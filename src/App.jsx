@@ -1040,13 +1040,13 @@ Tone: classified intelligence. Dark. Exclusive. Personal. Never generic.`}]
 
 function ExperienceCard({exp,day,index,isFree,timeLabel}){
   const [hov,setHov]=useState(false);
-  const timeLabel = {
+  const timeSlotLabels = {
     morning:"🌅 Morning",
     day:"☀️ Afternoon",
     night:"🌙 Night",
     allday:"🔥 Any Time"
   };
-  const bestTime = exp.times ? timeLabel[exp.times[0]] || "" : "";
+  const bestTime = (!timeLabel && exp.times) ? timeSlotLabels[exp.times[0]] || "" : "";
 
   return (
     <div onMouseEnter={()=>setHov(true)} onMouseLeave={()=>setHov(false)}
@@ -1067,7 +1067,7 @@ function ExperienceCard({exp,day,index,isFree,timeLabel}){
               {exp.dur&&<span style={{background:"rgba(255,215,0,.1)",color:"#ffd700",fontSize:"0.63rem",padding:"1px 8px",borderRadius:"20px",border:"1px solid rgba(255,215,0,.2)"}}>{exp.dur}</span>}
               {exp.rating>0&&<span style={{background:"rgba(255,45,85,.1)",color:"#ff8080",fontSize:"0.63rem",padding:"1px 8px",borderRadius:"20px",border:"1px solid rgba(255,45,85,.2)"}}>⭐ {exp.rating}</span>}
               {exp.isNew&&<span style={{background:"rgba(39,174,96,.2)",color:"#2ecc71",fontSize:"0.63rem",padding:"1px 8px",borderRadius:"20px",border:"1px solid rgba(39,174,96,.3)"}}>✨ New</span>}
-              {!isFree&&bestTime&&<span style={{background:"rgba(255,255,255,.05)",color:"#aaa",fontSize:"0.63rem",padding:"1px 8px",borderRadius:"20px",border:"1px solid rgba(255,255,255,.1)"}}>{bestTime}</span>}
+              {!isFree&&(timeLabel||bestTime)&&<span style={{background:"rgba(255,255,255,.05)",color:"#aaa",fontSize:"0.63rem",padding:"1px 8px",borderRadius:"20px",border:"1px solid rgba(255,255,255,.1)"}}>{timeLabel||bestTime}</span>}
               {exp.limitedTime&&<span style={{background:"rgba(255,165,0,.15)",color:"#ffaa00",fontSize:"0.63rem",padding:"1px 8px",borderRadius:"20px",border:"1px solid rgba(255,165,0,.3)"}}>⏰ {exp.limitedTime}</span>}
             </div>
           </div>
