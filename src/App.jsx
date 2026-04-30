@@ -246,7 +246,7 @@ const QUESTIONS = [
       {v:"morning",label:"Early Bird",emoji:"🌅",desc:"Up at sunrise — mornings are my peak"},
       {v:"night",label:"Night Owl",emoji:"🌙",desc:"I come alive after dark"},
       {v:"day",label:"Midday Explorer",emoji:"☀️",desc:"Afternoons are my sweet spot"},
-      {v:,label:"All Hours",emoji:"🔥",desc:"I sleep when I'm back home"},
+      {v:"allday",label:"All Hours",emoji:"🔥",desc:"I sleep when I'm back home"},
     ]},
   { id:"budget", question:"Budget per experience?", subtitle:"Per person · No judgment — just better picks", cols:2, multi:false,
     options:[
@@ -485,14 +485,6 @@ function getHotels(ans) {
   }
   return result;
 }
-    for(const h of HOTELS) {
-      if(!seen.has(h.name) && result.length<3 && h.profiles.some(p=>profile.includes(p))) {
-        seen.add(h.name); result.push(h);
-      }
-    }
-  }
-  return result;
-}
 
 // ─── EMAIL CAPTURE ────────────────────────────────────────────────────────
 async function sendItineraryEmail(email, itinerary, freeExp, hotels, answers) {
@@ -535,8 +527,8 @@ Format as clean HTML email. Keep it mysterious and exclusive in tone.`;
       })
     });
     const data = await res.json();
-    return data.content?.[0]?.text || ;
-  } catch { return ; }
+    return data.content?.[0]?.text || "";
+  } catch { return ""; }
 }
 
 // ─── MAIN APP ─────────────────────────────────────────────────────────────
@@ -696,9 +688,9 @@ export default function VegasApp() {
     const genderLabels={girls:"woman",guys:"man",lgbtq:"LGBTQ+ traveler",mixed:"mixed group",under6:"family with little ones",kids:"family with kids",teens:"family with teens",mixedages:"family"};
     const vibeLabels={dark:"drawn to the dark and mysterious side of Vegas",luxury:"a pure luxury seeker",adventure:"a thrill seeker",casino:"a casino and sports lover",romantic:"a hopeless romantic","first-timer":"experiencing Vegas for the first time",girlswild:"ready for a wild night out",girlsspa:"craving luxury and relaxation",girlsadventure:"an adventure-loving traveler",girlsmix:"looking for a perfect mix of everything",thrill:"craving thrills and adventure",show:"a live entertainment lover",explore:"an explorer at heart",relaxed:"looking for easy, fun experiences",nightout:"here for the nightlife and a serious night out"};
 
-    const travelerType = `${genderLabels[newAns.groupGender]||} ${tripLabels[newAns.tripType]||}`.trim();
-    const vibeDesc = vibeLabels[Array.isArray(newAns.vibe)?newAns.vibe[0]:newAns.vibe]||;
-    const interestDesc = Array.isArray(newAns.interest)?newAns.interest.join(" and "):newAns.interest||;
+    const travelerType = `${genderLabels[newAns.groupGender]||""} ${tripLabels[newAns.tripType]||""}`.trim();
+    const vibeDesc = vibeLabels[Array.isArray(newAns.vibe)?newAns.vibe[0]:newAns.vibe]||"";
+    const interestDesc = Array.isArray(newAns.interest)?newAns.interest.join(" and "):newAns.interest||"";
 
     try {
       const res=await fetch("https://api.anthropic.com/v1/messages",{
@@ -864,7 +856,7 @@ Tone: classified intelligence. Dark. Exclusive. Personal. Never generic.`}]
               {[0,1,2].map(i=>(
                 <div key={i} style={{position:"absolute",inset:`${i*8}px`,borderRadius:"50%",border:"2px solid transparent",
                   borderTopColor:i%2===0?"#ff2d55":"#ffd700",
-                  animation:`spin ${1+i*.5}s linear infinite ${i%2?"reverse":}`}}/>
+                  animation:`spin ${1+i*.5}s linear infinite ${i%2?"reverse":""}`}}/>
               ))}
             </div>
             <p style={{color:"#ffd700",fontSize:"0.95rem",margin:"0 0 6px"}}>Accessing the underground...</p>
@@ -1050,7 +1042,7 @@ function ExperienceCard({exp,day,index,isFree,timeLabel}){
     night:"🌙 Night",
     allday:"🔥 Any Time"
   };
-  const bestTime = (!timeLabel && exp.times) ? timeSlotLabels[exp.times[0]] ||  : ;
+  const bestTime = (!timeLabel && exp.times) ? timeSlotLabels[exp.times[0]] || "" : "";
 
   return (
     <div onMouseEnter={()=>setHov(true)} onMouseLeave={()=>setHov(false)}
@@ -1079,7 +1071,7 @@ function ExperienceCard({exp,day,index,isFree,timeLabel}){
         {/* Price or FREE badge — clearly separated */}
         {isFree
           ? <span style={{background:"rgba(39,174,96,.2)",border:"1px solid rgba(39,174,96,.4)",color:"#2ecc71",fontSize:"0.72rem",fontWeight:"700",padding:"3px 10px",borderRadius:"20px",whiteSpace:"nowrap",marginLeft:"8px"}}>FREE</span>
-          : <span style={{color:"#ffd700",fontSize:"1.05rem",fontWeight:"bold",marginLeft:"10px"}}>{exp.price===0?"Free entry":exp.price?"$"+exp.price:}</span>
+          : <span style={{color:"#ffd700",fontSize:"1.05rem",fontWeight:"bold",marginLeft:"10px"}}>{exp.price===0?"Free entry":exp.price?"$"+exp.price:""}</span>
         }
       </div>
       <p style={{color:"#888",fontSize:"0.8rem",lineHeight:1.6,margin:"0 0 12px"}}>{exp.desc}</p>
