@@ -17,7 +17,7 @@ const PAID = [
   { id:15, name:"Interstellar Arc — AREA15", cat:"Unique", price:44, rating:4.8, reviews:14, dur:"1 hr", emoji:"🌌", desc:"An otherworldly art installation inside AREA15. The future is already here — Vegas just doesn't advertise it.", url:"https://vegas.vdvm.net/9VM075", provider:"VCO", tags:["group","family","kids"], vibes:[], times:["day","night"], seasons:["winter","spring","summer","fall"], interests:["unique"], tier:"budget" },
   { id:16, name:"All Shook Up — Elvis Show", cat:"Show", price:45, rating:4.8, reviews:1340, dur:"1.5 hrs", emoji:"🎸", desc:"Open bar cabin above the Strip. Premium experience, best views in Vegas. No group needed — perfect solo.", url:"https://www.getyourguide.com/las-vegas-l58/las-vegas-all-shook-up-the-ultimate-elvis-tribute-t693302/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","couple","bachelorette","work"], vibes:["luxury","romantic"], times:["night"], seasons:["winter","spring","summer","fall"], interests:["show"], tier:"budget" },
   { id:17, name:"Blue Man Group — Luxor", cat:"Show", price:47, rating:4.4, reviews:4893, dur:"1.5 hrs", emoji:"💙", desc:"Three blue-painted performers, musical machines, and audience chaos. Zero words. Maximum impact.", url:"https://vegas.vdvm.net/21aPxA", provider:"VCO", tags:["solo","couple","group"], vibes:["adventure"], times:["day","night"], seasons:["winter","spring","fall"], interests:["show"], tier:"budget" },
-  { id:18, name:"High Roller Open Bar Cabin", cat:"Views", price:48, rating:4.6, reviews:1285, dur:"30 min", emoji:"🎡", desc:"The Strip from 550 feet. Open bar. Your group. No limits. Best at sunset.", url:"https://www.getyourguide.com/las-vegas-l58/the-high-roller-ride-at-the-linq-ticket-t436735/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["couple","group","family"], vibes:[], times:["day","night"], seasons:["winter","spring","summer","fall"], interests:["unique","nightlife"], tier:"budget", girlsTrip:true },
+  { id:18, name:"High Roller Open Bar Cabin", cat:"Views", price:48, rating:4.6, reviews:1285, dur:"30 min", emoji:"🎡", desc:"The Strip from 550 feet. Open bar. No limits. Best at sunset.", url:"https://www.getyourguide.com/las-vegas-l58/the-high-roller-ride-at-the-linq-ticket-t436735/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["couple","group","family"], vibes:[], times:["day","night"], seasons:["winter","spring","summer","fall"], interests:["unique","nightlife"], tier:"budget", girlsTrip:true },
   { id:19, name:"Mojave + 7 Magic Mountains Tour", cat:"Tour", price:49, rating:4.7, reviews:362, dur:"2 hrs", emoji:"🏔️", desc:"The neon totem poles in the middle of the Mojave desert. Plus the Vegas sign. Art meets nowhere.", url:"https://www.getyourguide.com/las-vegas-l58/las-vegas-seven-magic-mountains-and-las-vegas-sign-tour-t400361/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","group","work"], vibes:["adventure"], times:["day"], seasons:["winter","spring","summer","fall"], interests:["unique","adventure"], tier:"budget" },
   { id:20, name:"Mat Franco Magic Show", cat:"Show", price:50, rating:4.8, reviews:2686, dur:"1.5 hrs", emoji:"🪄", desc:"Winner of America's Got Talent. At The LINQ. Still the best magic show in Vegas — by far.", url:"https://vegas.vdvm.net/ZVx77X", provider:"VCO", tags:["couple","family","work"], vibes:["luxury"], times:["night"], seasons:["winter","spring","summer","fall"], interests:["show"], tier:"budget" },
   { id:21, name:"Machine Guns Vegas", cat:"Adventure", price:50, rating:4.8, reviews:144, dur:"1 hr", emoji:"🔫", desc:"Real machine guns in a supervised Vegas shooting range. The only place on Earth this makes sense.", url:"https://vegas.vdvm.net/Py36Z6", provider:"VCO", tags:["solo","couple","group","kids"], vibes:["dark"], times:["morning","day"], seasons:["winter","spring","summer","fall"], interests:["adventure"], tier:"budget" },
@@ -40,7 +40,7 @@ const PAID = [
   { id:38, name:"Wizard of Oz — Sphere", cat:"Show", price:114, rating:4.5, reviews:1319, dur:"1.5 hrs", emoji:"🌐", desc:"The Sphere. 160,000 sq ft of LED. Wizard of Oz has never looked anything like this.", url:"https://www.getyourguide.com/las-vegas-l58/las-vegas-the-sphere-experience-the-wizard-of-oz-t969545/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","couple","group","family","kids"], vibes:["luxury","adventure","first-timer"], times:["day","night"], seasons:["winter","spring","summer","fall"], interests:["show","unique"], tier:"mid" },
   { id:39, name:"Michael Jackson ONE", cat:"Show", price:96, rating:4.8, reviews:1048, dur:"1.5 hrs", emoji:"🕺", desc:"Cirque du Soleil meets MJ. Mandalay Bay. The most emotional show on the Strip.", url:"https://www.getyourguide.com/las-vegas-l58/las-vegas-michael-jackson-one-by-cirque-du-soleil-ticket-t400944/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","couple","group","family","work","kids"], vibes:["luxury"], times:["night"], seasons:["winter","spring","summer","fall"], interests:["show"], tier:"mid" },
   { id:40, name:"Desert ATV Tour", cat:"Adventure", price:109, rating:4.7, reviews:712, dur:"3 hrs", emoji:"🏜️", desc:"Real ATVs in the real Mojave. Nothing between you and the desert. Pure adrenaline.", url:"https://www.getyourguide.com/las-vegas-l58/las-vegas-guided-las-vegas-desert-atv-tour-t417683/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","couple","group"], vibes:[], times:["morning","day"], seasons:["winter","spring","summer","fall"], interests:["adventure"], tier:"mid" },
-  { id:41, name:"Mt. Charleston Day Trip", cat:"Tour", price:109, rating:4.7, reviews:82, dur:"Half day", emoji:"❄️", desc:"30 minutes from the Strip. Hotel pickup included — no car needed. Snow in winter, pine forests in spring.", url:"https://www.getyourguide.com/las-vegas-l58/las-vegas-mount-charleston-and-lee-canyon-day-trip-t371990/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","couple","group","work"], vibes:[], times:["morning","day"], seasons:["winter","spring","summer","fall"], interests:["adventure","unique"], tier:"mid" },
+  { id:41, name:"Mt. Charleston Day Trip", cat:"Tour", price:109, rating:4.7, reviews:82, dur:"Half day", emoji:"❄️", desc:"30 minutes from the Strip. Hotel pickup included — no car needed. Snow in winter, pine forests in spring.", url:"https://www.getyourguide.com/las-vegas-l58/las-vegas-mount-charleston-and-lee-canyon-day-trip-t371990/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","couple","group","work"], vibes:[], times:["morning","day"], seasons:["winter","spring"], interests:["adventure","unique"], tier:"mid" },
   { id:42, name:"Exotics Racing", cat:"Adventure", price:109, rating:4.8, reviews:188, dur:"1 hr", emoji:"🏎️", desc:"Drive a Lamborghini, Ferrari or Porsche on a real track. South of the Strip. Lives changed here.", url:"https://vegas.vdvm.net/eK4ZeZ", provider:"VCO", tags:["solo","group"], vibes:["adventure"], times:["morning","day"], seasons:["winter","spring","fall"], interests:["adventure"], tier:"mid" },
   { id:43, name:"Red Rock Canyon Trekker", cat:"Adventure", price:123, rating:4.8, reviews:125, dur:"4 hrs", emoji:"🪨", desc:"The red sandstone cliffs that frame Vegas — from inside them. Hotel pickup included. Small group. No tourists.", url:"https://www.getyourguide.com/las-vegas-l58/red-rock-canyon-by-tour-trekker-from-las-vegas-t7455/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","couple","group","family"], vibes:["adventure"], times:["morning","day"], seasons:["winter","spring"], interests:["adventure"], tier:"mid" },
   { id:44, name:"Grand Canyon + Hoover Dam", cat:"Tour", price:99, rating:4.8, reviews:3066, dur:"10.5 hrs", emoji:"🏔️", desc:"Two natural and engineering wonders in one day. Hotel pickup included — no car needed. The most-booked tour from Vegas.", url:"https://www.getyourguide.com/las-vegas-l58/vegas-grand-canyon-hoover-dam-lunchskywalk-options-wifi-t190065/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","couple","group","work"], vibes:["luxury","adventure"], times:["morning","day"], seasons:["winter","spring","summer","fall"], interests:["adventure","unique"], tier:"mid" },
@@ -103,7 +103,7 @@ const FREE_EXPERIENCES = [
   { id:"f2", name:"Bellagio Conservatory & Garden", loc:"Bellagio Hotel", time:"Anytime", emoji:"🌸", desc:"A 14,000 sq ft indoor garden that changes 5 times a year. Currently the most beautiful room in Vegas.", url:"https://vegas.vdvm.net/Org2RN" },
   { id:"f3", name:"Fremont Street LED Experience", loc:"Downtown Vegas", time:"After dark", emoji:"💡", desc:"A 1,500-foot LED canopy with free shows every hour. The Vegas the Strip doesn't want you to see.", url:"https://vegas.vdvm.net/9gR3A3" },
   { id:"f4", name:"Flamingo Wildlife Habitat", loc:"Flamingo Hotel", time:"Morning", emoji:"🦩", desc:"Real flamingos living inside a casino resort. Free to visit. Completely surreal at 8am.", url:"https://vegas.vdvm.net/6eOKEq" },
-  { id:"f5", name:"Venetian Grand Canal Promenade", loc:"The Venetian", time:"Anytime", emoji:"🛶", desc:"Venice reconstructed inside a hotel. Walk it for free. Watch the gondolas for free. It works.", url:"https://vegas.vdvm.net/MmJJG3" },
+  { id:"f5", name:"Grand Canal Shoppes — The Venetian", loc:"The Venetian", time:"Anytime", emoji:"🛶", desc:"Venice reconstructed inside a hotel. Walk it for free. Watch the gondolas for free. It works.", url:"https://vegas.vdvm.net/MmJJG3" },
   { id:"f6", name:"Pinball Hall of Fame", loc:"South Strip", time:"Anytime", emoji:"🎮", desc:"500+ vintage machines from the 1950s onward. All playable for quarters. Totally free to enter.", url:"https://vegas.vdvm.net/WqnZa3" },
   { id:"f7", name:"M&M's World Las Vegas", loc:"Las Vegas Blvd", time:"Anytime", emoji:"🍬", desc:"4 floors of chocolate chaos. Free to enter. The world's largest M&M's store.", url:"https://vegas.vdvm.net/JzGaLE" },
   { id:"f8", name:"Hershey's Chocolate World", loc:"New York-New York", time:"Anytime", emoji:"🍫", desc:"Inside a casino. A giant Hershey's experience — free to browse, optional to buy.", url:"https://vegas.vdvm.net/rQZ9R5" },
@@ -400,9 +400,42 @@ function filterExperiences(ans) {
   }).sort((a,b)=>b.score-a.score);
 
   const SPA_IDS = [63,64,65,66];
+  const MALE_REVUE_IDS = [28,29,34]; // Magic Mike, Chippendales, Thunder
+  const FEMALE_REVUE_IDS = [7,12]; // Fantasy Burlesque
+  const DRAG_IDS = [70,71,72,73]; // Drag shows
+  const TOUR_IDS = [31,43,44,45,46,47,48,50,51,52,53,54,55,56,60,67,86,88,89,90,91];
+  const KIDS_IDS = [5,8,15,17,18,23,24,26,32]; // Blue Man, Piff, Hop-On, etc
+
   const result=[]; const used=new Set();
   const dayPairs = {["1-2"]:3,["3-4"]:4,["5-7"]:7,["1week"]:8}[ans.days]||4;
-  let spaAdded = false; // Only 1 spa per itinerary
+  const minTours = (ans.days==="5-7"||ans.days==="1week") ? 4 : 0;
+
+  // Category dedup trackers
+  let spaAdded = false;
+  let maleRevueAdded = false;
+  let femaleRevueAdded = false;
+  let dragAdded = false;
+  let toursAdded = 0;
+  const catUsed = new Set(); // track by category
+
+  const canAdd = (exp) => {
+    if(used.has(exp.id)) return false;
+    if(!budgetMatch(exp.price)) return false;
+    if(SPA_IDS.includes(exp.id) && spaAdded) return false;
+    if(MALE_REVUE_IDS.includes(exp.id) && maleRevueAdded) return false;
+    if(FEMALE_REVUE_IDS.includes(exp.id) && femaleRevueAdded) return false;
+    if(DRAG_IDS.includes(exp.id) && dragAdded) return false;
+    return true;
+  };
+
+  const trackAdded = (exp) => {
+    used.add(exp.id);
+    if(SPA_IDS.includes(exp.id)) spaAdded = true;
+    if(MALE_REVUE_IDS.includes(exp.id)) maleRevueAdded = true;
+    if(FEMALE_REVUE_IDS.includes(exp.id)) femaleRevueAdded = true;
+    if(DRAG_IDS.includes(exp.id)) dragAdded = true;
+    if(TOUR_IDS.includes(exp.id)) toursAdded++;
+  };
 
   // Separate scored into day and night buckets
   const dayScored = scored.filter(e=>
@@ -414,24 +447,39 @@ function filterExperiences(ans) {
     budgetMatch(e.price)
   );
 
-  // Build pairs: alternating day/night — max 1 spa total
+  // Build pairs: alternating day/night with category dedup
   let dayIdx=0, nightIdx=0;
   for(let i=0; i<dayPairs; i++){
     // Add day experience
-    while(dayIdx<dayScored.length && (used.has(dayScored[dayIdx].id)||(SPA_IDS.includes(dayScored[dayIdx].id)&&spaAdded))) dayIdx++;
+    while(dayIdx<dayScored.length && !canAdd(dayScored[dayIdx])) dayIdx++;
     if(dayIdx<dayScored.length){
-      if(SPA_IDS.includes(dayScored[dayIdx].id)) spaAdded=true;
-      used.add(dayScored[dayIdx].id);
+      trackAdded(dayScored[dayIdx]);
       result.push({...dayScored[dayIdx], timeSlot:"day"});
       dayIdx++;
     }
     // Add night experience
-    while(nightIdx<nightScored.length && (used.has(nightScored[nightIdx].id)||(SPA_IDS.includes(nightScored[nightIdx].id)&&spaAdded))) nightIdx++;
+    while(nightIdx<nightScored.length && !canAdd(nightScored[nightIdx])) nightIdx++;
     if(nightIdx<nightScored.length){
-      if(SPA_IDS.includes(nightScored[nightIdx].id)) spaAdded=true;
-      used.add(nightScored[nightIdx].id);
+      trackAdded(nightScored[nightIdx]);
       result.push({...nightScored[nightIdx], timeSlot:"night"});
       nightIdx++;
+    }
+  }
+
+  // Enforce minimum tours for longer trips
+  if(minTours > 0 && toursAdded < minTours) {
+    const tourCandidates = scored.filter(e=>TOUR_IDS.includes(e.id)&&!used.has(e.id)&&budgetMatch(e.price));
+    let added = 0;
+    for(const tour of tourCandidates) {
+      if(toursAdded + added >= minTours) break;
+      // Replace last night exp with tour if needed
+      const lastNight = result.findIndex(e=>e.timeSlot==="night"&&!TOUR_IDS.includes(e.id));
+      if(lastNight>=0) {
+        used.delete(result[lastNight].id);
+        result[lastNight] = {...tour, timeSlot:"day"};
+        used.add(tour.id);
+        added++;
+      }
     }
   }
 
@@ -469,11 +517,17 @@ function getHotels(ans) {
   if(tierFiltered.length >= 2) filtered = tierFiltered;
   else if(tierFiltered.length === 1) filtered = tierFiltered;
 
-  // Deduplicate and limit to 3
+  // Deduplicate and limit to 3 — never show MGM Grand + Signature together
   const seen = new Set();
   const result = [];
+  let hasMGM = false;
   for(const h of filtered) {
-    if(!seen.has(h.name) && result.length<3) { seen.add(h.name); result.push(h); }
+    if(seen.has(h.name) || result.length>=3) continue;
+    if(h.name==="MGM Grand" && hasMGM) continue;
+    if(h.name==="The Signature at MGM Grand" && hasMGM) continue;
+    if(h.name==="MGM Grand" || h.name==="The Signature at MGM Grand") hasMGM = true;
+    seen.add(h.name);
+    result.push(h);
   }
   // Fill if needed — relax tier constraint
   if(result.length<3) {
@@ -698,32 +752,30 @@ export default function VegasApp() {
         headers:{"Content-Type":"application/json"},
         body:JSON.stringify({
           model:"claude-sonnet-4-20250514",max_tokens:1000,
-          messages:[{role:"user",content:`You are Vegas Unveiled — a mysterious Las Vegas insider with access to classified information about the city.
+          messages:[{role:"user",content:`You are Vegas Unveiled — a mysterious Las Vegas insider. You write like a thriller novelist who knows the city's secrets.
 
-Write a personalized traveler briefing in 4 parts. No headers. Flowing prose. Max 150 words total.
+Write a SHORT, powerful, deeply personal briefing. 3-4 sentences MAX. No fluff. No generic travel language.
 
 TRAVELER PROFILE:
-- Type: ${travelerType}
+- Who: ${travelerType}
 - Vibe: ${vibeDesc}
 - Interests: ${interestDesc}
 - Season: ${seasonCtx[newAns.season]}
 - Days: ${newAns.days}
-- Time preference: ${newAns.timeOfDay}
+- Time: ${newAns.timeOfDay}
 
-PART 1 (1 sentence): Open with a punchy line that reads their profile and massages their ego. Make them feel seen and special. Example style: "A solo woman chasing luxury and dark secrets — Vegas has been waiting for someone like you."
+RULES:
+1. First sentence: Hit them personally. Use their exact profile. Make them feel like you read their mind. Be specific and flattering. Example: "A solo woman who runs on dark energy and luxury — Vegas has been holding its breath for someone like you."
+2. Second sentence: Paint Vegas in their season/time with 1-2 sharp, sensory, cinematic details. No clichés. Make them feel the city physically.
+3. Third sentence: One bold statement about what makes their specific trip unique or what Vegas will reveal to them specifically.
+4. Final sentence: Sharp transition. Example: "Here's what should absolutely be on your list." or "This is what Vegas looks like when it's made for you."
 
-PART 2 (1-2 sentences): Describe their traveler profile in a flattering, cinematic way. What kind of traveler are they? What does that say about them?
-
-PART 3 (2 sentences): Dark, atmospheric description of Vegas in their season/time. Cinematic. Specific. Make them feel the city.
-
-PART 4 (1 sentence): Transition to the itinerary. Example: "Here's what should absolutely be on your list."
-
-Tone: classified intelligence. Dark. Exclusive. Personal. Never generic.`}]
+Tone: Dark. Intimate. Cinematic. Like a secret being handed over. NEVER say "vibrant" "bustling" "amazing" or any generic travel word.`}]
         })
       });
       const data=await res.json();
-      setAiStory(data.content?.[0]?.text||"Vegas doesn't show everyone its secrets. But you asked the right questions.");
-    } catch { setAiStory("Vegas has layers most visitors never reach. You asked the right questions."); }
+      setAiStory(data.content?.[0]?.text||"Vegas doesn't reveal itself to everyone. But you asked the right questions — and the city noticed.");
+    } catch { setAiStory("Vegas has layers most visitors never reach. You came looking for the right things."); }
 
     setLoading(false);
     setStep(totalSteps+1);
@@ -869,75 +921,35 @@ Tone: classified intelligence. Dark. Exclusive. Personal. Never generic.`}]
           <div style={{animation:"fadeUp .5s ease"}}>
 
             {/* AI Story */}
-            <div style={{background:"linear-gradient(135deg,rgba(255,45,85,.09),rgba(255,215,0,.05))",border:"1px solid rgba(255,215,0,.16)",borderLeft:"3px solid #ff2d55",borderRadius:"16px",padding:"22px",marginBottom:"14px"}}>
-              <div style={{color:"#ff2d55",fontSize:"0.6rem",letterSpacing:"0.22em",marginBottom:"8px"}}>◆ YOUR SECRET BRIEFING</div>
-              <p style={{color:"#ccc",lineHeight:1.9,margin:0,fontStyle:"italic",fontSize:"0.9rem"}}>"{aiStory}"</p>
-            </div>
-
-            {/* Share buttons */}
-            <div style={{marginBottom:"22px"}}>
-              <p style={{color:"#555",fontSize:"0.72rem",margin:"0 0 8px",textAlign:"center",fontStyle:"italic"}}>Know someone who'd love this? Send them their own custom itinerary.</p>
-              <div style={{display:"flex",gap:"8px"}}>
-                <button onClick={()=>{
-                    navigator.clipboard.writeText(window.location.href);
-                    alert("Link copied! Share it with your squad 🎰");
-                  }}
-                  style={{flex:1,padding:"10px",borderRadius:"8px",border:"1px solid rgba(255,255,255,.1)",background:"rgba(255,255,255,.04)",color:"#aaa",fontSize:"0.75rem",cursor:"pointer",fontFamily:"Georgia,serif"}}>
-                  🔗 Copy Link
-                </button>
-                <a href={`sms:&body=I just got a custom Vegas itinerary — you need to try this! ${window.location.href}`}
-                  style={{flex:1,padding:"10px",borderRadius:"8px",border:"1px solid rgba(255,215,0,.2)",background:"rgba(255,215,0,.06)",color:"#ffd700",fontSize:"0.75rem",cursor:"pointer",fontFamily:"Georgia,serif",textDecoration:"none",textAlign:"center",display:"flex",alignItems:"center",justifyContent:"center",fontWeight:"700"}}>
-                  💬 Share with Your Squad
-                </a>
-              </div>
+            <div style={{background:"linear-gradient(135deg,rgba(255,45,85,.09),rgba(255,215,0,.05))",border:"1px solid rgba(255,215,0,.16)",borderLeft:"3px solid #ff2d55",borderRadius:"16px",padding:"22px",marginBottom:"16px"}}>
+              <div style={{color:"#ff2d55",fontSize:"0.62rem",letterSpacing:"0.22em",marginBottom:"10px"}}>◆ YOUR SECRET BRIEFING</div>
+              <p style={{color:"#ddd",lineHeight:2,margin:0,fontStyle:"italic",fontSize:"0.95rem"}}>"{aiStory}"</p>
             </div>
 
             {/* Summary badges */}
-            <div style={{display:"flex",flexWrap:"wrap",gap:"6px",marginBottom:"20px"}}>
+            <div style={{display:"flex",flexWrap:"wrap",gap:"6px",marginBottom:"22px"}}>
               {[`${seasonLabels[answers.season]} in Vegas`,`${daysLabels[answers.days]} trip`,`${itinerary.length} paid experiences`,`~$${totalCost} est.`].map(b=>(
-                <div key={b} style={{background:"rgba(255,215,0,.07)",border:"1px solid rgba(255,215,0,.16)",borderRadius:"20px",padding:"3px 12px",color:"#ffd700",fontSize:"0.66rem",letterSpacing:"0.08em"}}>{b}</div>
+                <div key={b} style={{background:"rgba(255,215,0,.07)",border:"1px solid rgba(255,215,0,.16)",borderRadius:"20px",padding:"4px 14px",color:"#ffd700",fontSize:"0.72rem",letterSpacing:"0.06em"}}>{b}</div>
               ))}
             </div>
-
-            {/* EMAIL CAPTURE */}
-            {!emailSent?(
-              <div style={{background:"rgba(255,255,255,.03)",border:"1px solid rgba(255,255,255,.08)",borderRadius:"14px",padding:"18px",marginBottom:"22px"}}>
-                <p style={{color:"#aaa",fontSize:"0.82rem",margin:"0 0 12px"}}>
-                  📧 <strong style={{color:"#fff"}}>Get your itinerary as PDF</strong> — save it for later and share with your travel buddies
-                </p>
-                <div style={{display:"flex",gap:"8px"}}>
-                  <input type="email" placeholder="your@email.com" value={email} onChange={e=>setEmail(e.target.value)}
-                    style={{flex:1,padding:"10px 14px",borderRadius:"8px",border:"1px solid rgba(255,255,255,.12)",background:"rgba(255,255,255,.05)",color:"#fff",fontSize:"0.85rem",fontFamily:"Georgia,serif"}}/>
-                  <button onClick={handleEmailSubmit} disabled={!email||emailLoading} style={{padding:"10px 16px",borderRadius:"8px",border:"none",background:email?"linear-gradient(135deg,#ff2d55,#c0392b)":"rgba(255,255,255,.05)",color:email?"#fff":"#444",fontSize:"0.8rem",fontWeight:"700",cursor:email?"pointer":"not-allowed",whiteSpace:"nowrap"}}>
-                    {emailLoading?"Sending...":"Send PDF"}
-                  </button>
-                </div>
-              </div>
-            ):(
-              <div style={{background:"rgba(39,174,96,.1)",border:"1px solid rgba(39,174,96,.3)",borderRadius:"14px",padding:"14px 18px",marginBottom:"22px",textAlign:"center"}}>
-                <span style={{color:"#2ecc71",fontSize:"0.85rem"}}>✅ Itinerary sent to {email} — check your inbox!</span>
-              </div>
-            )}
 
             {/* HOTELS FIRST */}
             {hotels.length>0&&(
               <div style={{marginBottom:"28px"}}>
-                <h3 style={{color:"#fff",fontSize:"1rem",margin:"0 0 4px",fontWeight:"normal"}}>🏨 Where to Stay</h3>
-                <p style={{color:"#444",fontSize:"0.72rem",margin:"0 0 14px"}}>Curated for your profile</p>
-                <div style={{display:"flex",flexDirection:"column",gap:"10px",marginBottom:"8px"}}>
+                <h3 style={{color:"#fff",fontSize:"1.1rem",margin:"0 0 4px",fontWeight:"700"}}>🏨 Where to Stay</h3>
+                <p style={{color:"#888",fontSize:"0.78rem",margin:"0 0 14px"}}>Matched to your profile & budget</p>
+                <div style={{display:"flex",flexDirection:"column",gap:"12px",marginBottom:"8px"}}>
                   {hotels.map((h,i)=>(
-                    <div key={h.name} style={{background:"rgba(255,255,255,.03)",border:"1px solid rgba(255,255,255,.07)",borderRadius:"12px",padding:"16px",animation:`fadeUp .5s ease ${i*.1}s both`}}>
-                      <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start"}}>
-                        <div>
-                          <div style={{color:"#fff",fontWeight:"700",fontSize:"0.9rem",marginBottom:"2px"}}>{h.name}</div>
-                          <div style={{color:"#ffd700",fontSize:"0.7rem",marginBottom:"4px"}}>{"⭐".repeat(h.stars)}</div>
-                          <div style={{color:"#888",fontSize:"0.75rem"}}>{h.feature}</div>
+                    <div key={h.name} style={{background:"rgba(255,255,255,.04)",border:"1px solid rgba(255,255,255,.09)",borderRadius:"14px",padding:"18px",animation:`fadeUp .5s ease ${i*.1}s both`}}>
+                      <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:"10px"}}>
+                        <div style={{flex:1}}>
+                          <div style={{color:"#fff",fontWeight:"700",fontSize:"1rem",marginBottom:"3px"}}>{h.name}</div>
+                          <div style={{color:"#ffd700",fontSize:"0.75rem",marginBottom:"5px"}}>{"⭐".repeat(h.stars)}</div>
+                          <div style={{color:"#aaa",fontSize:"0.82rem"}}>{h.feature}</div>
                         </div>
-                        <div style={{textAlign:"right"}}>
-                          <div style={{color:"#2ecc71",fontSize:"0.8rem",fontWeight:"700"}}>{h.price}</div>
-                        </div>
+                        <div style={{color:"#2ecc71",fontSize:"0.85rem",fontWeight:"700",marginLeft:"12px",whiteSpace:"nowrap"}}>{h.price}</div>
                       </div>
-                      <a href={h.url} target="_blank" rel="noopener noreferrer" style={{display:"block",marginTop:"12px",background:"rgba(26,92,26,.4)",border:"1px solid rgba(39,174,96,.3)",color:"#2ecc71",padding:"9px 16px",borderRadius:"7px",textDecoration:"none",fontSize:"0.78rem",fontWeight:"700",textAlign:"center"}}>
+                      <a href={h.url} target="_blank" rel="noopener noreferrer" style={{display:"block",background:"rgba(26,92,26,.5)",border:"1px solid rgba(39,174,96,.4)",color:"#2ecc71",padding:"12px 16px",borderRadius:"9px",textDecoration:"none",fontSize:"0.85rem",fontWeight:"700",textAlign:"center"}}>
                         🏨 View Hotel
                       </a>
                     </div>
@@ -947,13 +959,14 @@ Tone: classified intelligence. Dark. Exclusive. Personal. Never generic.`}]
             )}
 
             {/* PAID EXPERIENCES + FREE INTERCALATED — grouped by day */}
-            <h2 style={{color:"#fff",fontSize:"1.05rem",margin:"0 0 4px",fontWeight:"normal"}}>Your Itinerary</h2>
-            <p style={{color:"#444",fontSize:"0.72rem",margin:"0 0 16px"}}>Book directly — early access links below</p>
+            <h2 style={{color:"#fff",fontSize:"1.2rem",margin:"0 0 4px",fontWeight:"700"}}>Your Itinerary</h2>
+            <p style={{color:"#888",fontSize:"0.78rem",margin:"0 0 18px"}}>Book directly — links below</p>
 
             <div style={{display:"flex",flexDirection:"column",gap:"20px",marginBottom:"28px"}}>
               {(() => {
                 const combined = [];
                 const dayPairs = Math.ceil(itinerary.length / 2);
+
                 let freeIdx = 0;
                 for(let d=0; d<dayPairs; d++){
                   const dayExp = itinerary[d*2];
@@ -1003,28 +1016,66 @@ Tone: classified intelligence. Dark. Exclusive. Personal. Never generic.`}]
               </div>
             )}
 
+            {/* Share buttons — moved to bottom */}
+            <div style={{marginBottom:"20px"}}>
+              <p style={{color:"#aaa",fontSize:"0.78rem",margin:"0 0 10px",textAlign:"center"}}>Know someone who'd love this? Send them their own custom itinerary.</p>
+              <div style={{display:"flex",gap:"8px"}}>
+                <button onClick={()=>{
+                    navigator.clipboard.writeText(window.location.href);
+                    alert("Link copied! Share it with your squad 🎰");
+                  }}
+                  style={{flex:1,padding:"12px",borderRadius:"9px",border:"1px solid rgba(255,255,255,.12)",background:"rgba(255,255,255,.05)",color:"#ccc",fontSize:"0.8rem",cursor:"pointer"}}>
+                  🔗 Copy Link
+                </button>
+                <a href={`sms:&body=I just got a custom Vegas itinerary — you need to try this! ${window.location.href}`}
+                  style={{flex:1,padding:"12px",borderRadius:"9px",border:"1px solid rgba(255,215,0,.25)",background:"rgba(255,215,0,.08)",color:"#ffd700",fontSize:"0.8rem",textDecoration:"none",textAlign:"center",display:"flex",alignItems:"center",justifyContent:"center",fontWeight:"700"}}>
+                  💬 Share with Friends
+                </a>
+              </div>
+            </div>
+
+            {/* EMAIL CAPTURE */}
+            {!emailSent?(
+              <div style={{background:"rgba(255,255,255,.03)",border:"1px solid rgba(255,255,255,.09)",borderRadius:"14px",padding:"18px",marginBottom:"22px"}}>
+                <p style={{color:"#ccc",fontSize:"0.85rem",margin:"0 0 12px"}}>
+                  📧 <strong style={{color:"#fff"}}>Get your itinerary as PDF</strong> — save it for later and share with your travel buddies
+                </p>
+                <div style={{display:"flex",gap:"8px"}}>
+                  <input type="email" placeholder="your@email.com" value={email} onChange={e=>setEmail(e.target.value)}
+                    style={{flex:1,padding:"11px 14px",borderRadius:"8px",border:"1px solid rgba(255,255,255,.12)",background:"rgba(255,255,255,.05)",color:"#fff",fontSize:"0.85rem"}}/>
+                  <button onClick={handleEmailSubmit} disabled={!email||emailLoading} style={{padding:"11px 16px",borderRadius:"8px",border:"none",background:email?"linear-gradient(135deg,#ff2d55,#c0392b)":"rgba(255,255,255,.05)",color:email?"#fff":"#444",fontSize:"0.8rem",fontWeight:"700",cursor:email?"pointer":"not-allowed",whiteSpace:"nowrap"}}>
+                    {emailLoading?"Sending...":"Send PDF"}
+                  </button>
+                </div>
+              </div>
+            ):(
+              <div style={{background:"rgba(39,174,96,.1)",border:"1px solid rgba(39,174,96,.3)",borderRadius:"14px",padding:"14px 18px",marginBottom:"22px",textAlign:"center"}}>
+                <span style={{color:"#2ecc71",fontSize:"0.85rem"}}>✅ Itinerary sent to {email} — check your inbox!</span>
+              </div>
+            )}
+
             {/* Feedback section */}
-            <div style={{background:"rgba(255,215,0,.04)",border:"1px solid rgba(255,215,0,.1)",borderRadius:"14px",padding:"18px",marginBottom:"16px",textAlign:"center"}}>
-              <p style={{color:"#888",fontSize:"0.82rem",margin:"0 0 4px"}}>
-                🎰 <strong style={{color:"#ccc"}}>Missing something in your itinerary?</strong>
+            <div style={{background:"rgba(255,215,0,.04)",border:"1px solid rgba(255,215,0,.12)",borderRadius:"14px",padding:"18px",marginBottom:"16px",textAlign:"center"}}>
+              <p style={{color:"#ccc",fontSize:"0.85rem",margin:"0 0 4px",fontWeight:"700"}}>
+                🎰 Missing something in your itinerary?
               </p>
-              <p style={{color:"#555",fontSize:"0.75rem",margin:"0 0 12px",fontStyle:"italic"}}>
-                Vegas is waiting for you with open arms. Tell us what you'd love to see added.
+              <p style={{color:"#888",fontSize:"0.78rem",margin:"0 0 12px"}}>
+                Vegas is waiting for you with open arms.
               </p>
               <a href="mailto:hello@vegasunveiled.com?subject=Itinerary Feedback"
-                style={{display:"inline-block",padding:"8px 20px",borderRadius:"8px",border:"1px solid rgba(255,215,0,.2)",color:"#ffd700",fontSize:"0.75rem",textDecoration:"none",fontWeight:"700"}}>
+                style={{display:"inline-block",padding:"10px 22px",borderRadius:"9px",border:"1px solid rgba(255,215,0,.25)",color:"#ffd700",fontSize:"0.8rem",textDecoration:"none",fontWeight:"700"}}>
                 Leave Your Feedback →
               </a>
             </div>
 
-            <button onClick={()=>{setStep(0);setAnswers({});setSelected(null);setAiStory();setItinerary([]);setFreeExp([]);setHotels([]);setEmail();setEmailSent(false);}}
-              style={{width:"100%",padding:"13px",borderRadius:"10px",background:"transparent",border:"1px solid rgba(255,255,255,.07)",color:"#444",fontSize:"0.78rem",cursor:"pointer",transition:"all .2s"}}
+            <button onClick={()=>{setStep(0);setAnswers({});setSelected(null);setAiStory("");setItinerary([]);setFreeExp([]);setHotels([]);setEmail("");setEmailSent(false);}}
+              style={{width:"100%",padding:"14px",borderRadius:"10px",background:"transparent",border:"1px solid rgba(255,255,255,.09)",color:"#666",fontSize:"0.82rem",cursor:"pointer",transition:"all .2s"}}
               onMouseEnter={e=>{e.currentTarget.style.color="#fff";e.currentTarget.style.borderColor="rgba(255,255,255,.2)"}}
-              onMouseLeave={e=>{e.currentTarget.style.color="#444";e.currentTarget.style.borderColor="rgba(255,255,255,.07)"}}>
+              onMouseLeave={e=>{e.currentTarget.style.color="#666";e.currentTarget.style.borderColor="rgba(255,255,255,.09)"}}>
               ↩ Start Over — New Itinerary
             </button>
 
-            <p style={{textAlign:"center",color:"#1a1a1a",fontSize:"0.6rem",marginTop:"16px"}}>
+            <p style={{textAlign:"center",color:"#444",fontSize:"0.65rem",marginTop:"16px"}}>
               Booking links may include affiliate partnerships · Prices subject to availability
             </p>
           </div>
@@ -1050,37 +1101,34 @@ function ExperienceCard({exp,day,index,isFree,timeLabel}){
         border:hov?`1px solid ${isFree?"rgba(39,174,96,.3)":"rgba(255,215,0,.3)"}`:"1px solid rgba(255,255,255,.06)",
         borderRadius:"14px",padding:"18px",transition:"all .3s",transform:hov?"translateY(-1px)":"none",
         animation:`fadeUp .5s ease ${index*.08}s both`}}>
-      <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:"8px"}}>
-        <div style={{display:"flex",gap:"10px",alignItems:"flex-start",flex:1}}>
-          <div style={{display:"flex",flexDirection:"column",alignItems:"center",gap:"3px",minWidth:"40px"}}>
-            <span style={{fontSize:"1.6rem"}}>{exp.emoji}</span>
-            {timeLabel&&<span style={{color:"#ff2d55",fontSize:"0.55rem",letterSpacing:"0.08em",whiteSpace:"nowrap",textAlign:"center"}}>{timeLabel}</span>}
-            {isFree&&<span style={{color:"#2ecc71",fontSize:"0.55rem"}}>★ Free</span>}
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:"10px"}}>
+        <div style={{display:"flex",gap:"12px",alignItems:"flex-start",flex:1}}>
+          <div style={{display:"flex",flexDirection:"column",alignItems:"center",gap:"3px",minWidth:"44px"}}>
+            <span style={{fontSize:"1.8rem"}}>{exp.emoji}</span>
+            {!isFree&&timeLabel&&<span style={{color:"#ff2d55",fontSize:"0.6rem",letterSpacing:"0.06em",whiteSpace:"nowrap",textAlign:"center",marginTop:"2px"}}>{timeLabel}</span>}
           </div>
           <div style={{flex:1}}>
-            <div style={{color:"#fff",fontWeight:"700",fontSize:"0.88rem",marginBottom:"5px",lineHeight:1.3}}>{exp.name}</div>
+            <div style={{color:"#fff",fontWeight:"700",fontSize:"1rem",marginBottom:"6px",lineHeight:1.3}}>{exp.name}</div>
             <div style={{display:"flex",gap:"5px",flexWrap:"wrap"}}>
-              {exp.dur&&<span style={{background:"rgba(255,215,0,.1)",color:"#ffd700",fontSize:"0.63rem",padding:"1px 8px",borderRadius:"20px",border:"1px solid rgba(255,215,0,.2)"}}>{exp.dur}</span>}
-              {exp.rating>0&&<span style={{background:"rgba(255,45,85,.1)",color:"#ff8080",fontSize:"0.63rem",padding:"1px 8px",borderRadius:"20px",border:"1px solid rgba(255,45,85,.2)"}}>⭐ {exp.rating}</span>}
-              {exp.isNew&&<span style={{background:"rgba(39,174,96,.2)",color:"#2ecc71",fontSize:"0.63rem",padding:"1px 8px",borderRadius:"20px",border:"1px solid rgba(39,174,96,.3)"}}>✨ New</span>}
-              {!isFree&&(timeLabel||bestTime)&&<span style={{background:"rgba(255,255,255,.05)",color:"#aaa",fontSize:"0.63rem",padding:"1px 8px",borderRadius:"20px",border:"1px solid rgba(255,255,255,.1)"}}>{timeLabel||bestTime}</span>}
-              {exp.limitedTime&&<span style={{background:"rgba(255,165,0,.15)",color:"#ffaa00",fontSize:"0.63rem",padding:"1px 8px",borderRadius:"20px",border:"1px solid rgba(255,165,0,.3)"}}>⏰ {exp.limitedTime}</span>}
+              {exp.dur&&<span style={{background:"rgba(255,215,0,.15)",color:"#ffd700",fontSize:"0.72rem",padding:"2px 10px",borderRadius:"20px",border:"1px solid rgba(255,215,0,.25)"}}>{exp.dur}</span>}
+              {exp.rating>0&&<span style={{background:"rgba(255,45,85,.15)",color:"#ff8080",fontSize:"0.72rem",padding:"2px 10px",borderRadius:"20px",border:"1px solid rgba(255,45,85,.25)"}}>⭐ {exp.rating}</span>}
+              {exp.isNew&&<span style={{background:"rgba(39,174,96,.2)",color:"#2ecc71",fontSize:"0.72rem",padding:"2px 10px",borderRadius:"20px",border:"1px solid rgba(39,174,96,.3)"}}>✨ New</span>}
+              {exp.limitedTime&&<span style={{background:"rgba(255,165,0,.15)",color:"#ffaa00",fontSize:"0.72rem",padding:"2px 10px",borderRadius:"20px",border:"1px solid rgba(255,165,0,.3)"}}>⏰ {exp.limitedTime}</span>}
             </div>
           </div>
         </div>
-        {/* Price or FREE badge — clearly separated */}
         {isFree
-          ? <span style={{background:"rgba(39,174,96,.2)",border:"1px solid rgba(39,174,96,.4)",color:"#2ecc71",fontSize:"0.72rem",fontWeight:"700",padding:"3px 10px",borderRadius:"20px",whiteSpace:"nowrap",marginLeft:"8px"}}>FREE</span>
-          : <span style={{color:"#ffd700",fontSize:"1.05rem",fontWeight:"bold",marginLeft:"10px"}}>{exp.price===0?"Free entry":exp.price?"$"+exp.price:""}</span>
+          ? <span style={{background:"rgba(39,174,96,.2)",border:"1px solid rgba(39,174,96,.4)",color:"#2ecc71",fontSize:"0.78rem",fontWeight:"700",padding:"4px 12px",borderRadius:"20px",whiteSpace:"nowrap",marginLeft:"8px"}}>FREE</span>
+          : <span style={{color:"#ffd700",fontSize:"1.1rem",fontWeight:"bold",marginLeft:"10px",whiteSpace:"nowrap"}}>{exp.price===0?"Free":exp.price?"$"+exp.price:""}</span>
         }
       </div>
-      <p style={{color:"#888",fontSize:"0.8rem",lineHeight:1.6,margin:"0 0 12px"}}>{exp.desc}</p>
+      <p style={{color:"#bbb",fontSize:"0.85rem",lineHeight:1.7,margin:"0 0 14px"}}>{exp.desc}</p>
       <a href={exp.url} target="_blank" rel="noopener noreferrer"
         style={{display:"block",background:isFree?"linear-gradient(135deg,rgba(39,174,96,.3),rgba(39,174,96,.15))":"linear-gradient(135deg,#ff2d55,#c0392b)",
           border:isFree?"1px solid rgba(39,174,96,.4)":"none",
-          color:"#fff",padding:"10px 16px",borderRadius:"8px",textDecoration:"none",
-          fontSize:"0.78rem",fontWeight:"700",textAlign:"center",
-          boxShadow:isFree?"none":"0 4px 14px rgba(255,45,85,.3)"}}>
+          color:"#fff",padding:"13px 16px",borderRadius:"10px",textDecoration:"none",
+          fontSize:"0.88rem",fontWeight:"700",textAlign:"center",
+          boxShadow:isFree?"none":"0 4px 18px rgba(255,45,85,.35)"}}>
         {isFree?"🔗 Learn More":"🎟️ Book Now"}
       </a>
     </div>
