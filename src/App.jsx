@@ -140,7 +140,7 @@ const QUESTIONS = [
   { id:"tripType", question:"Who's joining you in Vegas?", subtitle:"This shapes your entire experience", cols:3, multi:false,
     options:[
       {v:"solo",label:"Flying Solo",emoji:"🕶️",desc:"Just me — zero compromises"},
-      {v:"couple",label:"With My Partner",emoji:"🖤",desc:"Making memories together"},
+      {v:"couple",label:"With My Partner",emoji:"❤️",desc:"Making memories together"},
       {v:"group",label:"The Squad",emoji:"🥂",desc:"The more the wilder"},
       {v:"family",label:"Family Trip",emoji:"👨‍👩‍👧",desc:"Everyone has fun"},
       {v:"bachelorette",label:"Bachelorette / Bachelor",emoji:"👰",desc:"Epic last night of freedom"},
