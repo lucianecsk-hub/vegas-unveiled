@@ -763,10 +763,13 @@ export default function VegasApp() {
 
     // Build traveler profile descriptor
     const tripLabels={solo:"solo traveler",couple:"couple",group:"squad",family:"family",bachelorette:"bachelorette party",work:"work traveler"};
-    const genderLabels={girls:"woman",guys:"man",lgbtq:"LGBTQ+ traveler",mixed:"mixed group",under6:"family with little ones",kids:"family with kids",teens:"family with teens",mixedages:"family"};
+    const genderLabels={girls:"woman",guys:"man",lgbtq:"LGBTQ+ traveler",mixed:"",under6:"family with little ones",kids:"family with kids",teens:"family with teens",mixedages:"family"};
     const vibeLabels={dark:"drawn to the dark and mysterious side of Vegas",luxury:"a pure luxury seeker",adventure:"a thrill seeker",casino:"a casino and sports lover",romantic:"a hopeless romantic","first-timer":"experiencing Vegas for the first time",girlswild:"ready for a wild night out",girlsspa:"craving luxury and relaxation",girlsadventure:"an adventure-loving traveler",girlsmix:"looking for a perfect mix of everything",thrill:"craving thrills and adventure",show:"a live entertainment lover",explore:"an explorer at heart",relaxed:"looking for easy, fun experiences",nightout:"here for the nightlife and a serious night out"};
 
-    const travelerType = `${genderLabels[newAns.groupGender]||""} ${tripLabels[newAns.tripType]||""}`.trim();
+    const genderPrefix = genderLabels[newAns.groupGender] || "";
+    const travelerType = genderPrefix
+      ? `${genderPrefix} ${tripLabels[newAns.tripType]||""}`.trim()
+      : tripLabels[newAns.tripType] || "traveler";
     const vibeDesc = vibeLabels[Array.isArray(newAns.vibe)?newAns.vibe[0]:newAns.vibe]||"";
     const interestDesc = Array.isArray(newAns.interest)?newAns.interest.join(" and "):newAns.interest||"";
 
