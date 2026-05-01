@@ -776,8 +776,7 @@ export default function VegasApp() {
     const interestDesc = Array.isArray(newAns.interest)?newAns.interest.join(" and "):newAns.interest||"";
 
     const fallbacks = [
-      `${vibeDesc ? vibeDesc.charAt(0).toUpperCase()+vibeDesc.slice(1)+" energy" : "The kind of traveler"} who comes to Vegas as a ${travelerType} — the city has been holding its breath for someone like you. ${seasonCtx[newAns.season]} Vegas reveals different layers depending on who's asking, and you asked the right questions. Here's what should absolutely be on your list.`,
-      `You're coming to Vegas as a ${travelerType}${vibeDesc?" drawn to "+vibeDesc:""}. That already puts you in a different category. ${seasonCtx[newAns.season]} Here's what the city has been saving for you.`,
+      `You're the type of traveler who already knows what you want before you arrive — and Vegas is about to confirm every instinct. ${seasonCtx[newAns.season]} Most people come here and see the surface. You're not most people. Your itinerary is ready.`,
     ];
 
     // Show results immediately with fallback — AI briefing updates in background
@@ -786,30 +785,41 @@ export default function VegasApp() {
     setStep(totalSteps+1);
 
     // Fetch AI briefing in background and update when ready
+    const budgetDesc = {budget:"looks for the best experience at the lowest cost — hostels, free attractions, street food, nothing wasted",mid:"balances spending consciously — saves on some things to splurge on others, always asking if it's worth it",high:"travels comfortably without overthinking costs — chooses quality over price but isn't reckless",vip:"cost is never the deciding factor — only the best hotels, restaurants and experiences make the cut"}[newAns.budget] || "";
+
     fetch("https://api.anthropic.com/v1/messages",{
       method:"POST",
       headers:{"Content-Type":"application/json"},
       body:JSON.stringify({
-        model:"claude-sonnet-4-20250514",max_tokens:300,
-        messages:[{role:"user",content:`You are Vegas Unveiled — a mysterious Las Vegas insider. You write like a thriller novelist who knows the city's secrets.
-
-Write a SHORT, powerful, deeply personal briefing. 3-4 sentences MAX. No fluff. No generic travel language.
+        model:"claude-sonnet-4-20250514",max_tokens:500,
+        messages:[{role:"user",content:`You are an expert in traveler profiles who knows Las Vegas deeply. Based on the profile below, write a text in English with 3 paragraphs that feels like the person is reading their own travel horoscope — specific, revealing, a little humorous, never generic.
 
 TRAVELER PROFILE:
-- Who: ${travelerType}
-- Vibe: ${vibeDesc}
+- Trip type: ${travelerType}
+- Travel style/vibe: ${vibeDesc}
 - Interests: ${interestDesc}
-- Season: ${seasonCtx[newAns.season]}
-- Days: ${newAns.days}
-- Time: ${newAns.timeOfDay}
+- Budget behavior: ${budgetDesc}
+- Season: ${newAns.season}
+- Trip length: ${newAns.days} days
+- Preferred time: ${newAns.timeOfDay}
+
+PARAGRAPH 1 — THE TRAVELER:
+Describe this person's real travel behavior. How they make decisions. What they prioritize. What they never do. What they always do. Be specific and behavioral — not complimentary. They should read this and think "how did this app know that about me?" Use their exact budget style, trip type and vibe to make it feel personal and unique. Add a touch of dry humor if it fits naturally.
+
+PARAGRAPH 2 — VEGAS FOR THEM:
+What does Las Vegas specifically have for this type of traveler that they won't find anywhere else. Not the obvious stuff — the layer of Vegas that matches exactly who they are. Make them feel like Vegas was built for their profile.
+
+PARAGRAPH 3 — THE SEASON:
+Describe Las Vegas in ${newAns.season} in a sensory, seductive way — temperature, energy, crowd, light, vibe. Make them feel the city. End with one sentence that creates desire to be there NOW.
 
 RULES:
-1. First sentence: Hit them personally. Use their exact profile. Make them feel like you read their mind. Be specific and flattering.
-2. Second sentence: Paint Vegas in their season/time with 1-2 sharp, sensory, cinematic details. No clichés.
-3. Third sentence: One bold statement about what makes their specific trip unique.
-4. Final sentence: Sharp transition. Example: "Here's what should absolutely be on your list."
-
-Tone: Dark. Intimate. Cinematic. NEVER say "vibrant" "bustling" "amazing" or any generic travel word.`}]
+- Write in English only
+- 3-5 sentences per paragraph
+- Never use: "vibrant" "bustling" "amazing" "unique experience" "unforgettable" or any travel brochure language
+- Never be vague — every sentence must be specific to their profile
+- Tone: intimate, knowing, slightly cinematic. Like someone who has watched thousands of travelers come through Vegas and can read people instantly.
+- Do NOT use quotes around the text
+- Do NOT add any title or label before the text`}]
       })
     }).then(r=>r.json()).then(data=>{
       const text = data.content?.[0]?.text;
