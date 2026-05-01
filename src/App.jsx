@@ -550,48 +550,70 @@ function getHotels(ans) {
 }
 
 // ─── EMAIL CAPTURE ────────────────────────────────────────────────────────
-async function sendItineraryEmail(email, itinerary, freeExp, hotels, answers) {
-  // Build email content
-  const expList = itinerary.map((e,i)=>`Day ${i+1}: ${e.name} — $${e.price} — ${e.url}`).join('\n');
-  const freeList = freeExp.map(f=>`• ${f.name}: ${f.url}`).join('\n');
-  const hotelList = hotels.map(h=>`• ${h.name} (${h.price}): ${h.url}`).join('\n');
+async function sendItineraryEmail(toEmail, itinerary, freeExp, hotels, answers, aiStory) {
+  const EMAILJS_SERVICE = "service_edep1kv";
+  const EMAILJS_TEMPLATE = "template_q80x74g";
+  const EMAILJS_KEY = "dieVpaeqWt_BhxNUe";
 
-  const prompt = `You are Vegas Unveiled, a mysterious Las Vegas insider. 
+  const seasonLabels={winter:"Winter",spring:"Spring",summer:"Summer",fall:"Fall"};
+  const daysLabels={"1-2":"Weekend","3-4":"4-Day","5-7":"7-Day","1week":"Full Week"};
 
-A traveler just got their custom itinerary. Write a short, atmospheric email (HTML format) with:
-- Subject line that creates urgency
-- Dark, cinematic intro (2 sentences max)
-- Their itinerary listed clearly with booking links
-- A section for free experiences
-- Hotel recommendations
-- Closing that reinforces the "insider" brand
-
-Trip details: ${answers.tripType} trip, ${answers.vibe} vibe, ${answers.days} days, visiting in ${answers.season}
-
-Experiences:
-${expList}
-
-Free:
-${freeList}
-
-Hotels:
-${hotelList}
-
-Format as clean HTML email. Keep it mysterious and exclusive in tone.`;
-
-  try {
-    const res = await fetch("https://api.anthropic.com/v1/messages", {
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({
-        model:"claude-sonnet-4-20250514",
-        max_tokens:1000,
-        messages:[{role:"user",content:prompt}]
-      })
+  // Build itinerary HTML grouped by day
+  const dayPairs = Math.ceil(itinerary.length/2);
+  let itineraryHtml = "";
+  for(let i=0;i<dayPairs;i++){
+    const dayExp = itinerary.find(e=>e.timeSlot==="day"&&itinerary.indexOf(e)===i*2);
+    const nightExp = itinerary.find(e=>e.timeSlot==="night"&&itinerary.indexOf(e)===i*2+1);
+    itineraryHtml += `<p style="color:#ff2d55;font-size:14px;font-weight:bold;letter-spacing:2px;margin:20px 0 8px">Day ${i+1}</p>`;
+    [dayExp,nightExp].filter(Boolean).forEach(e=>{
+      const isFree = e.price===0;
+      itineraryHtml += `
+        <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:14px 18px;margin-bottom:8px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+            <span style="font-size:20px;margin-right:10px">${e.emoji}</span>
+            <span style="color:#fff;font-size:13px;font-weight:bold;flex:1">${e.name}</span>
+            <span style="color:${isFree?"#2ecc71":"#ffd700"};font-size:14px;font-weight:bold;margin-left:10px">${isFree?"FREE":"$"+e.price}</span>
+          </div>
+          <p style="color:#aaa;font-size:12px;line-height:1.6;margin:0 0 10px">${e.desc}</p>
+          <a href="${e.url}" style="display:block;background:${isFree?"rgba(39,174,96,.2)":"linear-gradient(135deg,#ff2d55,#c0392b)"};color:${isFree?"#2ecc71":"#fff"};text-align:center;padding:10px;border-radius:6px;text-decoration:none;font-size:12px;font-weight:bold">
+            ${isFree?"🔗 Learn More":"🎟️ Book Now"}
+          </a>
+        </div>`;
     });
-    const data = await res.json();
-    return data.content?.[0]?.text || "";
-  } catch { return ""; }
+  }
+
+  // Free experiences
+  if(freeExp && freeExp.length>0){
+    itineraryHtml += `<p style="color:#2ecc71;font-size:13px;font-weight:bold;letter-spacing:2px;margin:20px 0 8px">✨ Free Experiences</p>`;
+    freeExp.forEach(f=>{
+      itineraryHtml += `
+        <div style="background:rgba(39,174,96,.04);border:1px solid rgba(39,174,96,.15);border-radius:8px;padding:12px 16px;margin-bottom:6px">
+          <span style="font-size:18px;margin-right:8px">${f.emoji}</span>
+          <span style="color:#fff;font-size:13px;font-weight:bold">${f.name}</span>
+          <p style="color:#aaa;font-size:12px;margin:4px 0 8px">${f.desc}</p>
+          <a href="${f.url}" style="color:#2ecc71;font-size:12px;text-decoration:none">🔗 Learn More →</a>
+        </div>`;
+    });
+  }
+
+  // Load EmailJS SDK dynamically
+  if(!window.emailjs){
+    await new Promise((res,rej)=>{
+      const s=document.createElement("script");
+      s.src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js";
+      s.onload=res; s.onerror=rej;
+      document.head.appendChild(s);
+    });
+    window.emailjs.init(EMAILJS_KEY);
+  }
+
+  return window.emailjs.send(EMAILJS_SERVICE, EMAILJS_TEMPLATE, {
+    to_email: toEmail,
+    briefing: aiStory || "Your secret Vegas itinerary is ready.",
+    season: seasonLabels[answers.season] || answers.season,
+    days: daysLabels[answers.days] || answers.days,
+    itinerary_html: itineraryHtml,
+  });
 }
 
 // ─── MAIN APP ─────────────────────────────────────────────────────────────
@@ -790,7 +812,7 @@ Tone: Dark. Intimate. Cinematic. NEVER say "vibrant" "bustling" "amazing" or any
   async function handleEmailSubmit(){
     if(!email||emailLoading) return;
     setEmailLoading(true);
-    await sendItineraryEmail(email,itinerary,freeExp,hotels,answers);
+    await sendItineraryEmail(email,itinerary,freeExp,hotels,answers,aiStory);
     setEmailSent(true);
     setEmailLoading(false);
   }
