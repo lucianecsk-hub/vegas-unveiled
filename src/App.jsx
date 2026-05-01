@@ -13,7 +13,6 @@ const PAID = [
   { id:11, name:"VIP Club Crawl + Open Bar", cat:"Nightlife", price:40, rating:4.9, reviews:40, dur:"5 hrs", emoji:"🥂", desc:"Party bus, open bar and VIP entry to the best clubs on the Strip. The night that never ends.", url:"https://www.getyourguide.com/las-vegas-l58/las-vegas-cocktail-class-party-bus-and-vip-club-entry-t1230903/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","couple","group","bachelorette"], vibes:[], times:["night"], seasons:["winter","spring","summer","fall"], interests:["nightlife"], tier:"budget", girlsTrip:true },
   { id:12, name:"Piano Man — Kyle Martin", cat:"Show", price:42, rating:4.8, reviews:1037, dur:"1.5 hrs", emoji:"🎹", desc:"The Vegas piano show that Billy Joel himself would respect. Miracle Mile Shops. Every night.", url:"https://vegas.vdvm.net/qWEY35", provider:"VCO", tags:["solo","couple","work"], vibes:["dark"], times:["night"], seasons:["winter","spring","summer","fall"], interests:["show"], tier:"budget" },
   { id:13, name:"The King Comes Home — Elvis", cat:"Show", price:41, rating:4.7, reviews:124, dur:"1.5 hrs", emoji:"👑", desc:"The most convincing Elvis tribute in Vegas. Westgate Hotel — where the real Elvis performed.", url:"https://vegas.vdvm.net/5gXJVN", provider:"VCO", tags:["solo","couple","group"], vibes:["dark"], times:["night"], seasons:["winter","spring","summer","fall"], interests:["show"], tier:"budget" },
-  { id:14, name:"Fantasy Burlesque — Luxor", cat:"Show", price:44, rating:4.7, reviews:381, dur:"1.5 hrs", emoji:"🌹", desc:"Vegas' longest-running burlesque. Adult, funny, spectacular. Not what you expect — better.", url:"https://www.getyourguide.com/las-vegas-l58/las-vegas-strip-fantasy-at-luxor-t393290/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","couple","group"], vibes:[], times:["night"], seasons:["winter","spring","summer","fall"], interests:["show","nightlife"], tier:"budget", guysTrip:true },
   { id:15, name:"Interstellar Arc — AREA15", cat:"Unique", price:44, rating:4.8, reviews:14, dur:"1 hr", emoji:"🌌", desc:"An otherworldly art installation inside AREA15. The future is already here — Vegas just doesn't advertise it.", url:"https://vegas.vdvm.net/9VM075", provider:"VCO", tags:["group","family","kids"], vibes:[], times:["day","night"], seasons:["winter","spring","summer","fall"], interests:["unique"], tier:"budget" },
   { id:16, name:"All Shook Up — Elvis Show", cat:"Show", price:45, rating:4.8, reviews:1340, dur:"1.5 hrs", emoji:"🎸", desc:"Open bar cabin above the Strip. Premium experience, best views in Vegas. No group needed — perfect solo.", url:"https://www.getyourguide.com/las-vegas-l58/las-vegas-all-shook-up-the-ultimate-elvis-tribute-t693302/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","couple","group"], vibes:["luxury","romantic"], times:["night"], seasons:["winter","spring","summer","fall"], interests:["show"], tier:"budget" },
   { id:17, name:"Blue Man Group — Luxor", cat:"Show", price:47, rating:4.4, reviews:4893, dur:"1.5 hrs", emoji:"💙", desc:"Three blue-painted performers, musical machines, and audience chaos. Zero words. Maximum impact.", url:"https://vegas.vdvm.net/21aPxA", provider:"VCO", tags:["solo","couple","group"], vibes:["adventure"], times:["day","night"], seasons:["winter","spring","fall"], interests:["show"], tier:"budget" },
@@ -65,7 +64,7 @@ const PAID = [
   { id:63, name:"The Spa at Encore — Wynn", cat:"Wellness", price:130, rating:4.9, reviews:150, dur:"Half day", emoji:"🌿", desc:"One of the most awarded spas in North America. Inside Encore at Wynn. Pure luxury, no casino noise.", url:"https://vegas.vdvm.net/dy9YMk", provider:"VCO", tags:["solo","couple"], vibes:["luxury","romantic"], times:["morning"], seasons:["winter","spring","summer","fall"], interests:["wellness","unique"], tier:"premium", girlsTrip:true },
   { id:64, name:"Vdara Spa & Salon", cat:"Wellness", price:80, rating:4.7, reviews:100, dur:"Half day", emoji:"🛁", desc:"No casino. No noise. Just a world-class spa in the most peaceful hotel on the Strip.", url:"https://vegas.vdvm.net/6kPmjG", provider:"VCO", tags:["solo","couple","bachelorette","work"], vibes:["luxury","romantic"], times:["morning"], seasons:["winter","spring","summer","fall"], interests:["wellness","unique"], tier:"mid" },
   { id:65, name:"Nelson Ghost Town & Mine Tour", cat:"Dark", price:134, rating:4.7, reviews:68, dur:"4 hrs", emoji:"👻", desc:"An abandoned 1800s gold mining town 45 minutes from Vegas. Rusty cars, real ghost stories, an actual mine. The dark side Nevada doesn't advertise.", url:"https://www.getyourguide.com/nelson-ghost-town-nevada-l187538/las-vegas-nelson-ghost-town-with-mine-tour-option-t1221627/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","couple"], vibes:["luxury","romantic"], times:["morning","day"], seasons:["winter","spring","summer","fall"], interests:["unique","adventure"], tier:"mid" },
-  { id:74, name:"Strip Club Crawl + Open Bar + Party Bus", cat:"Nightlife", price:99, rating:4.7, reviews:150, dur:"4 hrs", emoji:"🎪", desc:"Party bus, open bar and VIP entry to Vegas' top strip clubs. The bachelor party night this city was built for.", url:"https://www.getyourguide.com/las-vegas-l58/strip-club-crawl-open-bar-party-bus-t442598/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","couple","group"], vibes:["luxury"], times:["night"], seasons:["winter","spring","summer","fall"], interests:["nightlife"], tier:"mid", guysTrip:true },
+  { id:74, name:"Strip Club Crawl + Open Bar + Party Bus", cat:"Nightlife", price:99, rating:4.7, reviews:150, dur:"4 hrs", emoji:"🍾", desc:"Party bus, open bar and VIP entry to Vegas' top strip clubs. The bachelor party night this city was built for.", url:"https://www.getyourguide.com/las-vegas-l58/strip-club-crawl-open-bar-party-bus-t442598/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","couple","group"], vibes:["luxury"], times:["night"], seasons:["winter","spring","summer","fall"], interests:["nightlife"], tier:"mid", guysTrip:true },
   { id:66, name:"Pool Party Crawl by Party Bus", cat:"Nightlife", price:99, rating:4.5, reviews:110, dur:"5 hrs", emoji:"🏊", desc:"Party bus to a Vegas pool party with free drinks and VIP entry. The definitive Vegas summer experience.", url:"https://www.getyourguide.com/las-vegas-l58/las-vegas-pool-party-crawl-by-party-bus-t439815/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","work"], vibes:["luxury"], times:["morning","day"], seasons:["winter","spring","summer","fall"], interests:["nightlife"], tier:"mid", girlsTrip:true },
   { id:67, name:"3-Stop Pool Party Crawl — Party Bus", cat:"Nightlife", price:99, rating:4.5, reviews:110, dur:"5 hrs", emoji:"🎉", desc:"Party bus hits 3 Vegas pool parties in one day. Free drinks, VIP entry at each stop. Summer in Vegas, maximized.", url:"https://www.getyourguide.com/las-vegas-l58/las-vegas-strip-3-stop-pool-party-crawl-with-party-bus-t384399/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","couple","group"], vibes:["dark","adventure"], times:["morning","day"], seasons:["winter","spring","fall"], interests:["nightlife"], tier:"mid", girlsTrip:true },
   // ── LGBT EXPERIENCES ──
@@ -102,7 +101,7 @@ const FREE_EXPERIENCES = [
   { id:"f1", name:"Bellagio Fountains at Night", loc:"Bellagio Hotel", time:"After 8pm", emoji:"⛲", desc:"Every 15-30 minutes after dark. 1,000 jets of water choreographed to music. Free. Unmissable.", url:"https://vegas.vdvm.net/oq11jb" },
   { id:"f2", name:"Bellagio Conservatory & Garden", loc:"Bellagio Hotel", time:"Anytime", emoji:"🌸", desc:"A 14,000 sq ft indoor garden that changes 5 times a year. Currently the most beautiful room in Vegas.", url:"https://vegas.vdvm.net/Org2RN" },
   { id:"f3", name:"Fremont Street LED Experience", loc:"Downtown Vegas", time:"After dark", emoji:"💡", desc:"A 1,500-foot LED canopy with free shows every hour. The Vegas the Strip doesn't want you to see.", url:"https://vegas.vdvm.net/9gR3A3" },
-  { id:"f4", name:"Flamingo Wildlife Habitat", loc:"Flamingo Hotel", time:"Morning", emoji:"🦩", desc:"Real flamingos living inside a casino resort. Free to visit. Completely surreal at 8am.", url:"https://vegas.vdvm.net/6eOKEq" },
+  { id:"f4", name:"Flamingo Wildlife Habitat", loc:"Flamingo Hotel", time:"Morning", emoji:"🦩", desc:"Real flamingos living inside a casino resort. Free to visit. Great for families and kids — surreal at 8am.", tags:["family","kids"], url:"https://vegas.vdvm.net/6eOKEq" },
   { id:"f5", name:"Grand Canal Shoppes — The Venetian", loc:"The Venetian", time:"Anytime", emoji:"🛶", desc:"Venice reconstructed inside a hotel. Walk it for free. Watch the gondolas for free. It works.", url:"https://vegas.vdvm.net/MmJJG3" },
   { id:"f6", name:"Pinball Hall of Fame", loc:"South Strip", time:"Anytime", emoji:"🎮", desc:"500+ vintage machines from the 1950s onward. All playable for quarters. Totally free to enter.", url:"https://vegas.vdvm.net/WqnZa3" },
   { id:"f7", name:"M&M's World Las Vegas", loc:"Las Vegas Blvd", time:"Anytime", emoji:"🍬", desc:"4 floors of chocolate chaos. Free to enter. The world's largest M&M's store.", url:"https://vegas.vdvm.net/JzGaLE" },
@@ -410,8 +409,13 @@ function filterExperiences(ans) {
   const dayPairs = {["1-2"]:3,["3-4"]:4,["5-7"]:7,["1week"]:8}[ans.days]||4;
   const minTours = (ans.days==="5-7"||ans.days==="1week") ? 4 : 0;
 
+  // Nightlife/Adult/Strip category IDs — max 1 per category in itinerary
+  const NIGHTLIFE_CAT_IDS = [11, 24, 56, 66, 67]; // Club crawls, bar crawls, pool parties
+  const ADULT_SHOW_IDS = [8, 27, 29]; // Female adult shows (ROUGE, Atomic Saloon, FANTASY VCO)
+  const STRIP_CLUB_IDS = [74]; // Strip club crawl
+
   // Category dedup trackers — using object so closures see updates
-  const state = { spaAdded:false, maleRevueAdded:false, femaleRevueAdded:false, dragAdded:false, toursAdded:0 };
+  const state = { spaAdded:false, maleRevueAdded:false, femaleRevueAdded:false, dragAdded:false, toursAdded:0, nightlifeAdded:false, adultShowAdded:false, stripClubAdded:false };
 
   const canAdd = (exp) => {
     if(used.has(exp.id)) return false;
@@ -420,6 +424,9 @@ function filterExperiences(ans) {
     if(MALE_REVUE_IDS.includes(exp.id) && state.maleRevueAdded) return false;
     if(FEMALE_REVUE_IDS.includes(exp.id) && state.femaleRevueAdded) return false;
     if(DRAG_IDS.includes(exp.id) && state.dragAdded) return false;
+    if(NIGHTLIFE_CAT_IDS.includes(exp.id) && state.nightlifeAdded) return false;
+    if(ADULT_SHOW_IDS.includes(exp.id) && state.adultShowAdded) return false;
+    if(STRIP_CLUB_IDS.includes(exp.id) && state.stripClubAdded) return false;
     return true;
   };
 
@@ -429,6 +436,9 @@ function filterExperiences(ans) {
     if(MALE_REVUE_IDS.includes(exp.id)) state.maleRevueAdded = true;
     if(FEMALE_REVUE_IDS.includes(exp.id)) state.femaleRevueAdded = true;
     if(DRAG_IDS.includes(exp.id)) state.dragAdded = true;
+    if(NIGHTLIFE_CAT_IDS.includes(exp.id)) state.nightlifeAdded = true;
+    if(ADULT_SHOW_IDS.includes(exp.id)) state.adultShowAdded = true;
+    if(STRIP_CLUB_IDS.includes(exp.id)) state.stripClubAdded = true;
     if(TOUR_IDS.includes(exp.id)) state.toursAdded++;
   };
 
@@ -937,7 +947,7 @@ Tone: Dark. Intimate. Cinematic. Like a secret being handed over. NEVER say "vib
 
             {/* Summary badges */}
             <div style={{display:"flex",flexWrap:"wrap",gap:"6px",marginBottom:"22px"}}>
-              {[`${seasonLabels[answers.season]} in Vegas`,`${daysLabels[answers.days]} trip`,`${itinerary.length} paid experiences`,`~$${totalCost} est.`].map(b=>(
+              {[`${seasonLabels[answers.season]} in Vegas`,`${daysLabels[answers.days]} trip`].map(b=>(
                 <div key={b} style={{background:"rgba(255,215,0,.07)",border:"1px solid rgba(255,215,0,.16)",borderRadius:"20px",padding:"4px 14px",color:"#ffd700",fontSize:"0.72rem",letterSpacing:"0.06em"}}>{b}</div>
               ))}
             </div>
