@@ -102,9 +102,9 @@ const FREE_EXPERIENCES = [
   { id:"f3", name:"Fremont Street LED Experience", loc:"Downtown Vegas", time:"After dark", emoji:"💡", desc:"A 1,500-foot LED canopy with free shows every hour. The Vegas the Strip doesn't want you to see.", url:"https://vegas.vdvm.net/9gR3A3" },
   { id:"f5", name:"Grand Canal Shoppes — The Venetian", loc:"The Venetian", time:"Anytime", emoji:"🛶", desc:"Venice reconstructed inside a hotel. Walk it for free. Watch the gondolas for free. It works.", url:"https://vegas.vdvm.net/MmJJG3" },
   { id:"f10", name:"Welcome to Las Vegas Sign", loc:"South Strip", time:"Golden Hour", emoji:"🪧", desc:"The photo. Golden hour makes it transcendent. Get there 30 minutes before sunset.", url:"https://vegas.vdvm.net/DKPrk2" },
-  { id:"f6", name:"Pinball Hall of Fame", loc:"South Strip", time:"Anytime", emoji:"🎮", desc:"500+ vintage machines from the 1950s onward. All playable for quarters. Totally free to enter.", url:"https://vegas.vdvm.net/WqnZa3" },
+  { id:"f6", name:"Pinball Hall of Fame", loc:"South Strip", time:"Anytime", emoji:"🎮", desc:"500+ vintage machines from the 1950s onward. All playable for quarters. Totally free to enter.", url:"https://vegas.vdvm.net/WqnZa3", tags:["budget"] },
   { id:"f2", name:"Bellagio Conservatory & Garden", loc:"Bellagio Hotel", time:"Anytime", emoji:"🌸", desc:"A 14,000 sq ft indoor garden that changes 5 times a year. Currently the most beautiful room in Vegas.", url:"https://vegas.vdvm.net/Org2RN" },
-  { id:"f9", name:"Fall of Atlantis — Caesars", loc:"Forum Shops", time:"Every hour", emoji:"🏛️", desc:"A free animatronic show inside Caesars Forum Shops. Surprisingly spectacular.", url:"https://vegas.vdvm.net/g1jjyO" },
+  { id:"f9", name:"Fall of Atlantis — Caesars", loc:"Forum Shops", time:"Every hour", emoji:"🏛️", desc:"A free animatronic show inside Caesars Forum Shops. Surprisingly spectacular.", url:"https://vegas.vdvm.net/g1jjyO", tags:["budget"] },
   { id:"f4", name:"Flamingo Wildlife Habitat", loc:"Flamingo Hotel", time:"Morning", emoji:"🦩", desc:"Real flamingos living inside a casino resort. Free to visit. Great for families and kids — surreal at 8am.", tags:["family","kids"], url:"https://vegas.vdvm.net/6eOKEq" },
   { id:"f7", name:"M&M's World Las Vegas", loc:"Las Vegas Blvd", time:"Anytime", emoji:"🍬", desc:"4 floors of chocolate chaos. Free to enter. The world's largest M&M's store.", url:"https://vegas.vdvm.net/JzGaLE", tags:["family","kids"] },
   { id:"f8", name:"Hershey's Chocolate World", loc:"New York-New York", time:"Anytime", emoji:"🍫", desc:"Inside a casino. A giant Hershey's experience — free to browse, optional to buy.", url:"https://vegas.vdvm.net/rQZ9R5", tags:["family","kids"] },
@@ -374,17 +374,26 @@ function filterExperiences(ans) {
     if(isGirlsTrip && [74].includes(exp.id)) s-=4;  // no strip club crawl for girls
 
     // ADULT SHOW GENDER LOGIC:
-    // Male revues (Chippendales/Thunder) = women want to see men → girls/bachelorette only
-    // Female shows (FANTASY/ROUGE/Atomic) = men want to see women → guys/couple only
     const isBachelorette = ans.tripType === "bachelorette";
     const isHeteroCouple = ans.tripType === "couple" && ans.groupGender !== "lgbtq";
-
-    // Male revues: only for girls trip or bachelorette
     if(!isGirlsTrip && !isBachelorette && [31,35].includes(exp.id)) s-=8;
-
-    // Female adult shows: only for guys trip or hetero couple — NOT for girls solo
     if(isGirlsTrip && [8,27,29].includes(exp.id)) s-=8;
     if(isBachelorette && [8,27,29].includes(exp.id)) s-=8;
+
+    // LUXURY RULES — budget experiences never for vip/luxury budget
+    const isLuxuryBudget = ans.budget === "vip" || ans.budget === "high";
+    if(isLuxuryBudget) {
+      // Never show these for luxury travelers
+      if([26].includes(exp.id)) s-=15;  // Hop-On Hop-Off bus
+      if([33].includes(exp.id)) s-=15;  // Tournament of Kings (kids show)
+      if([44].includes(exp.id)) s-=12;  // Grand Canyon bus tour $99 — show helicopter instead
+      if([1,6].includes(exp.id)) s-=8;  // Basic High Roller ticket, Eiffel Tower
+      // Grand Canyon helicopter (id:58) gets huge boost for luxury
+      if([58].includes(exp.id)) s+=10;
+    }
+
+    // GRAND CANYON DEDUP — never show more than 1 Grand Canyon experience
+    const GRAND_CANYON_IDS = [44,45,58]; // Bus tour, Helicopter Strip, Helicopter Landing
 
     interests.forEach(i=>{
       if(exp.interests&&exp.interests.includes(i)) s+=3;
@@ -425,9 +434,11 @@ function filterExperiences(ans) {
   const NIGHTLIFE_CAT_IDS = [11, 24, 56, 66, 67]; // Club crawls, bar crawls, pool parties
   const ADULT_SHOW_IDS = []; // Covered by FEMALE_REVUE_IDS and MALE_REVUE_IDS
   const STRIP_CLUB_IDS = [74]; // Strip club crawl
+  const GRAND_CANYON_IDS = [44, 45, 58]; // Bus tour, Helicopter Strip, Helicopter Landing
+  const WEDDING_IDS = [57, 60, 92]; // Elvis Wedding, Helicopter Wedding, Elvis+Limo
 
-  // Category dedup trackers — using object so closures see updates
-  const state = { spaAdded:false, maleRevueAdded:false, femaleRevueAdded:false, dragAdded:false, toursAdded:0, nightlifeAdded:false, adultShowAdded:false, stripClubAdded:false };
+  // Category dedup trackers
+  const state = { spaAdded:false, maleRevueAdded:false, femaleRevueAdded:false, dragAdded:false, toursAdded:0, nightlifeAdded:false, adultShowAdded:false, stripClubAdded:false, grandCanyonAdded:false, weddingAdded:false };
 
   const canAdd = (exp) => {
     if(used.has(exp.id)) return false;
@@ -439,6 +450,8 @@ function filterExperiences(ans) {
     if(NIGHTLIFE_CAT_IDS.includes(exp.id) && state.nightlifeAdded) return false;
     if(ADULT_SHOW_IDS.includes(exp.id) && state.adultShowAdded) return false;
     if(STRIP_CLUB_IDS.includes(exp.id) && state.stripClubAdded) return false;
+    if(GRAND_CANYON_IDS.includes(exp.id) && state.grandCanyonAdded) return false;
+    if(WEDDING_IDS.includes(exp.id) && state.weddingAdded) return false;
     return true;
   };
 
@@ -451,6 +464,8 @@ function filterExperiences(ans) {
     if(NIGHTLIFE_CAT_IDS.includes(exp.id)) state.nightlifeAdded = true;
     if(ADULT_SHOW_IDS.includes(exp.id)) state.adultShowAdded = true;
     if(STRIP_CLUB_IDS.includes(exp.id)) state.stripClubAdded = true;
+    if(GRAND_CANYON_IDS.includes(exp.id)) state.grandCanyonAdded = true;
+    if(WEDDING_IDS.includes(exp.id)) state.weddingAdded = true;
     if(TOUR_IDS.includes(exp.id)) state.toursAdded++;
   };
 
@@ -613,10 +628,13 @@ async function sendItineraryEmail(toEmail, itinerary, freeExp, hotels, answers, 
     await new Promise((res,rej)=>{
       const s=document.createElement("script");
       s.src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js";
-      s.onload=res; s.onerror=rej;
+      s.onload=()=>{ window.emailjs.init(EMAILJS_KEY); res(); };
+      s.onerror=rej;
       document.head.appendChild(s);
     });
+  } else if(!window._emailjsInited) {
     window.emailjs.init(EMAILJS_KEY);
+    window._emailjsInited = true;
   }
 
   return window.emailjs.send(EMAILJS_SERVICE, EMAILJS_TEMPLATE, {
@@ -753,6 +771,8 @@ export default function VegasApp() {
       // Exclude kids/family attractions for non-family trips
       if(f.tags && f.tags.includes("kids") && newAns.tripType!=="family") return false;
       if(f.tags && f.tags.includes("family") && newAns.tripType!=="family") return false;
+      // For luxury/vip — exclude budget-only free experiences
+      if((newAns.budget==="vip"||newAns.budget==="high") && f.tags && f.tags.includes("budget")) return false;
       return true;
     }).reduce((acc, f) => {
       const hasFountains = acc.some(x=>x.id==="f1");
@@ -840,8 +860,13 @@ RULES:
   async function handleEmailSubmit(){
     if(!email||emailLoading) return;
     setEmailLoading(true);
-    await sendItineraryEmail(email,itinerary,freeExp,hotels,answers,aiStory);
-    setEmailSent(true);
+    try {
+      await sendItineraryEmail(email,itinerary,freeExp,hotels,answers,aiStory);
+      setEmailSent(true);
+    } catch(err) {
+      console.error("Email error:", err);
+      alert("Could not send email. Please try again or check your email address.");
+    }
     setEmailLoading(false);
   }
 
@@ -1081,13 +1106,13 @@ RULES:
               <p style={{color:"#aaa",fontSize:"0.78rem",margin:"0 0 10px",textAlign:"center"}}>Know someone who'd love this? Send them their own custom itinerary.</p>
               <div style={{display:"flex",gap:"8px"}}>
                 <button onClick={()=>{
-                    const url = window.location.href;
+                    const shareText = "Going to Vegas? Discover your traveler profile and see what the city has to offer you 🎰\n" + window.location.href;
                     if(navigator.clipboard && navigator.clipboard.writeText){
-                      navigator.clipboard.writeText(url).then(()=>alert("Link copied! Share it with your squad 🎰")).catch(()=>{
-                        prompt("Copy this link:", url);
+                      navigator.clipboard.writeText(shareText).then(()=>alert("Copied! Just paste and send 🎰")).catch(()=>{
+                        prompt("Copy this and send to your friend:", shareText);
                       });
                     } else {
-                      prompt("Copy this link:", url);
+                      prompt("Copy this and send to your friend:", shareText);
                     }
                   }}
                   style={{flex:1,padding:"12px",borderRadius:"9px",border:"1px solid rgba(255,255,255,.12)",background:"rgba(255,255,255,.05)",color:"#ccc",fontSize:"0.8rem",cursor:"pointer"}}>
