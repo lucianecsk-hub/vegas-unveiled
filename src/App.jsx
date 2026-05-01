@@ -15,7 +15,7 @@ const PAID = [
   { id:13, name:"The King Comes Home — Elvis", cat:"Show", price:41, rating:4.7, reviews:124, dur:"1.5 hrs", emoji:"👑", desc:"The most convincing Elvis tribute in Vegas. Westgate Hotel — where the real Elvis performed.", url:"https://vegas.vdvm.net/5gXJVN", provider:"VCO", tags:["solo","couple","group"], vibes:["dark"], times:["night"], seasons:["winter","spring","summer","fall"], interests:["show"], tier:"budget" },
   { id:15, name:"Interstellar Arc — AREA15", cat:"Unique", price:44, rating:4.8, reviews:14, dur:"1 hr", emoji:"🌌", desc:"An otherworldly art installation inside AREA15. The future is already here — Vegas just doesn't advertise it.", url:"https://vegas.vdvm.net/9VM075", provider:"VCO", tags:["group","family","kids"], vibes:[], times:["day","night"], seasons:["winter","spring","summer","fall"], interests:["unique"], tier:"budget" },
   { id:16, name:"All Shook Up — Elvis Show", cat:"Show", price:45, rating:4.8, reviews:1340, dur:"1.5 hrs", emoji:"🎸", desc:"Open bar cabin above the Strip. Premium experience, best views in Vegas. No group needed — perfect solo.", url:"https://www.getyourguide.com/las-vegas-l58/las-vegas-all-shook-up-the-ultimate-elvis-tribute-t693302/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","couple","group"], vibes:["luxury","romantic"], times:["night"], seasons:["winter","spring","summer","fall"], interests:["show"], tier:"budget" },
-  { id:17, name:"Blue Man Group — Luxor", cat:"Show", price:47, rating:4.4, reviews:4893, dur:"1.5 hrs", emoji:"💙", desc:"Three blue-painted performers, musical machines, and audience chaos. Zero words. Maximum impact.", url:"https://vegas.vdvm.net/21aPxA", provider:"VCO", tags:["solo","couple","group"], vibes:["adventure"], times:["day","night"], seasons:["winter","spring","summer","fall"], interests:["show"], tier:"budget" },
+  { id:17, name:"Blue Man Group — Luxor", cat:"Show", price:47, rating:4.4, reviews:4893, dur:"1.5 hrs", emoji:"💙", desc:"Three blue-painted performers, musical machines, and audience chaos. Zero words. Maximum impact.", url:"https://vegas.vdvm.net/21aPxA", provider:"VCO", tags:["family","kids"], vibes:["adventure"], times:["day","night"], seasons:["winter","spring","summer","fall"], interests:["show"], tier:"budget" },
   { id:18, name:"High Roller Open Bar Cabin", cat:"Views", price:48, rating:4.6, reviews:1285, dur:"30 min", emoji:"🎡", desc:"The Strip from 550 feet. Open bar. No limits. Best at sunset.", url:"https://www.getyourguide.com/las-vegas-l58/the-high-roller-ride-at-the-linq-ticket-t436735/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["couple","group","family"], vibes:[], times:["day","night"], seasons:["winter","spring","summer","fall"], interests:["unique","nightlife"], tier:"budget", girlsTrip:true },
   { id:19, name:"Mojave + 7 Magic Mountains Tour", cat:"Tour", price:49, rating:4.7, reviews:362, dur:"2 hrs", emoji:"🏔️", desc:"The neon totem poles in the middle of the Mojave desert. Plus the Vegas sign. Art meets nowhere.", url:"https://www.getyourguide.com/las-vegas-l58/las-vegas-seven-magic-mountains-and-las-vegas-sign-tour-t400361/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","group","work"], vibes:["adventure"], times:["day"], seasons:["winter","spring","summer","fall"], interests:["unique","adventure"], tier:"budget" },
   { id:20, name:"Mat Franco Magic Show", cat:"Show", price:50, rating:4.8, reviews:2686, dur:"1.5 hrs", emoji:"🪄", desc:"Winner of America's Got Talent. At The LINQ. Still the best magic show in Vegas — by far.", url:"https://vegas.vdvm.net/ZVx77X", provider:"VCO", tags:["couple","family","work"], vibes:["luxury"], times:["night"], seasons:["winter","spring","summer","fall"], interests:["show"], tier:"budget" },
@@ -39,7 +39,7 @@ const PAID = [
   { id:38, name:"Wizard of Oz — Sphere", cat:"Show", price:114, rating:4.5, reviews:1319, dur:"1.5 hrs", emoji:"🌐", desc:"The Sphere. 160,000 sq ft of LED. Wizard of Oz has never looked anything like this.", url:"https://www.getyourguide.com/las-vegas-l58/las-vegas-the-sphere-experience-the-wizard-of-oz-t969545/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","couple","group","family","kids"], vibes:["luxury","adventure","first-timer"], times:["day","night"], seasons:["winter","spring","summer","fall"], interests:["show","unique"], tier:"mid" },
   { id:39, name:"Michael Jackson ONE", cat:"Show", price:96, rating:4.8, reviews:1048, dur:"1.5 hrs", emoji:"🕺", desc:"Cirque du Soleil meets MJ. Mandalay Bay. The most emotional show on the Strip.", url:"https://www.getyourguide.com/las-vegas-l58/las-vegas-michael-jackson-one-by-cirque-du-soleil-ticket-t400944/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","couple","group","family","work","kids"], vibes:["luxury"], times:["night"], seasons:["winter","spring","summer","fall"], interests:["show"], tier:"mid" },
   { id:40, name:"Desert ATV Tour", cat:"Adventure", price:109, rating:4.7, reviews:712, dur:"3 hrs", emoji:"🏜️", desc:"Real ATVs in the real Mojave. Nothing between you and the desert. Pure adrenaline.", url:"https://www.getyourguide.com/las-vegas-l58/las-vegas-guided-las-vegas-desert-atv-tour-t417683/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","couple","group"], vibes:[], times:["morning","day"], seasons:["winter","spring","summer","fall"], interests:["adventure"], tier:"mid" },
-  { id:41, name:"Mt. Charleston Day Trip", cat:"Tour", price:109, rating:4.7, reviews:82, dur:"Half day", emoji:"❄️", desc:"30 minutes from the Strip. Hotel pickup included — no car needed. Snow in winter, pine forests in spring.", url:"https://www.getyourguide.com/las-vegas-l58/las-vegas-mount-charleston-and-lee-canyon-day-trip-t371990/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","couple","group","work"], vibes:[], times:["morning","day"], seasons:["winter","spring"], interests:["adventure","unique"], tier:"mid" },
+  { id:41, name:"Mt. Charleston Day Trip", cat:"Tour", price:109, rating:4.7, reviews:82, dur:"Half day", emoji:"❄️", desc:"30 minutes from the Strip. Hotel pickup included — no car needed. Snow in winter, pine forests in spring.", url:"https://www.getyourguide.com/las-vegas-l58/las-vegas-mount-charleston-and-lee-canyon-day-trip-t371990/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","couple","group","work"], vibes:[], times:["morning","day"], seasons:["winter"], interests:["adventure","unique"], tier:"mid" },
   { id:42, name:"Exotics Racing", cat:"Adventure", price:109, rating:4.8, reviews:188, dur:"1 hr", emoji:"🏎️", desc:"Drive a Lamborghini, Ferrari or Porsche on a real track. South of the Strip. Lives changed here.", url:"https://vegas.vdvm.net/eK4ZeZ", provider:"VCO", tags:["solo","group"], vibes:["adventure"], times:["morning","day"], seasons:["winter","spring","summer","fall"], interests:["adventure"], tier:"mid" },
   { id:43, name:"Red Rock Canyon Trekker", cat:"Adventure", price:123, rating:4.8, reviews:125, dur:"4 hrs", emoji:"🪨", desc:"The red sandstone cliffs that frame Vegas — from inside them. Hotel pickup included. Small group. No tourists.", url:"https://www.getyourguide.com/las-vegas-l58/red-rock-canyon-by-tour-trekker-from-las-vegas-t7455/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","couple","group","family"], vibes:["adventure"], times:["morning","day"], seasons:["winter","spring"], interests:["adventure"], tier:"mid" },
   { id:44, name:"Grand Canyon + Hoover Dam", cat:"Tour", price:99, rating:4.8, reviews:3066, dur:"10.5 hrs", emoji:"🏔️", desc:"Two natural and engineering wonders in one day. Hotel pickup included — no car needed. The most-booked tour from Vegas.", url:"https://www.getyourguide.com/las-vegas-l58/vegas-grand-canyon-hoover-dam-lunchskywalk-options-wifi-t190065/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","couple","group","work"], vibes:["luxury","adventure"], times:["morning","day"], seasons:["winter","spring","summer","fall"], interests:["adventure","unique"], tier:"mid" },
@@ -373,6 +373,8 @@ function filterExperiences(ans) {
     if(!isLGBTQ && [68,69,70,71,72,73].includes(exp.id)) s-=5;  // LGBT events only for lgbtq
     if(isGirlsTrip && [74].includes(exp.id)) s-=4;  // no strip club crawl for girls
     if(isGuysTrip && [30,31,35].includes(exp.id)) s-=6;  // no male revues for guys
+    // Male revues only for girls/bachelorette
+    if(!isGirlsTrip && ans.tripType!=="bachelorette" && [31,35].includes(exp.id)) s-=8;
 
     interests.forEach(i=>{
       if(exp.interests&&exp.interests.includes(i)) s+=3;
@@ -399,7 +401,7 @@ function filterExperiences(ans) {
   }).sort((a,b)=>b.score-a.score);
 
   const SPA_IDS = [63,64,65,66];
-  const MALE_REVUE_IDS = [28,29,34]; // Magic Mike, Chippendales, Thunder
+  const MALE_REVUE_IDS = [31,35]; // Chippendales, Thunder From Down Under
   const FEMALE_REVUE_IDS = [7,12]; // Fantasy Burlesque
   const DRAG_IDS = [70,71,72,73]; // Drag shows only
   const TOUR_IDS = [31,43,44,45,46,47,48,50,51,52,53,54,55,56,60,67,86,88,89,90,91];
@@ -1071,11 +1073,18 @@ Tone: Dark. Intimate. Cinematic. NEVER say "vibrant" "bustling" "amazing" or any
                   style={{flex:1,padding:"12px",borderRadius:"9px",border:"1px solid rgba(255,255,255,.12)",background:"rgba(255,255,255,.05)",color:"#ccc",fontSize:"0.8rem",cursor:"pointer"}}>
                   🔗 Copy Link
                 </button>
-                <a href={`https://wa.me/?text=${encodeURIComponent("I just got a custom Vegas itinerary — you NEED to try this! 🎰 " + window.location.href)}`}
-                  target="_blank" rel="noopener noreferrer"
-                  style={{flex:1,padding:"12px",borderRadius:"9px",border:"1px solid rgba(255,215,0,.25)",background:"rgba(255,215,0,.08)",color:"#ffd700",fontSize:"0.8rem",textDecoration:"none",textAlign:"center",display:"flex",alignItems:"center",justifyContent:"center",fontWeight:"700"}}>
+                <button onClick={()=>{
+                    const shareText = "Going to Vegas? Discover your traveler profile and see what the city has to offer you 🎰";
+                    const shareUrl = window.location.href;
+                    if(navigator.share){
+                      navigator.share({ title:"Vegas Unveiled", text: shareText, url: shareUrl });
+                    } else {
+                      prompt("Copy and share this:", shareText + "\n" + shareUrl);
+                    }
+                  }}
+                  style={{flex:1,padding:"12px",borderRadius:"9px",border:"1px solid rgba(255,215,0,.25)",background:"rgba(255,215,0,.08)",color:"#ffd700",fontSize:"0.8rem",cursor:"pointer",fontWeight:"700"}}>
                   💬 Share with Friends
-                </a>
+                </button>
               </div>
             </div>
 
