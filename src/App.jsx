@@ -819,7 +819,11 @@ export default function VegasApp() {
 
     fetch("https://api.anthropic.com/v1/messages",{
       method:"POST",
-      headers:{"Content-Type":"application/json"},
+      headers:{
+        "Content-Type":"application/json",
+        "anthropic-version":"2023-06-01",
+        "anthropic-dangerous-direct-browser-access":"true"
+      },
       body:JSON.stringify({
         model:"claude-sonnet-4-20250514",max_tokens:500,
         messages:[{role:"user",content:`You are an expert in traveler profiles who knows Las Vegas deeply. Based on the profile below, write a text in English with 3 paragraphs that feels like the person is reading their own travel horoscope — specific, revealing, a little humorous, never generic.
