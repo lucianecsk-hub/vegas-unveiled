@@ -372,9 +372,19 @@ function filterExperiences(ans) {
     if(isGuysTrip && [70,71,72,73].includes(exp.id)) s-=6;  // no drag for guys
     if(!isLGBTQ && [68,69,70,71,72,73].includes(exp.id)) s-=5;  // LGBT events only for lgbtq
     if(isGirlsTrip && [74].includes(exp.id)) s-=4;  // no strip club crawl for girls
-    if(isGuysTrip && [30,31,35].includes(exp.id)) s-=6;  // no male revues for guys
-    // Male revues only for girls/bachelorette
-    if(!isGirlsTrip && ans.tripType!=="bachelorette" && [31,35].includes(exp.id)) s-=8;
+
+    // ADULT SHOW GENDER LOGIC:
+    // Male revues (Chippendales/Thunder) = women want to see men → girls/bachelorette only
+    // Female shows (FANTASY/ROUGE/Atomic) = men want to see women → guys/couple only
+    const isBachelorette = ans.tripType === "bachelorette";
+    const isHeteroCouple = ans.tripType === "couple" && ans.groupGender !== "lgbtq";
+
+    // Male revues: only for girls trip or bachelorette
+    if(!isGirlsTrip && !isBachelorette && [31,35].includes(exp.id)) s-=8;
+
+    // Female adult shows: only for guys trip or hetero couple — NOT for girls solo
+    if(isGirlsTrip && [8,27,29].includes(exp.id)) s-=8;
+    if(isBachelorette && [8,27,29].includes(exp.id)) s-=8;
 
     interests.forEach(i=>{
       if(exp.interests&&exp.interests.includes(i)) s+=3;
@@ -400,9 +410,9 @@ function filterExperiences(ans) {
     return {...exp,score:s};
   }).sort((a,b)=>b.score-a.score);
 
-  const SPA_IDS = [63,64,65,66];
+  const SPA_IDS = [61,62,63,64]; // Four Seasons, Canyon Ranch, Encore Wynn, Vdara
   const MALE_REVUE_IDS = [31,35]; // Chippendales, Thunder From Down Under
-  const FEMALE_REVUE_IDS = [7,12]; // Fantasy Burlesque
+  const FEMALE_REVUE_IDS = [8,27,29]; // FANTASY Burlesque, ROUGE, Atomic Saloon
   const DRAG_IDS = [70,71,72,73]; // Drag shows only
   const TOUR_IDS = [31,43,44,45,46,47,48,50,51,52,53,54,55,56,60,67,86,88,89,90,91];
   const KIDS_IDS = [85,32,15]; // Water park, Tournament of Kings, Blue Man
@@ -413,7 +423,7 @@ function filterExperiences(ans) {
 
   // Nightlife/Adult/Strip category IDs — max 1 per category in itinerary
   const NIGHTLIFE_CAT_IDS = [11, 24, 56, 66, 67]; // Club crawls, bar crawls, pool parties
-  const ADULT_SHOW_IDS = [8, 27, 29]; // Female adult shows (ROUGE, Atomic Saloon, FANTASY VCO)
+  const ADULT_SHOW_IDS = []; // Covered by FEMALE_REVUE_IDS and MALE_REVUE_IDS
   const STRIP_CLUB_IDS = [74]; // Strip club crawl
 
   // Category dedup trackers — using object so closures see updates
