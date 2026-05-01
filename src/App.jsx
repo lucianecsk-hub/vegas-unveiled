@@ -760,13 +760,18 @@ export default function VegasApp() {
       `You're coming to Vegas as a ${travelerType}${vibeDesc?" drawn to "+vibeDesc:""}. That already puts you in a different category. ${seasonCtx[newAns.season]} Here's what the city has been saving for you.`,
     ];
 
-    try {
-      const res=await fetch("https://api.anthropic.com/v1/messages",{
-        method:"POST",
-        headers:{"Content-Type":"application/json"},
-        body:JSON.stringify({
-          model:"claude-sonnet-4-20250514",max_tokens:1000,
-          messages:[{role:"user",content:`You are Vegas Unveiled — a mysterious Las Vegas insider. You write like a thriller novelist who knows the city's secrets.
+    // Show results immediately with fallback — AI briefing updates in background
+    setAiStory(fallbacks[0]);
+    setLoading(false);
+    setStep(totalSteps+1);
+
+    // Fetch AI briefing in background and update when ready
+    fetch("https://api.anthropic.com/v1/messages",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        model:"claude-sonnet-4-20250514",max_tokens:300,
+        messages:[{role:"user",content:`You are Vegas Unveiled — a mysterious Las Vegas insider. You write like a thriller novelist who knows the city's secrets.
 
 Write a SHORT, powerful, deeply personal briefing. 3-4 sentences MAX. No fluff. No generic travel language.
 
@@ -779,21 +784,17 @@ TRAVELER PROFILE:
 - Time: ${newAns.timeOfDay}
 
 RULES:
-1. First sentence: Hit them personally. Use their exact profile. Make them feel like you read their mind. Be specific and flattering. Example: "A solo woman who runs on dark energy and luxury — Vegas has been holding its breath for someone like you."
-2. Second sentence: Paint Vegas in their season/time with 1-2 sharp, sensory, cinematic details. No clichés. Make them feel the city physically.
-3. Third sentence: One bold statement about what makes their specific trip unique or what Vegas will reveal to them specifically.
-4. Final sentence: Sharp transition. Example: "Here's what should absolutely be on your list." or "This is what Vegas looks like when it's made for you."
+1. First sentence: Hit them personally. Use their exact profile. Make them feel like you read their mind. Be specific and flattering.
+2. Second sentence: Paint Vegas in their season/time with 1-2 sharp, sensory, cinematic details. No clichés.
+3. Third sentence: One bold statement about what makes their specific trip unique.
+4. Final sentence: Sharp transition. Example: "Here's what should absolutely be on your list."
 
-Tone: Dark. Intimate. Cinematic. Like a secret being handed over. NEVER say "vibrant" "bustling" "amazing" or any generic travel word.`}]
-        })
-      });
-      const data=await res.json();
+Tone: Dark. Intimate. Cinematic. NEVER say "vibrant" "bustling" "amazing" or any generic travel word.`}]
+      })
+    }).then(r=>r.json()).then(data=>{
       const text = data.content?.[0]?.text;
-      setAiStory(text && text.length > 30 ? text : fallbacks[0]);
-    } catch { setAiStory(fallbacks[0]); }
-
-    setLoading(false);
-    setStep(totalSteps+1);
+      if(text && text.length > 30) setAiStory(text);
+    }).catch(()=>{});
   }
 
   async function handleEmailSubmit(){
