@@ -99,15 +99,15 @@ const PAID = [
 
 const FREE_EXPERIENCES = [
   { id:"f1", name:"Bellagio Fountains at Night", loc:"Bellagio Hotel", time:"After 8pm", emoji:"⛲", desc:"Every 15-30 minutes after dark. 1,000 jets of water choreographed to music. Free. Unmissable.", url:"https://vegas.vdvm.net/oq11jb" },
-  { id:"f2", name:"Bellagio Conservatory & Garden", loc:"Bellagio Hotel", time:"Anytime", emoji:"🌸", desc:"A 14,000 sq ft indoor garden that changes 5 times a year. Currently the most beautiful room in Vegas.", url:"https://vegas.vdvm.net/Org2RN" },
   { id:"f3", name:"Fremont Street LED Experience", loc:"Downtown Vegas", time:"After dark", emoji:"💡", desc:"A 1,500-foot LED canopy with free shows every hour. The Vegas the Strip doesn't want you to see.", url:"https://vegas.vdvm.net/9gR3A3" },
-  { id:"f4", name:"Flamingo Wildlife Habitat", loc:"Flamingo Hotel", time:"Morning", emoji:"🦩", desc:"Real flamingos living inside a casino resort. Free to visit. Great for families and kids — surreal at 8am.", tags:["family","kids"], url:"https://vegas.vdvm.net/6eOKEq" },
   { id:"f5", name:"Grand Canal Shoppes — The Venetian", loc:"The Venetian", time:"Anytime", emoji:"🛶", desc:"Venice reconstructed inside a hotel. Walk it for free. Watch the gondolas for free. It works.", url:"https://vegas.vdvm.net/MmJJG3" },
-  { id:"f6", name:"Pinball Hall of Fame", loc:"South Strip", time:"Anytime", emoji:"🎮", desc:"500+ vintage machines from the 1950s onward. All playable for quarters. Totally free to enter.", url:"https://vegas.vdvm.net/WqnZa3" },
-  { id:"f7", name:"M&M's World Las Vegas", loc:"Las Vegas Blvd", time:"Anytime", emoji:"🍬", desc:"4 floors of chocolate chaos. Free to enter. The world's largest M&M's store.", url:"https://vegas.vdvm.net/JzGaLE" },
-  { id:"f8", name:"Hershey's Chocolate World", loc:"New York-New York", time:"Anytime", emoji:"🍫", desc:"Inside a casino. A giant Hershey's experience — free to browse, optional to buy.", url:"https://vegas.vdvm.net/rQZ9R5" },
-  { id:"f9", name:"Fall of Atlantis — Caesars", loc:"Forum Shops", time:"Every hour", emoji:"🏛️", desc:"A free animatronic show inside Caesars Forum Shops. Surprisingly spectacular.", url:"https://vegas.vdvm.net/g1jjyO" },
   { id:"f10", name:"Welcome to Las Vegas Sign", loc:"South Strip", time:"Golden Hour", emoji:"🪧", desc:"The photo. Golden hour makes it transcendent. Get there 30 minutes before sunset.", url:"https://vegas.vdvm.net/DKPrk2" },
+  { id:"f6", name:"Pinball Hall of Fame", loc:"South Strip", time:"Anytime", emoji:"🎮", desc:"500+ vintage machines from the 1950s onward. All playable for quarters. Totally free to enter.", url:"https://vegas.vdvm.net/WqnZa3" },
+  { id:"f2", name:"Bellagio Conservatory & Garden", loc:"Bellagio Hotel", time:"Anytime", emoji:"🌸", desc:"A 14,000 sq ft indoor garden that changes 5 times a year. Currently the most beautiful room in Vegas.", url:"https://vegas.vdvm.net/Org2RN" },
+  { id:"f9", name:"Fall of Atlantis — Caesars", loc:"Forum Shops", time:"Every hour", emoji:"🏛️", desc:"A free animatronic show inside Caesars Forum Shops. Surprisingly spectacular.", url:"https://vegas.vdvm.net/g1jjyO" },
+  { id:"f4", name:"Flamingo Wildlife Habitat", loc:"Flamingo Hotel", time:"Morning", emoji:"🦩", desc:"Real flamingos living inside a casino resort. Free to visit. Great for families and kids — surreal at 8am.", tags:["family","kids"], url:"https://vegas.vdvm.net/6eOKEq" },
+  { id:"f7", name:"M&M's World Las Vegas", loc:"Las Vegas Blvd", time:"Anytime", emoji:"🍬", desc:"4 floors of chocolate chaos. Free to enter. The world's largest M&M's store.", url:"https://vegas.vdvm.net/JzGaLE", tags:["family","kids"] },
+  { id:"f8", name:"Hershey's Chocolate World", loc:"New York-New York", time:"Anytime", emoji:"🍫", desc:"Inside a casino. A giant Hershey's experience — free to browse, optional to buy.", url:"https://vegas.vdvm.net/rQZ9R5", tags:["family","kids"] },
 ];
 
 // ─── HOTELS ───────────────────────────────────────────────────────────────
@@ -738,6 +738,9 @@ export default function VegasApp() {
     const freeResults = FREE_EXPERIENCES.filter(f => {
       if(isYoungFamily && f.id==="f3") return false;
       if(newAns.tripType==="family" && kidsAge==="under6" && f.time==="After 8pm") return false;
+      // Exclude kids/family attractions for non-family trips
+      if(f.tags && f.tags.includes("kids") && newAns.tripType!=="family") return false;
+      if(f.tags && f.tags.includes("family") && newAns.tripType!=="family") return false;
       return true;
     }).reduce((acc, f) => {
       const hasFountains = acc.some(x=>x.id==="f1");
@@ -1053,13 +1056,20 @@ Tone: Dark. Intimate. Cinematic. NEVER say "vibrant" "bustling" "amazing" or any
               <p style={{color:"#aaa",fontSize:"0.78rem",margin:"0 0 10px",textAlign:"center"}}>Know someone who'd love this? Send them their own custom itinerary.</p>
               <div style={{display:"flex",gap:"8px"}}>
                 <button onClick={()=>{
-                    navigator.clipboard.writeText(window.location.href);
-                    alert("Link copied! Share it with your squad 🎰");
+                    const url = window.location.href;
+                    if(navigator.clipboard && navigator.clipboard.writeText){
+                      navigator.clipboard.writeText(url).then(()=>alert("Link copied! Share it with your squad 🎰")).catch(()=>{
+                        prompt("Copy this link:", url);
+                      });
+                    } else {
+                      prompt("Copy this link:", url);
+                    }
                   }}
                   style={{flex:1,padding:"12px",borderRadius:"9px",border:"1px solid rgba(255,255,255,.12)",background:"rgba(255,255,255,.05)",color:"#ccc",fontSize:"0.8rem",cursor:"pointer"}}>
                   🔗 Copy Link
                 </button>
-                <a href={`sms:&body=I just got a custom Vegas itinerary — you need to try this! ${window.location.href}`}
+                <a href={`https://wa.me/?text=${encodeURIComponent("I just got a custom Vegas itinerary — you NEED to try this! 🎰 " + window.location.href)}`}
+                  target="_blank" rel="noopener noreferrer"
                   style={{flex:1,padding:"12px",borderRadius:"9px",border:"1px solid rgba(255,215,0,.25)",background:"rgba(255,215,0,.08)",color:"#ffd700",fontSize:"0.8rem",textDecoration:"none",textAlign:"center",display:"flex",alignItems:"center",justifyContent:"center",fontWeight:"700"}}>
                   💬 Share with Friends
                 </a>
@@ -1094,7 +1104,7 @@ Tone: Dark. Intimate. Cinematic. NEVER say "vibrant" "bustling" "amazing" or any
               <p style={{color:"#888",fontSize:"0.78rem",margin:"0 0 12px"}}>
                 Vegas is waiting for you with open arms.
               </p>
-              <a href="mailto:hello@vegasunveiled.com?subject=Itinerary Feedback"
+              <a href="mailto:unveiledvegas@gmail.com?subject=Itinerary Feedback"
                 style={{display:"inline-block",padding:"10px 22px",borderRadius:"9px",border:"1px solid rgba(255,215,0,.25)",color:"#ffd700",fontSize:"0.8rem",textDecoration:"none",fontWeight:"700"}}>
                 Leave Your Feedback →
               </a>
