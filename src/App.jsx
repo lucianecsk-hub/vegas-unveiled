@@ -12,10 +12,10 @@ const PAID = [
   { id:10, name:"Piff the Magic Dragon", cat:"Show", price:39, rating:4.7, reviews:1678, dur:"1.5 hrs", emoji:"🐉", desc:"A magician in a dragon suit. As seen on America's Got Talent. Funnier than anything on the Strip.", url:"https://vegas.vdvm.net/dy9Y0M", provider:"VCO", tags:["solo","couple"], vibes:[], times:["night"], seasons:["winter","spring","summer","fall"], interests:["show"], tier:"budget" },
   { id:11, name:"VIP Club Crawl + Open Bar", cat:"Nightlife", price:40, rating:4.9, reviews:40, dur:"5 hrs", emoji:"🥂", desc:"Party bus, open bar and VIP entry to the best clubs on the Strip. The night that never ends.", url:"https://www.getyourguide.com/las-vegas-l58/las-vegas-cocktail-class-party-bus-and-vip-club-entry-t1230903/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","couple","group","bachelorette"], vibes:[], times:["night"], seasons:["winter","spring","summer","fall"], interests:["nightlife"], tier:"budget", girlsTrip:true },
   { id:12, name:"Piano Man — Kyle Martin", cat:"Show", price:42, rating:4.8, reviews:1037, dur:"1.5 hrs", emoji:"🎹", desc:"The Vegas piano show that Billy Joel himself would respect. Miracle Mile Shops. Every night.", url:"https://vegas.vdvm.net/qWEY35", provider:"VCO", tags:["solo","couple","work"], vibes:["dark"], times:["night"], seasons:["winter","spring","summer","fall"], interests:["show"], tier:"budget" },
-  { id:13, name:"The King Comes Home — Elvis", cat:"Show", price:41, rating:4.7, reviews:124, dur:"1.5 hrs", emoji:"👑", desc:"The most convincing Elvis tribute in Vegas. Westgate Hotel — where the real Elvis performed.", url:"https://vegas.vdvm.net/5gXJVN", provider:"VCO", tags:["solo","couple","group","family","kids"], vibes:["dark"], times:["night"], seasons:["winter","spring","summer","fall"], interests:["show"], tier:"budget" },
+  { id:13, name:"The King Comes Home — Elvis", cat:"Show", price:41, rating:4.7, reviews:124, dur:"1.5 hrs", emoji:"👑", desc:"The most convincing Elvis tribute in Vegas. Westgate Hotel — where the real Elvis performed.", url:"https://vegas.vdvm.net/5gXJVN", provider:"VCO", tags:["solo","couple","group"], vibes:["dark"], times:["night"], seasons:["winter","spring","summer","fall"], interests:["show"], tier:"budget" },
   { id:14, name:"Fantasy Burlesque — Luxor", cat:"Show", price:44, rating:4.7, reviews:381, dur:"1.5 hrs", emoji:"🌹", desc:"Vegas' longest-running burlesque. Adult, funny, spectacular. Not what you expect — better.", url:"https://www.getyourguide.com/las-vegas-l58/las-vegas-strip-fantasy-at-luxor-t393290/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","couple","group"], vibes:[], times:["night"], seasons:["winter","spring","summer","fall"], interests:["show","nightlife"], tier:"budget", guysTrip:true },
   { id:15, name:"Interstellar Arc — AREA15", cat:"Unique", price:44, rating:4.8, reviews:14, dur:"1 hr", emoji:"🌌", desc:"An otherworldly art installation inside AREA15. The future is already here — Vegas just doesn't advertise it.", url:"https://vegas.vdvm.net/9VM075", provider:"VCO", tags:["group","family","kids"], vibes:[], times:["day","night"], seasons:["winter","spring","summer","fall"], interests:["unique"], tier:"budget" },
-  { id:16, name:"All Shook Up — Elvis Show", cat:"Show", price:45, rating:4.8, reviews:1340, dur:"1.5 hrs", emoji:"🎸", desc:"Open bar cabin above the Strip. Premium experience, best views in Vegas. No group needed — perfect solo.", url:"https://www.getyourguide.com/las-vegas-l58/las-vegas-all-shook-up-the-ultimate-elvis-tribute-t693302/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","couple","bachelorette","work"], vibes:["luxury","romantic"], times:["night"], seasons:["winter","spring","summer","fall"], interests:["show"], tier:"budget" },
+  { id:16, name:"All Shook Up — Elvis Show", cat:"Show", price:45, rating:4.8, reviews:1340, dur:"1.5 hrs", emoji:"🎸", desc:"Open bar cabin above the Strip. Premium experience, best views in Vegas. No group needed — perfect solo.", url:"https://www.getyourguide.com/las-vegas-l58/las-vegas-all-shook-up-the-ultimate-elvis-tribute-t693302/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","couple","group"], vibes:["luxury","romantic"], times:["night"], seasons:["winter","spring","summer","fall"], interests:["show"], tier:"budget" },
   { id:17, name:"Blue Man Group — Luxor", cat:"Show", price:47, rating:4.4, reviews:4893, dur:"1.5 hrs", emoji:"💙", desc:"Three blue-painted performers, musical machines, and audience chaos. Zero words. Maximum impact.", url:"https://vegas.vdvm.net/21aPxA", provider:"VCO", tags:["solo","couple","group"], vibes:["adventure"], times:["day","night"], seasons:["winter","spring","fall"], interests:["show"], tier:"budget" },
   { id:18, name:"High Roller Open Bar Cabin", cat:"Views", price:48, rating:4.6, reviews:1285, dur:"30 min", emoji:"🎡", desc:"The Strip from 550 feet. Open bar. No limits. Best at sunset.", url:"https://www.getyourguide.com/las-vegas-l58/the-high-roller-ride-at-the-linq-ticket-t436735/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["couple","group","family"], vibes:[], times:["day","night"], seasons:["winter","spring","summer","fall"], interests:["unique","nightlife"], tier:"budget", girlsTrip:true },
   { id:19, name:"Mojave + 7 Magic Mountains Tour", cat:"Tour", price:49, rating:4.7, reviews:362, dur:"2 hrs", emoji:"🏔️", desc:"The neon totem poles in the middle of the Mojave desert. Plus the Vegas sign. Art meets nowhere.", url:"https://www.getyourguide.com/las-vegas-l58/las-vegas-seven-magic-mountains-and-las-vegas-sign-tour-t400361/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","group","work"], vibes:["adventure"], times:["day"], seasons:["winter","spring","summer","fall"], interests:["unique","adventure"], tier:"budget" },
@@ -56,7 +56,7 @@ const PAID = [
   { id:54, name:"Area 51 Full-Day Tour", cat:"Tour", price:242, rating:4.8, reviews:252, dur:"10 hrs", emoji:"👽", desc:"The classified base. The black mailbox. Hotel pickup included — no car needed. Whether you believe or not — this is eerie.", url:"https://www.getyourguide.com/las-vegas-l58/area-51-tour-from-las-vegas-t47582/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","couple","group","family"], vibes:["dark","adventure","romantic"], times:["morning","day"], seasons:["winter","spring","summer","fall"], interests:["unique","adventure"], tier:"premium" },
   { id:55, name:"Personal Photographer", cat:"Experience", price:304, rating:4.8, reviews:39, dur:"1-3 hrs", emoji:"📸", desc:"A professional travel photographer. Your whole trip documented. Worth every dollar.", url:"https://www.getyourguide.com/las-vegas-l58/las-vegas-personal-travel-vacation-photographer-t129907/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","couple","group"], vibes:["adventure","romantic"], times:["morning","day","night"], seasons:["spring","fall"], interests:["unique"], tier:"luxury", girlsTrip:true },
   { id:56, name:"Limo Tour + Champagne + Club VIP", cat:"Nightlife", price:499, rating:4.8, reviews:11, dur:"4 hrs", emoji:"🚘", desc:"Stretch limo pickup, champagne on the way, VIP club entry. The bachelorette night Vegas was built for.", url:"https://www.getyourguide.com/las-vegas-l58/las-vegas-limo-tour-with-champagne-and-nightclub-entry-t981477/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","couple","group"], vibes:["dark","adventure"], times:["day","night"], seasons:["winter","spring","fall"], interests:["nightlife"], tier:"luxury", girlsTrip:true },
-  { id:57, name:"Elvis Wedding — Graceland", cat:"Romantic", price:324, rating:4.9, reviews:331, dur:"1.5 hrs", emoji:"💍", desc:"The Graceland Wedding Chapel. Elvis officiates. Completely legal. Completely Vegas.", url:"https://www.getyourguide.com/las-vegas-l58/las-vegas-traditional-wedding-or-vow-renewal-t437514/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","couple","group","bachelorette"], vibes:["luxury","romantic"], times:["morning","day","night"], seasons:["winter","spring","summer","fall"], interests:["unique"], tier:"luxury" },
+  { id:57, name:"Elvis Wedding — Graceland", cat:"Romantic", price:324, rating:4.9, reviews:331, dur:"1.5 hrs", emoji:"💍", desc:"The Graceland Wedding Chapel. Elvis officiates. Completely legal. Completely Vegas.", url:"https://www.getyourguide.com/las-vegas-l58/las-vegas-traditional-wedding-or-vow-renewal-t437514/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["couple"], vibes:["luxury","romantic"], times:["morning","day","night"], seasons:["winter","spring","summer","fall"], interests:["unique"], tier:"luxury" },
   { id:58, name:"Grand Canyon Helicopter Landing", cat:"Adventure", price:519, rating:4.8, reviews:1415, dur:"4.5 hrs", emoji:"🚁", desc:"Land inside the Grand Canyon. Champagne picnic on the canyon floor. Nothing comes close.", url:"https://www.getyourguide.com/las-vegas-l58/grand-canyon-helicopter-landing-tour-ecostar-t9617/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["couple","group","bachelorette"], vibes:["luxury"], times:["morning","day"], seasons:["winter","spring","summer","fall"], interests:["adventure"], tier:"luxury" },
   { id:59, name:"KÀ Royal VIP + Backstage", cat:"Show", price:370, rating:5.0, reviews:1, dur:"3 hrs", emoji:"🎪", desc:"Cirque's most spectacular show — plus backstage access, artist meet and greet, VIP lounge. Once in a lifetime.", url:"https://www.getyourguide.com/las-vegas-l58/las-vegas-ka-by-cirque-du-soleil-at-mgm-grand-ticket-t405483/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["couple"], vibes:["luxury","romantic"], times:["night"], seasons:["winter","spring","summer","fall"], interests:["show"], tier:"luxury" },
   { id:60, name:"Helicopter Wedding Ceremony", cat:"Romantic", price:1350, rating:5.0, reviews:2, dur:"2 hrs", emoji:"💒", desc:"Get married in a helicopter over the Las Vegas Strip at night. The most Vegas thing possible.", url:"https://www.getyourguide.com/las-vegas-l58/las-vegas-night-strip-helicopter-wedding-ceremony-package-t774621/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","couple","group","work"], vibes:["luxury","adventure","romantic"], times:["night"], seasons:["winter","spring","fall"], interests:["unique"], tier:"luxury" },
@@ -402,39 +402,34 @@ function filterExperiences(ans) {
   const SPA_IDS = [63,64,65,66];
   const MALE_REVUE_IDS = [28,29,34]; // Magic Mike, Chippendales, Thunder
   const FEMALE_REVUE_IDS = [7,12]; // Fantasy Burlesque
-  const DRAG_IDS = [70,71,72,73]; // Drag shows
+  const DRAG_IDS = [70,71,72,73,74,75]; // Drag shows
   const TOUR_IDS = [31,43,44,45,46,47,48,50,51,52,53,54,55,56,60,67,86,88,89,90,91];
-  const KIDS_IDS = [5,8,15,17,18,23,24,26,32]; // Blue Man, Piff, Hop-On, etc
+  const KIDS_IDS = [85,32,15]; // Water park, Tournament of Kings, Blue Man
 
   const result=[]; const used=new Set();
   const dayPairs = {["1-2"]:3,["3-4"]:4,["5-7"]:7,["1week"]:8}[ans.days]||4;
   const minTours = (ans.days==="5-7"||ans.days==="1week") ? 4 : 0;
 
-  // Category dedup trackers
-  let spaAdded = false;
-  let maleRevueAdded = false;
-  let femaleRevueAdded = false;
-  let dragAdded = false;
-  let toursAdded = 0;
-  const catUsed = new Set(); // track by category
+  // Category dedup trackers — using object so closures see updates
+  const state = { spaAdded:false, maleRevueAdded:false, femaleRevueAdded:false, dragAdded:false, toursAdded:0 };
 
   const canAdd = (exp) => {
     if(used.has(exp.id)) return false;
     if(!budgetMatch(exp.price)) return false;
-    if(SPA_IDS.includes(exp.id) && spaAdded) return false;
-    if(MALE_REVUE_IDS.includes(exp.id) && maleRevueAdded) return false;
-    if(FEMALE_REVUE_IDS.includes(exp.id) && femaleRevueAdded) return false;
-    if(DRAG_IDS.includes(exp.id) && dragAdded) return false;
+    if(SPA_IDS.includes(exp.id) && state.spaAdded) return false;
+    if(MALE_REVUE_IDS.includes(exp.id) && state.maleRevueAdded) return false;
+    if(FEMALE_REVUE_IDS.includes(exp.id) && state.femaleRevueAdded) return false;
+    if(DRAG_IDS.includes(exp.id) && state.dragAdded) return false;
     return true;
   };
 
   const trackAdded = (exp) => {
     used.add(exp.id);
-    if(SPA_IDS.includes(exp.id)) spaAdded = true;
-    if(MALE_REVUE_IDS.includes(exp.id)) maleRevueAdded = true;
-    if(FEMALE_REVUE_IDS.includes(exp.id)) femaleRevueAdded = true;
-    if(DRAG_IDS.includes(exp.id)) dragAdded = true;
-    if(TOUR_IDS.includes(exp.id)) toursAdded++;
+    if(SPA_IDS.includes(exp.id)) state.spaAdded = true;
+    if(MALE_REVUE_IDS.includes(exp.id)) state.maleRevueAdded = true;
+    if(FEMALE_REVUE_IDS.includes(exp.id)) state.femaleRevueAdded = true;
+    if(DRAG_IDS.includes(exp.id)) state.dragAdded = true;
+    if(TOUR_IDS.includes(exp.id)) state.toursAdded++;
   };
 
   // Separate scored into day and night buckets
@@ -751,8 +746,8 @@ export default function VegasApp() {
     const interestDesc = Array.isArray(newAns.interest)?newAns.interest.join(" and "):newAns.interest||"";
 
     const fallbacks = [
-      `A ${travelerType} ${vibeDesc} — Vegas has been holding its breath for someone like you. ${seasonCtx[newAns.season]} The city reveals different secrets depending on who's asking, and you asked the right questions. Here's what should absolutely be on your list.`,
-      `You came to Vegas as a ${travelerType}, ${vibeDesc}. That already puts you in a different category than most visitors. ${seasonCtx[newAns.season]} Here's what the city has been saving for you.`,
+      `${vibeDesc ? vibeDesc.charAt(0).toUpperCase()+vibeDesc.slice(1)+" energy" : "The kind of traveler"} who comes to Vegas as a ${travelerType} — the city has been holding its breath for someone like you. ${seasonCtx[newAns.season]} Vegas reveals different layers depending on who's asking, and you asked the right questions. Here's what should absolutely be on your list.`,
+      `You're coming to Vegas as a ${travelerType}${vibeDesc?" drawn to "+vibeDesc:""}. That already puts you in a different category. ${seasonCtx[newAns.season]} Here's what the city has been saving for you.`,
     ];
 
     try {
@@ -847,15 +842,15 @@ Tone: Dark. Intimate. Cinematic. Like a secret being handed over. NEVER say "vib
             <div style={{background:"linear-gradient(135deg,rgba(255,45,85,.07),rgba(255,215,0,.04))",border:"1px solid rgba(255,215,0,.12)",borderRadius:"20px",padding:"36px 28px",textAlign:"center",marginBottom:"24px"}}>
               <div style={{fontSize:"2.8rem",marginBottom:"16px"}}>🎰</div>
               <h2 style={{fontSize:"1.3rem",color:"#fff",margin:"0 0 12px",fontWeight:"normal"}}>Most people leave Vegas having seen <em style={{color:"#ff2d55"}}>nothing</em>.</h2>
-              <p style={{color:"#aaa",lineHeight:1.8,margin:"0 0 8px",fontSize:"0.88rem"}}>Tell us about your trip. Get a custom itinerary with direct booking links — plus free insider tips most tourists never discover.</p>
-              <p style={{color:"#666",fontSize:"0.7rem",margin:0,fontStyle:"italic"}}>Quick, personal, free.</p>
+              <p style={{color:"#ccc",lineHeight:1.8,margin:"0 0 8px",fontSize:"0.92rem"}}>Tell us about your trip. Get a custom itinerary with direct booking links — plus free insider tips most tourists never discover.</p>
+              <p style={{color:"#999",fontSize:"0.82rem",margin:0,fontStyle:"italic"}}>Quick, personal, free.</p>
             </div>
             <button onClick={handleNext} style={{width:"100%",padding:"17px",borderRadius:"12px",border:"none",background:"linear-gradient(135deg,#ff2d55,#ff6b35)",color:"#fff",fontSize:"0.95rem",fontWeight:"700",cursor:"pointer",letterSpacing:"0.08em",textTransform:"uppercase",boxShadow:"0 8px 32px rgba(255,45,85,.38)",transition:"all .2s"}}
               onMouseEnter={e=>{e.currentTarget.style.transform="translateY(-2px)";e.currentTarget.style.boxShadow="0 14px 40px rgba(255,45,85,.55)"}}
               onMouseLeave={e=>{e.currentTarget.style.transform="none";e.currentTarget.style.boxShadow="0 8px 32px rgba(255,45,85,.38)"}}>
               Reveal My Secret Itinerary →
             </button>
-            <p style={{textAlign:"center",color:"#555",fontSize:"0.72rem",margin:"12px 0 0",fontStyle:"italic"}}>
+            <p style={{textAlign:"center",color:"#aaa",fontSize:"0.82rem",margin:"12px 0 0",fontStyle:"italic"}}>
               ✨ Includes free hidden gems only locals know
             </p>
           </div>
@@ -893,22 +888,25 @@ Tone: Dark. Intimate. Cinematic. Like a secret being handed over. NEVER say "vib
                     opacity:isDisabled&&!isSel?.45:1,color:"#fff",textAlign:"left",transition:"all .2s",
                     transform:isSel?"scale(1.03)":"scale(1)"}}>
                     <div style={{fontSize:"1.4rem",marginBottom:"6px"}}>{opt.emoji}</div>
-                    <div style={{fontWeight:"700",fontSize:"0.78rem",marginBottom:"2px",color:isSel?"#ffd700":"#fff"}}>{opt.label}</div>
-                    <div style={{color:"#666",fontSize:"0.68rem",lineHeight:1.4}}>{opt.desc}</div>
-                    {isSel&&<div style={{marginTop:"5px",color:"#ffd700",fontSize:"0.6rem"}}>✓</div>}
+                    <div style={{fontWeight:"700",fontSize:"0.95rem",marginBottom:"4px",color:isSel?"#ffd700":"#fff"}}>{opt.label}</div>
+                    <div style={{color:"#aaa",fontSize:"0.8rem",lineHeight:1.5}}>{opt.desc}</div>
+                    {isSel&&<div style={{marginTop:"6px",color:"#ffd700",fontSize:"0.75rem"}}>✓</div>}
                   </button>
                 );
               })}
             </div>
 
-            <button onClick={handleNext} disabled={!canContinue} style={{width:"100%",padding:"15px",borderRadius:"12px",border:"none",
-              background:canContinue?"linear-gradient(135deg,#ff2d55,#ff6b35)":"rgba(255,255,255,.06)",
-              color:canContinue?"#fff":"#666",fontSize:"0.92rem",fontWeight:"700",
-              cursor:canContinue?"pointer":"not-allowed",letterSpacing:"0.08em",textTransform:"uppercase",transition:"all .3s",
-              boxShadow:canContinue?"0 6px 24px rgba(255,45,85,.3)":"none",
-              border:canContinue?"none":"1px solid rgba(255,255,255,.08)"}}>
-              {step===totalSteps?"🔓 Unlock My Itinerary":canContinue?"Continue →":"Select an option above"}
-            </button>
+            {/* Floating continue button — always visible */}
+            <div style={{position:"sticky",bottom:"16px",zIndex:100,marginTop:"16px"}}>
+              <button onClick={handleNext} disabled={!canContinue} style={{width:"100%",padding:"16px",borderRadius:"12px",border:"none",
+                background:canContinue?"linear-gradient(135deg,#ff2d55,#ff6b35)":"rgba(20,20,30,.95)",
+                color:canContinue?"#fff":"#666",fontSize:"0.92rem",fontWeight:"700",
+                cursor:canContinue?"pointer":"not-allowed",letterSpacing:"0.08em",textTransform:"uppercase",transition:"all .3s",
+                boxShadow:canContinue?"0 6px 24px rgba(255,45,85,.5), 0 2px 8px rgba(0,0,0,.8)":"0 2px 8px rgba(0,0,0,.6)",
+                border:canContinue?"none":"1px solid rgba(255,255,255,.08)"}}>
+                {step===totalSteps?"🔓 Unlock My Itinerary":canContinue?"Continue →":"Select an option above"}
+              </button>
+            </div>
           </div>
         )}
 
@@ -990,9 +988,9 @@ Tone: Dark. Intimate. Cinematic. Like a secret being handed over. NEVER say "vib
                         Day {d+1}
                       </div>
                       <div style={{display:"flex",flexDirection:"column",gap:"10px"}}>
-                        {dayExp && <ExperienceCard key={dayExp.id} exp={dayExp} day={null} index={d*2} isFree={false} timeLabel="🌅 During the day"/>}
+                        {dayExp && <ExperienceCard key={dayExp.id} exp={dayExp} day={null} index={d*2} isFree={false} timeLabel="🌅 Day"/>}
                         {freeForThisDay && <ExperienceCard key={freeForThisDay.id} exp={freeForThisDay} day={null} index={d*2} isFree={true}/>}
-                        {nightExp && <ExperienceCard key={nightExp.id} exp={nightExp} day={null} index={d*2+1} isFree={false} timeLabel="🌙 At night"/>}
+                        {nightExp && <ExperienceCard key={nightExp.id} exp={nightExp} day={null} index={d*2+1} isFree={false} timeLabel="🌙 Night"/>}
                       </div>
                     </div>
                   );
@@ -1116,11 +1114,11 @@ function ExperienceCard({exp,day,index,isFree,timeLabel}){
         <div style={{display:"flex",gap:"12px",alignItems:"flex-start",flex:1}}>
           <div style={{display:"flex",flexDirection:"column",alignItems:"center",gap:"3px",minWidth:"44px"}}>
             <span style={{fontSize:"1.8rem"}}>{exp.emoji}</span>
-            {!isFree&&timeLabel&&<span style={{color:"#ff2d55",fontSize:"0.6rem",letterSpacing:"0.06em",whiteSpace:"nowrap",textAlign:"center",marginTop:"2px"}}>{timeLabel}</span>}
           </div>
           <div style={{flex:1}}>
             <div style={{color:"#fff",fontWeight:"700",fontSize:"1rem",marginBottom:"6px",lineHeight:1.3}}>{exp.name}</div>
             <div style={{display:"flex",gap:"5px",flexWrap:"wrap"}}>
+              {!isFree&&timeLabel&&<span style={{background:"rgba(255,45,85,.12)",color:"#ff6b8a",fontSize:"0.72rem",padding:"2px 10px",borderRadius:"20px",border:"1px solid rgba(255,45,85,.2)"}}>{timeLabel}</span>}
               {exp.dur&&<span style={{background:"rgba(255,215,0,.15)",color:"#ffd700",fontSize:"0.72rem",padding:"2px 10px",borderRadius:"20px",border:"1px solid rgba(255,215,0,.25)"}}>{exp.dur}</span>}
               {exp.rating>0&&<span style={{background:"rgba(255,45,85,.15)",color:"#ff8080",fontSize:"0.72rem",padding:"2px 10px",borderRadius:"20px",border:"1px solid rgba(255,45,85,.25)"}}>⭐ {exp.rating}</span>}
               {exp.isNew&&<span style={{background:"rgba(39,174,96,.2)",color:"#2ecc71",fontSize:"0.72rem",padding:"2px 10px",borderRadius:"20px",border:"1px solid rgba(39,174,96,.3)"}}>✨ New</span>}
