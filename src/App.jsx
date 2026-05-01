@@ -22,7 +22,7 @@ const PAID = [
   { id:20, name:"Mat Franco Magic Show", cat:"Show", price:50, rating:4.8, reviews:2686, dur:"1.5 hrs", emoji:"🪄", desc:"Winner of America's Got Talent. At The LINQ. Still the best magic show in Vegas — by far.", url:"https://vegas.vdvm.net/ZVx77X", provider:"VCO", tags:["couple","family","work"], vibes:["luxury"], times:["night"], seasons:["winter","spring","summer","fall"], interests:["show"], tier:"budget" },
   { id:21, name:"Machine Guns Vegas", cat:"Adventure", price:50, rating:4.8, reviews:144, dur:"1 hr", emoji:"🔫", desc:"Real machine guns in a supervised Vegas shooting range. The only place on Earth this makes sense.", url:"https://vegas.vdvm.net/Py36Z6", provider:"VCO", tags:["solo","couple","group","kids"], vibes:["dark"], times:["morning","day"], seasons:["winter","spring","summer","fall"], interests:["adventure"], tier:"budget" },
   { id:22, name:"Mystère — Cirque du Soleil", cat:"Show", price:49, rating:4.6, reviews:5750, dur:"1.5 hrs", emoji:"🎭", desc:"The original Cirque in Vegas. Treasure Island. 30+ years of acrobatics that defy physics.", url:"https://vegas.vdvm.net/LKVW3L", provider:"VCO", tags:["solo","couple","group","bachelorette","work"], vibes:["dark"], times:["night"], seasons:["winter","spring","summer","fall"], interests:["show"], tier:"budget" },
-  { id:23, name:"Meow Wolf Omega Mart", cat:"Unique", price:46, rating:3.8, reviews:265, dur:"2 hrs", emoji:"🛒", desc:"A supermarket where nothing is what it seems. AREA15. Go down the rabbit hole.", url:"https://vegas.vdvm.net/NkZ5bq", provider:"VCO", tags:["couple","group","family"], vibes:[], times:["day","night"], seasons:["winter","spring","summer","fall"], interests:["unique"], tier:"budget" },
+  
   { id:24, name:"Bars Unknown Bar Crawl", cat:"Nightlife", price:54, rating:5.0, reviews:5, dur:"3 hrs", emoji:"🍸", desc:"The Strip's hidden bars. Most tourists walk past them every night without knowing. You won't.", url:"https://www.getyourguide.com/las-vegas-l58/bars-unknown-the-las-vegas-strip-bar-crawl-t708411/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","couple","group","family","kids"], vibes:[], times:["night"], seasons:["winter","spring","summer","fall"], interests:["nightlife","unique"], tier:"budget", girlsTrip:true },
   { id:25, name:"Vegas! The Show", cat:"Show", price:47, rating:4.6, reviews:2599, dur:"1.5 hrs", emoji:"✨", desc:"Vegas history told through its greatest hits. Sinatra, Elvis, Liberace — all in one show.", url:"https://vegas.vdvm.net/R0O77N", provider:"VCO", tags:["solo","couple"], vibes:["dark","romantic"], times:["night"], seasons:["winter","spring","summer","fall"], interests:["show"], tier:"budget" },
   { id:26, name:"Hop-On Hop-Off Bus", cat:"Tour", price:58, rating:4.3, reviews:907, dur:"24 hrs", emoji:"🚌", desc:"See every inch of the Strip at your own pace. First-timers' best friend.", url:"https://www.getyourguide.com/las-vegas-l58/las-vegas-24-or-48-hour-hop-on-hop-off-tour-t61878/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","couple","group","family","work","kids"], vibes:["luxury","romantic","first-timer"], times:["morning","day","night"], seasons:["winter","spring","summer","fall"], interests:["unique"], tier:"budget" },
@@ -529,10 +529,14 @@ function getHotels(ans) {
     seen.add(h.name);
     result.push(h);
   }
-  // Fill if needed — relax tier constraint
+  // Fill if needed — try adjacent tier before giving up
   if(result.length<3) {
+    const adjacentTiers = {budget:["budget","mid"], mid:["mid","budget","high"], high:["high","mid","vip"], vip:["vip","high"]};
+    const allowedTiers = adjacentTiers[userTier] || [userTier];
     for(const h of HOTELS) {
-      if(!seen.has(h.name) && result.length<3 && h.profiles.some(p=>profile.includes(p)) && h.tiers.includes(userTier)) {
+      if(!seen.has(h.name) && result.length<3 && 
+         h.profiles.some(p=>profile.includes(p)) && 
+         h.tiers.some(t=>allowedTiers.includes(t))) {
         seen.add(h.name); result.push(h);
       }
     }
@@ -746,6 +750,11 @@ export default function VegasApp() {
     const vibeDesc = vibeLabels[Array.isArray(newAns.vibe)?newAns.vibe[0]:newAns.vibe]||"";
     const interestDesc = Array.isArray(newAns.interest)?newAns.interest.join(" and "):newAns.interest||"";
 
+    const fallbacks = [
+      `A ${travelerType} ${vibeDesc} — Vegas has been holding its breath for someone like you. ${seasonCtx[newAns.season]} The city reveals different secrets depending on who's asking, and you asked the right questions. Here's what should absolutely be on your list.`,
+      `You came to Vegas as a ${travelerType}, ${vibeDesc}. That already puts you in a different category than most visitors. ${seasonCtx[newAns.season]} Here's what the city has been saving for you.`,
+    ];
+
     try {
       const res=await fetch("https://api.anthropic.com/v1/messages",{
         method:"POST",
@@ -774,8 +783,9 @@ Tone: Dark. Intimate. Cinematic. Like a secret being handed over. NEVER say "vib
         })
       });
       const data=await res.json();
-      setAiStory(data.content?.[0]?.text||"Vegas doesn't reveal itself to everyone. But you asked the right questions — and the city noticed.");
-    } catch { setAiStory("Vegas has layers most visitors never reach. You came looking for the right things."); }
+      const text = data.content?.[0]?.text;
+      setAiStory(text && text.length > 30 ? text : fallbacks[0]);
+    } catch { setAiStory(fallbacks[0]); }
 
     setLoading(false);
     setStep(totalSteps+1);
@@ -828,7 +838,7 @@ Tone: Dark. Intimate. Cinematic. Like a secret being handed over. NEVER say "vib
             backgroundClip:"text",animation:"flicker 9s infinite, shimmer 4s linear infinite",lineHeight:1.1}}>
             VEGAS UNVEILED
           </h1>
-          <p style={{color:"#444",fontSize:"0.78rem",margin:0,letterSpacing:"0.15em"}}>Experiences they don't put in the brochures</p>
+          <p style={{color:"#777",fontSize:"0.78rem",margin:0,letterSpacing:"0.15em"}}>Experiences they don't put in the brochures</p>
         </div>
 
         {/* INTRO */}
@@ -838,7 +848,7 @@ Tone: Dark. Intimate. Cinematic. Like a secret being handed over. NEVER say "vib
               <div style={{fontSize:"2.8rem",marginBottom:"16px"}}>🎰</div>
               <h2 style={{fontSize:"1.3rem",color:"#fff",margin:"0 0 12px",fontWeight:"normal"}}>Most people leave Vegas having seen <em style={{color:"#ff2d55"}}>nothing</em>.</h2>
               <p style={{color:"#aaa",lineHeight:1.8,margin:"0 0 8px",fontSize:"0.88rem"}}>Tell us about your trip. Get a custom itinerary with direct booking links — plus free insider tips most tourists never discover.</p>
-              <p style={{color:"#444",fontSize:"0.7rem",margin:0,fontStyle:"italic"}}>Quick, personal, free.</p>
+              <p style={{color:"#666",fontSize:"0.7rem",margin:0,fontStyle:"italic"}}>Quick, personal, free.</p>
             </div>
             <button onClick={handleNext} style={{width:"100%",padding:"17px",borderRadius:"12px",border:"none",background:"linear-gradient(135deg,#ff2d55,#ff6b35)",color:"#fff",fontSize:"0.95rem",fontWeight:"700",cursor:"pointer",letterSpacing:"0.08em",textTransform:"uppercase",boxShadow:"0 8px 32px rgba(255,45,85,.38)",transition:"all .2s"}}
               onMouseEnter={e=>{e.currentTarget.style.transform="translateY(-2px)";e.currentTarget.style.boxShadow="0 14px 40px rgba(255,45,85,.55)"}}
@@ -861,7 +871,7 @@ Tone: Dark. Intimate. Cinematic. Like a secret being handed over. NEVER say "vib
             </div>
 
             <h2 style={{fontSize:"1.4rem",color:"#fff",margin:"0 0 5px",fontWeight:"normal"}}>{currentQ.question}</h2>
-            <p style={{color:"#555",fontSize:"0.78rem",margin:"0 0 18px",fontStyle:"italic"}}>{currentQ.subtitle}</p>
+            <p style={{color:"#aaa",fontSize:"0.82rem",margin:"0 0 18px",fontStyle:"italic"}}>{currentQ.subtitle}</p>
 
             {currentQ.multi&&(
               <div style={{background:"rgba(255,215,0,.06)",border:"1px solid rgba(255,215,0,.16)",borderRadius:"8px",padding:"7px 12px",marginBottom:"14px",display:"flex",alignItems:"center",gap:"8px"}}>
@@ -892,11 +902,12 @@ Tone: Dark. Intimate. Cinematic. Like a secret being handed over. NEVER say "vib
             </div>
 
             <button onClick={handleNext} disabled={!canContinue} style={{width:"100%",padding:"15px",borderRadius:"12px",border:"none",
-              background:canContinue?"linear-gradient(135deg,#ff2d55,#ff6b35)":"rgba(255,255,255,.04)",
-              color:canContinue?"#fff":"#333",fontSize:"0.92rem",fontWeight:"700",
+              background:canContinue?"linear-gradient(135deg,#ff2d55,#ff6b35)":"rgba(255,255,255,.06)",
+              color:canContinue?"#fff":"#666",fontSize:"0.92rem",fontWeight:"700",
               cursor:canContinue?"pointer":"not-allowed",letterSpacing:"0.08em",textTransform:"uppercase",transition:"all .3s",
-              boxShadow:canContinue?"0 6px 24px rgba(255,45,85,.3)":"none"}}>
-              {step===totalSteps?"🔓 Unlock My Itinerary":"Continue →"}
+              boxShadow:canContinue?"0 6px 24px rgba(255,45,85,.3)":"none",
+              border:canContinue?"none":"1px solid rgba(255,255,255,.08)"}}>
+              {step===totalSteps?"🔓 Unlock My Itinerary":canContinue?"Continue →":"Select an option above"}
             </button>
           </div>
         )}
@@ -912,7 +923,7 @@ Tone: Dark. Intimate. Cinematic. Like a secret being handed over. NEVER say "vib
               ))}
             </div>
             <p style={{color:"#ffd700",fontSize:"0.95rem",margin:"0 0 6px"}}>Accessing the underground...</p>
-            <p style={{color:"#444",fontSize:"0.75rem"}}>Building your secret Vegas itinerary</p>
+            <p style={{color:"#888",fontSize:"0.78rem"}}>Building your secret Vegas itinerary</p>
           </div>
         )}
 
