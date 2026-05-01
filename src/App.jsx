@@ -64,7 +64,7 @@ const PAID = [
   { id:63, name:"The Spa at Encore — Wynn", cat:"Wellness", price:130, rating:4.9, reviews:150, dur:"Half day", emoji:"🌿", desc:"One of the most awarded spas in North America. Inside Encore at Wynn. Pure luxury, no casino noise.", url:"https://vegas.vdvm.net/dy9YMk", provider:"VCO", tags:["solo","couple"], vibes:["luxury","romantic"], times:["morning"], seasons:["winter","spring","summer","fall"], interests:["wellness","unique"], tier:"premium", girlsTrip:true },
   { id:64, name:"Vdara Spa & Salon", cat:"Wellness", price:80, rating:4.7, reviews:100, dur:"Half day", emoji:"🛁", desc:"No casino. No noise. Just a world-class spa in the most peaceful hotel on the Strip.", url:"https://vegas.vdvm.net/6kPmjG", provider:"VCO", tags:["solo","couple","bachelorette","work"], vibes:["luxury","romantic"], times:["morning"], seasons:["winter","spring","summer","fall"], interests:["wellness","unique"], tier:"mid" },
   { id:65, name:"Nelson Ghost Town & Mine Tour", cat:"Dark", price:134, rating:4.7, reviews:68, dur:"4 hrs", emoji:"👻", desc:"An abandoned 1800s gold mining town 45 minutes from Vegas. Rusty cars, real ghost stories, an actual mine. The dark side Nevada doesn't advertise.", url:"https://www.getyourguide.com/nelson-ghost-town-nevada-l187538/las-vegas-nelson-ghost-town-with-mine-tour-option-t1221627/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","couple"], vibes:["luxury","romantic"], times:["morning","day"], seasons:["winter","spring","summer","fall"], interests:["unique","adventure"], tier:"mid" },
-  { , desc:"Party bus, open bar and VIP entry to Vegas' top strip clubs. The bachelor party night this city was built for.", url:"https://www.getyourguide.com/las-vegas-l58/strip-club-crawl-open-bar-party-bus-t442598/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","couple","group"], vibes:["luxury"], times:["night"], seasons:["winter","spring","summer","fall"], interests:["nightlife"], tier:"mid", guysTrip:true },
+  { id:74, name:"Strip Club Crawl + Open Bar + Party Bus", cat:"Nightlife", price:99, rating:4.7, reviews:150, dur:"4 hrs", emoji:"🍾", desc:"Party bus, open bar and VIP entry to Vegas' top strip clubs. The bachelor party night this city was built for.", url:"https://www.getyourguide.com/las-vegas-l58/strip-club-crawl-open-bar-party-bus-t442598/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","couple","group"], vibes:["luxury"], times:["night"], seasons:["winter","spring","summer","fall"], interests:["nightlife"], tier:"mid", guysTrip:true },
   { id:66, name:"Pool Party Crawl by Party Bus", cat:"Nightlife", price:99, rating:4.5, reviews:110, dur:"5 hrs", emoji:"🏊", desc:"Party bus to a Vegas pool party with free drinks and VIP entry. The definitive Vegas summer experience.", url:"https://www.getyourguide.com/las-vegas-l58/las-vegas-pool-party-crawl-by-party-bus-t439815/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","work"], vibes:["luxury"], times:["morning","day"], seasons:["winter","spring","summer","fall"], interests:["nightlife"], tier:"mid", girlsTrip:true },
   { id:67, name:"3-Stop Pool Party Crawl — Party Bus", cat:"Nightlife", price:99, rating:4.5, reviews:110, dur:"5 hrs", emoji:"🎉", desc:"Party bus hits 3 Vegas pool parties in one day. Free drinks, VIP entry at each stop. Summer in Vegas, maximized.", url:"https://www.getyourguide.com/las-vegas-l58/las-vegas-strip-3-stop-pool-party-crawl-with-party-bus-t384399/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","couple","group"], vibes:["dark","adventure"], times:["morning","day"], seasons:["winter","spring","fall"], interests:["nightlife"], tier:"mid", girlsTrip:true },
   // ── LGBT EXPERIENCES ──
@@ -101,7 +101,7 @@ const FREE_EXPERIENCES = [
   { id:"f1", name:"Bellagio Fountains at Night", loc:"Bellagio Hotel", time:"After 8pm", emoji:"⛲", desc:"Every 15-30 minutes after dark. 1,000 jets of water choreographed to music. Free. Unmissable.", url:"https://vegas.vdvm.net/oq11jb" },
   { id:"f2", name:"Bellagio Conservatory & Garden", loc:"Bellagio Hotel", time:"Anytime", emoji:"🌸", desc:"A 14,000 sq ft indoor garden that changes 5 times a year. Currently the most beautiful room in Vegas.", url:"https://vegas.vdvm.net/Org2RN" },
   { id:"f3", name:"Fremont Street LED Experience", loc:"Downtown Vegas", time:"After dark", emoji:"💡", desc:"A 1,500-foot LED canopy with free shows every hour. The Vegas the Strip doesn't want you to see.", url:"https://vegas.vdvm.net/9gR3A3" },
-  { id:"f4", name:"Flamingo Wildlife Habitat", loc:"Flamingo Hotel", time:"Morning", emoji:"🦩", desc:"Real flamingos living inside a casino resort. Free to visit. Great for families & kids — surreal at 8am.", tags:["family","kids"], url:"https://vegas.vdvm.net/6eOKEq" },
+  { id:"f4", name:"Flamingo Wildlife Habitat", loc:"Flamingo Hotel", time:"Morning", emoji:"🦩", desc:"Real flamingos living inside a casino resort. Free to visit. Great for families and kids — surreal at 8am.", tags:["family","kids"], url:"https://vegas.vdvm.net/6eOKEq" },
   { id:"f5", name:"Grand Canal Shoppes — The Venetian", loc:"The Venetian", time:"Anytime", emoji:"🛶", desc:"Venice reconstructed inside a hotel. Walk it for free. Watch the gondolas for free. It works.", url:"https://vegas.vdvm.net/MmJJG3" },
   { id:"f6", name:"Pinball Hall of Fame", loc:"South Strip", time:"Anytime", emoji:"🎮", desc:"500+ vintage machines from the 1950s onward. All playable for quarters. Totally free to enter.", url:"https://vegas.vdvm.net/WqnZa3" },
   { id:"f7", name:"M&M's World Las Vegas", loc:"Las Vegas Blvd", time:"Anytime", emoji:"🍬", desc:"4 floors of chocolate chaos. Free to enter. The world's largest M&M's store.", url:"https://vegas.vdvm.net/JzGaLE" },
@@ -182,8 +182,8 @@ const QUESTIONS = [
       {v:"dark",label:"Dark & Mysterious",emoji:"🌑",desc:"Ghost tours, hidden bars & the dark side of Vegas"},
       {v:"luxury",label:"Pure Luxury",emoji:"💎",desc:"Only the best, always"},
       {v:"adventure",label:"Thrill Seeker",emoji:"⚡",desc:"Adrenaline & rush"},
-      {v:"casino",label:"Casino & Gambling",emoji:"🎲",desc:"The game within the game"},
-      {v:"girlswild",label:"Wild Night Out",emoji:"🥂",desc:"Clubs, shows & no rules"},
+      {v:"casino",label:"Gambling & Sports",emoji:"🎲",desc:"Sportsbooks, live games & casino action"},
+      {v:"nightout",label:"Wild Night Out",emoji:"🥂",desc:"Clubs, shows & no rules"},
       {v:"first-timer",label:"First Time in Vegas",emoji:"🎰",desc:"The iconic, done perfectly"},
     ],
     familyMulti: true, familyMax: 2,
@@ -311,7 +311,7 @@ function filterExperiences(ans) {
     vibes.forEach(v => {
       if(v==="nightout") { if(exp.interests?.includes("nightlife")||exp.tags.includes("nightlife")) s+=4; }
       else if(v==="casino") {
-        // For guys: casino = gambling + sports
+        // casino = gambling + sports for guys AND lgbtq
         if(exp.interests?.includes("sports")||SPORTS_IDS.includes(exp.id)) s+=4;
         if(exp.vibes?.includes("casino")) s+=4;
       }
@@ -409,10 +409,12 @@ function filterExperiences(ans) {
   const dayPairs = {["1-2"]:3,["3-4"]:4,["5-7"]:7,["1week"]:8}[ans.days]||4;
   const minTours = (ans.days==="5-7"||ans.days==="1week") ? 4 : 0;
 
+  // Nightlife/Adult/Strip category IDs — max 1 per category in itinerary
+  const NIGHTLIFE_CAT_IDS = [11, 24, 56, 66, 67]; // Club crawls, bar crawls, pool parties
+  const ADULT_SHOW_IDS = [8, 27, 29]; // Female adult shows (ROUGE, Atomic Saloon, FANTASY VCO)
+  const STRIP_CLUB_IDS = [74]; // Strip club crawl
+
   // Category dedup trackers — using object so closures see updates
-  const NIGHTLIFE_CAT_IDS = [11, 24, 56, 66, 67];
-  const ADULT_SHOW_IDS = [8, 27, 29];
-  const STRIP_CLUB_IDS = [74];
   const state = { spaAdded:false, maleRevueAdded:false, femaleRevueAdded:false, dragAdded:false, toursAdded:0, nightlifeAdded:false, adultShowAdded:false, stripClubAdded:false };
 
   const canAdd = (exp) => {
@@ -677,6 +679,7 @@ export default function VegasApp() {
       const nextQ = QUESTIONS[nextStep-1];
       const isGuysNow = newAns.groupGender === "guys";
       const isLGBTQNow = newAns.groupGender === "lgbtq";
+      // Skip vibe only for girls/mixed — guys and lgbtq have their own vibe options
       const skipVibe = !isGuysNow && !isLGBTQNow && newAns.tripType !== "family";
 
       // For girls/lgbtq/mixed: skip Q3 vibe AND Q4 interest separately
@@ -695,18 +698,6 @@ export default function VegasApp() {
         if(familyVibes.includes("explore")) autoInterests.push("nature","unique");
         if(familyVibes.includes("thrill")) autoInterests.push("adventure");
         if(familyVibes.includes("relaxed")) autoInterests.push("unique");
-        const finalAns = {...newAns, interest: autoInterests.length>0 ? autoInterests : ["unique"]};
-        setAnswers(finalAns);
-        setStep(nextStep+1);
-      // Skip Q4 (interest) for guys — auto-map from vibe
-      } else if(nextQ?.id==="interest" && isGuysNow){
-        const guyVibes = Array.isArray(newAns.vibe) ? newAns.vibe : [newAns.vibe];
-        const autoInterests = [];
-        if(guyVibes.includes("casino")) autoInterests.push("sports","unique");
-        if(guyVibes.includes("nightout")) autoInterests.push("nightlife");
-        if(guyVibes.includes("adventure")) autoInterests.push("nature","adventure");
-        if(guyVibes.includes("dark")) autoInterests.push("unique");
-        if(guyVibes.includes("first-timer")) autoInterests.push("unique","show");
         const finalAns = {...newAns, interest: autoInterests.length>0 ? autoInterests : ["unique"]};
         setAnswers(finalAns);
         setStep(nextStep+1);
@@ -759,13 +750,18 @@ export default function VegasApp() {
       `You're coming to Vegas as a ${travelerType}${vibeDesc?" drawn to "+vibeDesc:""}. That already puts you in a different category. ${seasonCtx[newAns.season]} Here's what the city has been saving for you.`,
     ];
 
-    try {
-      const res=await fetch("https://api.anthropic.com/v1/messages",{
-        method:"POST",
-        headers:{"Content-Type":"application/json"},
-        body:JSON.stringify({
-          model:"claude-sonnet-4-20250514",max_tokens:1000,
-          messages:[{role:"user",content:`You are Vegas Unveiled — a mysterious Las Vegas insider. You write like a thriller novelist who knows the city's secrets.
+    // Show results immediately with fallback — AI briefing updates in background
+    setAiStory(fallbacks[0]);
+    setLoading(false);
+    setStep(totalSteps+1);
+
+    // Fetch AI briefing in background and update when ready
+    fetch("https://api.anthropic.com/v1/messages",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        model:"claude-sonnet-4-20250514",max_tokens:300,
+        messages:[{role:"user",content:`You are Vegas Unveiled — a mysterious Las Vegas insider. You write like a thriller novelist who knows the city's secrets.
 
 Write a SHORT, powerful, deeply personal briefing. 3-4 sentences MAX. No fluff. No generic travel language.
 
@@ -778,21 +774,17 @@ TRAVELER PROFILE:
 - Time: ${newAns.timeOfDay}
 
 RULES:
-1. First sentence: Hit them personally. Use their exact profile. Make them feel like you read their mind. Be specific and flattering. Example: "A solo woman who runs on dark energy and luxury — Vegas has been holding its breath for someone like you."
-2. Second sentence: Paint Vegas in their season/time with 1-2 sharp, sensory, cinematic details. No clichés. Make them feel the city physically.
-3. Third sentence: One bold statement about what makes their specific trip unique or what Vegas will reveal to them specifically.
-4. Final sentence: Sharp transition. Example: "Here's what should absolutely be on your list." or "This is what Vegas looks like when it's made for you."
+1. First sentence: Hit them personally. Use their exact profile. Make them feel like you read their mind. Be specific and flattering.
+2. Second sentence: Paint Vegas in their season/time with 1-2 sharp, sensory, cinematic details. No clichés.
+3. Third sentence: One bold statement about what makes their specific trip unique.
+4. Final sentence: Sharp transition. Example: "Here's what should absolutely be on your list."
 
-Tone: Dark. Intimate. Cinematic. Like a secret being handed over. NEVER say "vibrant" "bustling" "amazing" or any generic travel word.`}]
-        })
-      });
-      const data=await res.json();
+Tone: Dark. Intimate. Cinematic. NEVER say "vibrant" "bustling" "amazing" or any generic travel word.`}]
+      })
+    }).then(r=>r.json()).then(data=>{
       const text = data.content?.[0]?.text;
-      setAiStory(text && text.length > 30 ? text : fallbacks[0]);
-    } catch { setAiStory(fallbacks[0]); }
-
-    setLoading(false);
-    setStep(totalSteps+1);
+      if(text && text.length > 30) setAiStory(text);
+    }).catch(()=>{});
   }
 
   async function handleEmailSubmit(){
