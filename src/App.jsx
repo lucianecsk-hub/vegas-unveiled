@@ -401,7 +401,7 @@ function filterExperiences(ans) {
   const SPA_IDS = [63,64,65,66];
   const MALE_REVUE_IDS = [28,29,34]; // Magic Mike, Chippendales, Thunder
   const FEMALE_REVUE_IDS = [7,12]; // Fantasy Burlesque
-  const DRAG_IDS = [70,71,72,73,74,75]; // Drag shows
+  const DRAG_IDS = [70,71,72,73]; // Drag shows only
   const TOUR_IDS = [31,43,44,45,46,47,48,50,51,52,53,54,55,56,60,67,86,88,89,90,91];
   const KIDS_IDS = [85,32,15]; // Water park, Tournament of Kings, Blue Man
 
