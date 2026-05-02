@@ -682,6 +682,7 @@ async function sendItineraryEmail(toEmail, itinerary, freeExp, hotels, answers, 
     const result = await window.emailjs.send(EMAILJS_SERVICE, EMAILJS_TEMPLATE, {
       to_email: toEmail,
       content: fullEmailHtml,
+      message_html: fullEmailHtml,
     });
     console.log("EmailJS success:", result);
     return result;
