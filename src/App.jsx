@@ -641,13 +641,47 @@ async function sendItineraryEmail(toEmail, itinerary, freeExp, hotels, answers, 
     window._emailjsInited = true;
   }
 
+  const fullEmailHtml = `<!DOCTYPE html>
+<html><head><meta charset="UTF-8"></head>
+<body style="margin:0;padding:0;background:#0d0a18;font-family:Georgia,serif">
+<div style="max-width:600px;margin:0 auto;background:#0d0a18">
+
+  <div style="background:#1a0a0a;padding:40px;text-align:center;border-bottom:2px solid #ff2d55">
+    <p style="color:#ff2d55;font-size:10px;letter-spacing:6px;margin:0 0 12px;font-family:monospace">◆ CLASSIFIED ◆</p>
+    <h1 style="font-size:28px;font-weight:bold;margin:0 0 6px;color:#ffd700">VEGAS UNVEILED</h1>
+    <p style="color:#666;font-size:11px;letter-spacing:3px;margin:0">YOUR SECRET ITINERARY HAS ARRIVED</p>
+  </div>
+
+  <div style="border-left:3px solid #ff2d55;margin:32px 32px 0;padding:16px 20px;background:#1a0505">
+    <p style="color:#ff2d55;font-size:10px;letter-spacing:4px;margin:0 0 10px;font-family:monospace">◆ YOUR SECRET BRIEFING</p>
+    <p style="color:#ccc;font-style:italic;line-height:1.8;margin:0;font-size:13px">${aiStory || "Your secret Vegas itinerary is ready."}</p>
+  </div>
+
+  <div style="padding:16px 32px">
+    <span style="background:#1a1500;border:1px solid #3d3000;border-radius:20px;padding:4px 12px;color:#ffd700;font-size:11px;font-family:monospace">${seasonLabels[answers.season]} in Vegas</span>
+    &nbsp;
+    <span style="background:#1a1500;border:1px solid #3d3000;border-radius:20px;padding:4px 12px;color:#ffd700;font-size:11px;font-family:monospace">${daysLabels[answers.days]} trip</span>
+  </div>
+
+  <div style="padding:8px 32px 32px">
+    <p style="color:#fff;font-size:15px;margin:0 0 4px;font-weight:bold">Your Itinerary</p>
+    <p style="color:#555;font-size:11px;margin:0 0 16px;letter-spacing:1px">BOOK DIRECTLY — LINKS BELOW</p>
+    ${itineraryHtml}
+  </div>
+
+  <div style="background:#050505;padding:24px 32px;text-align:center;border-top:1px solid #1a1a1a">
+    <p style="color:#444;font-size:11px;margin:0 0 6px">Generated exclusively for you by <strong style="color:#ffd700">Vegas Unveiled</strong></p>
+    <p style="color:#444;font-size:11px;margin:0">Booking links may include affiliate partnerships · Prices subject to availability</p>
+    <p style="margin-top:10px"><a href="https://vegas-unveiled.vercel.app" style="color:#555;font-size:11px">vegas-unveiled.vercel.app</a></p>
+  </div>
+
+</div>
+</body></html>`;
+
   try {
     const result = await window.emailjs.send(EMAILJS_SERVICE, EMAILJS_TEMPLATE, {
       to_email: toEmail,
-      briefing: aiStory || "Your secret Vegas itinerary is ready.",
-      season: seasonLabels[answers.season] || answers.season,
-      days: daysLabels[answers.days] || answers.days,
-      itinerary_html: itineraryHtml,
+      content: fullEmailHtml,
     });
     console.log("EmailJS success:", result);
     return result;
