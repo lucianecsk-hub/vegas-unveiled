@@ -628,7 +628,11 @@ async function sendItineraryEmail(toEmail, itinerary, freeExp, hotels, answers, 
     await new Promise((res,rej)=>{
       const s=document.createElement("script");
       s.src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js";
-      s.onload=()=>{ window.emailjs.init(EMAILJS_KEY); res(); };
+      s.onload=()=>{
+        window.emailjs.init(EMAILJS_KEY);
+        window._emailjsInited = true;
+        res();
+      };
       s.onerror=rej;
       document.head.appendChild(s);
     });
@@ -637,13 +641,20 @@ async function sendItineraryEmail(toEmail, itinerary, freeExp, hotels, answers, 
     window._emailjsInited = true;
   }
 
-  return window.emailjs.send(EMAILJS_SERVICE, EMAILJS_TEMPLATE, {
-    to_email: toEmail,
-    briefing: aiStory || "Your secret Vegas itinerary is ready.",
-    season: seasonLabels[answers.season] || answers.season,
-    days: daysLabels[answers.days] || answers.days,
-    itinerary_html: itineraryHtml,
-  });
+  try {
+    const result = await window.emailjs.send(EMAILJS_SERVICE, EMAILJS_TEMPLATE, {
+      to_email: toEmail,
+      briefing: aiStory || "Your secret Vegas itinerary is ready.",
+      season: seasonLabels[answers.season] || answers.season,
+      days: daysLabels[answers.days] || answers.days,
+      itinerary_html: itineraryHtml,
+    });
+    console.log("EmailJS success:", result);
+    return result;
+  } catch(err) {
+    console.error("EmailJS error:", JSON.stringify(err));
+    throw err;
+  }
 }
 
 // ─── MAIN APP ─────────────────────────────────────────────────────────────
@@ -821,12 +832,13 @@ export default function VegasApp() {
       method:"POST",
       headers:{
         "Content-Type":"application/json",
+        "x-api-key":import.meta.env.VITE_ANTHROPIC_KEY,
         "anthropic-version":"2023-06-01",
         "anthropic-dangerous-direct-browser-access":"true"
       },
       body:JSON.stringify({
-        model:"claude-sonnet-4-20250514",max_tokens:500,
-        messages:[{role:"user",content:`You are an expert in traveler profiles who knows Las Vegas deeply. Based on the profile below, write a text in English with 3 paragraphs that feels like the person is reading their own travel horoscope — specific, revealing, a little humorous, never generic.
+        model:"claude-sonnet-4-20250514",max_tokens:350,
+        messages:[{role:"user",content:`You are an expert in traveler profiles who knows Las Vegas deeply. Based on the profile below, write exactly 3 short paragraphs in English that feel like the person is reading their own travel horoscope — specific, revealing, slightly cinematic, never generic.
 
 TRAVELER PROFILE:
 - Trip type: ${travelerType}
@@ -837,23 +849,21 @@ TRAVELER PROFILE:
 - Trip length: ${newAns.days} days
 - Preferred time: ${newAns.timeOfDay}
 
-PARAGRAPH 1 — THE TRAVELER:
-Describe this person's real travel behavior. How they make decisions. What they prioritize. What they never do. What they always do. Be specific and behavioral — not complimentary. They should read this and think "how did this app know that about me?" Use their exact budget style, trip type and vibe to make it feel personal and unique. Add a touch of dry humor if it fits naturally.
+PARAGRAPH 1 — THE TRAVELER (2-3 sentences):
+Describe how this person travels — their real behavior and decisions. Specific, behavioral, a touch of dry humor. They should think "how did this app know that?"
 
-PARAGRAPH 2 — VEGAS FOR THEM:
-What does Las Vegas specifically have for this type of traveler that they won't find anywhere else. Not the obvious stuff — the layer of Vegas that matches exactly who they are. Make them feel like Vegas was built for their profile.
+PARAGRAPH 2 — VEGAS FOR THEM (2-3 sentences):
+What Vegas has specifically for this profile that they won't find anywhere else. Not obvious — the layer of Vegas that matches exactly who they are.
 
-PARAGRAPH 3 — THE SEASON:
-Describe Las Vegas in ${newAns.season} in a sensory, seductive way — temperature, energy, crowd, light, vibe. Make them feel the city. End with one sentence that creates desire to be there NOW.
+PARAGRAPH 3 — THE SEASON (2-3 sentences):
+Vegas in ${newAns.season} — sensory, seductive, specific details. End with one sentence that makes them want to be there right now.
 
 RULES:
-- Write in English only
-- 3-5 sentences per paragraph
-- Never use: "vibrant" "bustling" "amazing" "unique experience" "unforgettable" or any travel brochure language
-- Never be vague — every sentence must be specific to their profile
-- Tone: intimate, knowing, slightly cinematic. Like someone who has watched thousands of travelers come through Vegas and can read people instantly.
-- Do NOT use quotes around the text
-- Do NOT add any title or label before the text`}]
+- English only
+- Max 3 sentences per paragraph — be concise and punchy
+- Never use: "vibrant" "bustling" "amazing" "unforgettable" "unique experience"
+- Tone: intimate, knowing, cinematic
+- No quotes, no titles, no labels before the text`}]
       })
     }).then(r=>r.json()).then(data=>{
       const text = data.content?.[0]?.text;
