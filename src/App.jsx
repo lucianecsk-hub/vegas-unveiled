@@ -702,6 +702,7 @@ export default function VegasApp() {
   const [freeExp,setFreeExp]=useState([]);
   const [hotels,setHotels]=useState([]);
   const [aiStory,setAiStory]=useState();
+  const [aiReady,setAiReady]=useState(false);
   const [email,setEmail]=useState();
   const [emailSent,setEmailSent]=useState(false);
   const [emailLoading,setEmailLoading]=useState(false);
@@ -872,7 +873,7 @@ export default function VegasApp() {
         "anthropic-dangerous-direct-browser-access":"true"
       },
       body:JSON.stringify({
-        model:"claude-sonnet-4-20250514",max_tokens:350,
+        model:"claude-sonnet-4-20250514",max_tokens:280,
         messages:[{role:"user",content:`You are an expert in traveler profiles who knows Las Vegas deeply. Based on the profile below, write exactly 3 short paragraphs in English that feel like the person is reading their own travel horoscope — specific, revealing, slightly cinematic, never generic.
 
 TRAVELER PROFILE:
@@ -902,8 +903,8 @@ RULES:
       })
     }).then(r=>r.json()).then(data=>{
       const text = data.content?.[0]?.text;
-      if(text && text.length > 30) setAiStory(text);
-    }).catch(()=>{});
+      if(text && text.length > 30) { setAiStory(text); setAiReady(true); }
+    }).catch(()=>{ setAiReady(true); });
   }
 
   async function handleEmailSubmit(){
@@ -1057,7 +1058,23 @@ RULES:
             {/* AI Story */}
             <div style={{background:"linear-gradient(135deg,rgba(255,45,85,.09),rgba(255,215,0,.05))",border:"1px solid rgba(255,215,0,.16)",borderLeft:"3px solid #ff2d55",borderRadius:"16px",padding:"22px",marginBottom:"16px"}}>
               <div style={{color:"#ff2d55",fontSize:"0.62rem",letterSpacing:"0.22em",marginBottom:"10px"}}>◆ YOUR SECRET BRIEFING</div>
-              <p style={{color:"#ddd",lineHeight:2,margin:0,fontStyle:"italic",fontSize:"0.95rem"}}>"{aiStory}"</p>
+              {!aiReady ? (
+                <div style={{display:"flex",alignItems:"center",gap:"12px",padding:"8px 0"}}>
+                  <div style={{position:"relative",width:"28px",height:"28px",flexShrink:0}}>
+                    {[0,1,2].map(i=>(
+                      <div key={i} style={{position:"absolute",inset:`${i*4}px`,borderRadius:"50%",border:"1.5px solid transparent",
+                        borderTopColor:i%2===0?"#ff2d55":"#ffd700",
+                        animation:`spin ${0.8+i*.3}s linear infinite ${i%2?"reverse":""}`}}/>
+                    ))}
+                  </div>
+                  <div>
+                    <p style={{color:"#ffd700",fontSize:"0.8rem",margin:"0 0 3px",fontWeight:"700"}}>Analyzing your traveler profile...</p>
+                    <p style={{color:"#888",fontSize:"0.72rem",margin:0}}>Your personalized briefing will appear in a few seconds ✨</p>
+                  </div>
+                </div>
+              ) : (
+                <p style={{color:"#ddd",lineHeight:2,margin:0,fontStyle:"italic",fontSize:"0.95rem",animation:"fadeUp .5s ease"}}>"{aiStory}"</p>
+              )}
             </div>
 
             {/* Summary badges */}
@@ -1216,7 +1233,7 @@ RULES:
               </a>
             </div>
 
-            <button onClick={()=>{setStep(0);setAnswers({});setSelected(null);setAiStory("");setItinerary([]);setFreeExp([]);setHotels([]);setEmail("");setEmailSent(false);}}
+            <button onClick={()=>{setStep(0);setAnswers({});setSelected(null);setAiStory("");setAiReady(false);setItinerary([]);setFreeExp([]);setHotels([]);setEmail("");setEmailSent(false);}}
               style={{width:"100%",padding:"14px",borderRadius:"10px",background:"transparent",border:"1px solid rgba(255,255,255,.09)",color:"#666",fontSize:"0.82rem",cursor:"pointer",transition:"all .2s"}}
               onMouseEnter={e=>{e.currentTarget.style.color="#fff";e.currentTarget.style.borderColor="rgba(255,255,255,.2)"}}
               onMouseLeave={e=>{e.currentTarget.style.color="#666";e.currentTarget.style.borderColor="rgba(255,255,255,.09)"}}>
