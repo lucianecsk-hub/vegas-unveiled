@@ -868,7 +868,7 @@ export default function VegasApp() {
       method:"POST",
       headers:{
         "Content-Type":"application/json",
-        "x-api-key":import.meta.env.VITE_ANTHROPIC_KEY,
+        "x-api-key":process.env.REACT_APP_ANTHROPIC_KEY,
         "anthropic-version":"2023-06-01",
         "anthropic-dangerous-direct-browser-access":"true"
       },
@@ -1205,11 +1205,16 @@ RULES:
                 <p style={{color:"#ccc",fontSize:"0.85rem",margin:"0 0 12px"}}>
                   📧 <strong style={{color:"#fff"}}>Get your itinerary as PDF</strong> — save it for later and share with your travel buddies
                 </p>
+                {!aiReady && (
+                  <p style={{color:"#ffd700",fontSize:"0.75rem",margin:"0 0 10px",fontStyle:"italic"}}>
+                    ⏳ Finalizing your personalized briefing — email will be ready in seconds...
+                  </p>
+                )}
                 <div style={{display:"flex",gap:"8px"}}>
                   <input type="email" placeholder="your@email.com" value={email} onChange={e=>setEmail(e.target.value)}
                     style={{flex:1,padding:"11px 14px",borderRadius:"8px",border:"1px solid rgba(255,255,255,.12)",background:"rgba(255,255,255,.05)",color:"#fff",fontSize:"0.85rem"}}/>
-                  <button onClick={handleEmailSubmit} disabled={!email||emailLoading} style={{padding:"11px 16px",borderRadius:"8px",border:"none",background:email?"linear-gradient(135deg,#ff2d55,#c0392b)":"rgba(255,255,255,.05)",color:email?"#fff":"#444",fontSize:"0.8rem",fontWeight:"700",cursor:email?"pointer":"not-allowed",whiteSpace:"nowrap"}}>
-                    {emailLoading?"Sending...":"Send PDF"}
+                  <button onClick={handleEmailSubmit} disabled={!email||emailLoading||!aiReady} style={{padding:"11px 16px",borderRadius:"8px",border:"none",background:(email&&aiReady)?"linear-gradient(135deg,#ff2d55,#c0392b)":"rgba(255,255,255,.05)",color:(email&&aiReady)?"#fff":"#444",fontSize:"0.8rem",fontWeight:"700",cursor:(email&&aiReady)?"pointer":"not-allowed",whiteSpace:"nowrap"}}>
+                    {emailLoading?"Sending...":!aiReady?"Wait...":"Send PDF"}
                   </button>
                 </div>
               </div>
