@@ -864,46 +864,17 @@ export default function VegasApp() {
     // Fetch AI briefing in background and update when ready
     const budgetDesc = {budget:"looks for the best experience at the lowest cost — hostels, free attractions, street food, nothing wasted",mid:"balances spending consciously — saves on some things to splurge on others, always asking if it's worth it",high:"travels comfortably without overthinking costs — chooses quality over price but isn't reckless",vip:"cost is never the deciding factor — only the best hotels, restaurants and experiences make the cut"}[newAns.budget] || "";
 
-    fetch("https://api.anthropic.com/v1/messages",{
+    fetch("/api/briefing",{
       method:"POST",
-      headers:{
-        "Content-Type":"application/json",
-        "x-api-key":process.env.REACT_APP_ANTHROPIC_KEY,
-        "anthropic-version":"2023-06-01",
-        "anthropic-dangerous-direct-browser-access":"true"
-      },
+      headers:{"Content-Type":"application/json"},
       body:JSON.stringify({
-        model:"claude-sonnet-4-20250514",max_tokens:280,
-        messages:[{role:"user",content:`You are an expert in traveler profiles who knows Las Vegas deeply. Based on the profile below, write exactly 3 short paragraphs in English that feel like the person is reading their own travel horoscope — specific, revealing, slightly cinematic, never generic.
-
-TRAVELER PROFILE:
-- Trip type: ${travelerType}
-- Travel style/vibe: ${vibeDesc}
-- Interests: ${interestDesc}
-- Budget behavior: ${budgetDesc}
-- Season: ${newAns.season}
-- Trip length: ${newAns.days} days
-- Preferred time: ${newAns.timeOfDay}
-
-PARAGRAPH 1 — THE TRAVELER (2-3 sentences):
-Describe how this person travels — their real behavior and decisions. Specific, behavioral, a touch of dry humor. They should think "how did this app know that?"
-
-PARAGRAPH 2 — VEGAS FOR THEM (2-3 sentences):
-What Vegas has specifically for this profile that they won't find anywhere else. Not obvious — the layer of Vegas that matches exactly who they are.
-
-PARAGRAPH 3 — THE SEASON (2-3 sentences):
-Vegas in ${newAns.season} — sensory, seductive, specific details. End with one sentence that makes them want to be there right now.
-
-RULES:
-- English only
-- Max 3 sentences per paragraph — be concise and punchy
-- Never use: "vibrant" "bustling" "amazing" "unforgettable" "unique experience"
-- Tone: intimate, knowing, cinematic
-- No quotes, no titles, no labels before the text`}]
+        travelerType, vibeDesc, interestDesc, budgetDesc,
+        season:newAns.season, days:newAns.days, timeOfDay:newAns.timeOfDay
       })
     }).then(r=>r.json()).then(data=>{
-      const text = data.content?.[0]?.text;
+      const text = data.text;
       if(text && text.length > 30) { setAiStory(text); setAiReady(true); }
+      else setAiReady(true);
     }).catch(()=>{ setAiReady(true); });
   }
 
