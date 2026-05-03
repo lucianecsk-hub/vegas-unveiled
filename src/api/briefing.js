@@ -8,7 +8,7 @@ export default async function handler(req, res) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'x-api-key': process.env.REACT_APP_ANTHROPIC_KEY,
+        'x-api-key': process.env.REACT_APP_ANTHROPIC_KEY || process.env.ANTHROPIC_KEY,
         'anthropic-version': '2023-06-01',
       },
       body: JSON.stringify({
@@ -47,6 +47,8 @@ RULES:
     });
     
     const data = await response.json();
+    console.log('Anthropic response status:', response.status);
+    console.log('Anthropic data:', JSON.stringify(data).slice(0, 200));
     const text = data.content?.[0]?.text;
     res.status(200).json({ text });
   } catch (err) {
