@@ -42,7 +42,7 @@ RULES:
 - Never use: "vibrant" "bustling" "amazing" "unforgettable" "unique experience"
 - Tone: intimate, knowing, cinematic
 - No quotes, no titles, no labels before the text`
-- Separate each paragraph with a blank line
+- Separate each paragraph with a blank line`
         }]
       })
     });
