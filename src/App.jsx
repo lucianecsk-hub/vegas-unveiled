@@ -578,6 +578,10 @@ function getHotels(ans) {
 
 // ─── EMAIL CAPTURE ────────────────────────────────────────────────────────
 async function sendItineraryEmail(toEmail, itinerary, freeExp, hotels, answers, aiStory) {
+  const EMAILJS_SERVICE = "service_edep1kv";
+  const EMAILJS_TEMPLATE = "template_q80x74g";
+  const EMAILJS_KEY = "dieVpaeqWt_BhxNUe";
+
   const seasonLabels={winter:"Winter",spring:"Spring",summer:"Summer",fall:"Fall"};
   const daysLabels={"1-2":"Weekend","3-4":"4-Day","5-7":"7-Day","1week":"Full Week"};
 
@@ -595,7 +599,7 @@ async function sendItineraryEmail(toEmail, itinerary, freeExp, hotels, answers, 
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
             <span style="font-size:20px;margin-right:10px">${e.emoji}</span>
             <span style="color:#fff;font-size:13px;font-weight:bold;flex:1">${e.name}</span>
-            <span style="color:${isFree?"#2ecc71":"#ffd700"};font-size:14px;font-weight:bold;margin-left:10px">${isFree?"FREE":(e.cat==="Sports"||e.cat==="Concert")?"From $"+e.price:"$"+e.price}</span>
+            <span style="color:${isFree?"#2ecc71":"#ffd700"};font-size:14px;font-weight:bold;margin-left:10px">${isFree?"FREE":"$"+e.price}</span>
           </div>
           <p style="color:#aaa;font-size:12px;line-height:1.6;margin:0 0 10px">${e.desc}</p>
           <a href="${e.url}" style="display:block;background:${isFree?"rgba(39,174,96,.2)":"linear-gradient(135deg,#ff2d55,#c0392b)"};color:${isFree?"#2ecc71":"#fff"};text-align:center;padding:10px;border-radius:6px;text-decoration:none;font-size:12px;font-weight:bold">
@@ -617,6 +621,24 @@ async function sendItineraryEmail(toEmail, itinerary, freeExp, hotels, answers, 
           <a href="${f.url}" style="color:#2ecc71;font-size:12px;text-decoration:none">🔗 Learn More →</a>
         </div>`;
     });
+  }
+
+  // Load EmailJS SDK dynamically
+  if(!window.emailjs){
+    await new Promise((res,rej)=>{
+      const s=document.createElement("script");
+      s.src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js";
+      s.onload=()=>{
+        window.emailjs.init(EMAILJS_KEY);
+        window._emailjsInited = true;
+        res();
+      };
+      s.onerror=rej;
+      document.head.appendChild(s);
+    });
+  } else if(!window._emailjsInited) {
+    window.emailjs.init(EMAILJS_KEY);
+    window._emailjsInited = true;
   }
 
   const fullEmailHtml = `<!DOCTYPE html>
@@ -656,16 +678,18 @@ async function sendItineraryEmail(toEmail, itinerary, freeExp, hotels, answers, 
 </div>
 </body></html>`;
 
-  const response = await fetch("/api/send-email", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ to_email: toEmail, content: fullEmailHtml }),
-  });
-
-  const data = await response.json();
-  if (!response.ok) throw new Error(data.error || "Failed to send email");
-  console.log("Email sent:", data);
-  return data;
+  try {
+    const result = await window.emailjs.send(EMAILJS_SERVICE, EMAILJS_TEMPLATE, {
+      to_email: toEmail,
+      content: fullEmailHtml,
+      message_html: fullEmailHtml,
+    });
+    console.log("EmailJS success:", result);
+    return result;
+  } catch(err) {
+    console.error("EmailJS error:", JSON.stringify(err));
+    throw err;
+  }
 }
 
 // ─── MAIN APP ─────────────────────────────────────────────────────────────
@@ -914,9 +938,9 @@ export default function VegasApp() {
           <div style={{animation:"fadeUp .6s ease .2s both"}}>
             <div style={{background:"linear-gradient(135deg,rgba(255,45,85,.07),rgba(255,215,0,.04))",border:"1px solid rgba(255,215,0,.12)",borderRadius:"20px",padding:"36px 28px",textAlign:"center",marginBottom:"24px"}}>
               <div style={{fontSize:"2.8rem",marginBottom:"16px"}}>🎰</div>
-              <h2 style={{fontSize:"1.3rem",color:"#fff",margin:"0 0 12px",fontWeight:"normal"}}>Most people leave Vegas having seen <em style={{color:"#ff2d55"}}>nothing</em>.</h2>
-              <p style={{color:"#ccc",lineHeight:1.8,margin:"0 0 8px",fontSize:"0.92rem"}}>Tell us about your trip. Get a custom itinerary with direct booking links — plus free insider tips most tourists never discover.</p>
-              <p style={{color:"#999",fontSize:"0.82rem",margin:0,fontStyle:"italic"}}>Quick, personal, free.</p>
+              <h2 style={{fontSize:"1.3rem",color:"#fff",margin:"0 0 12px",fontWeight:"normal"}}>There's a side of Vegas <em style={{color:"#ff2d55"}}>most people never find.</em></h2>
+              <p style={{color:"#ccc",lineHeight:1.8,margin:"0 0 8px",fontSize:"1.05rem"}}>Answer a few questions and we'll reveal your personal traveler profile — then build you an itinerary as unique as you are.</p>
+              <p style={{color:"#999",fontSize:"0.92rem",margin:0,fontStyle:"italic"}}>Quick, personal, free.</p>
             </div>
             <button onClick={handleNext} style={{width:"100%",padding:"17px",borderRadius:"12px",border:"none",background:"linear-gradient(135deg,#ff2d55,#ff6b35)",color:"#fff",fontSize:"0.95rem",fontWeight:"700",cursor:"pointer",letterSpacing:"0.08em",textTransform:"uppercase",boxShadow:"0 8px 32px rgba(255,45,85,.38)",transition:"all .2s"}}
               onMouseEnter={e=>{e.currentTarget.style.transform="translateY(-2px)";e.currentTarget.style.boxShadow="0 14px 40px rgba(255,45,85,.55)"}}
@@ -1020,7 +1044,11 @@ export default function VegasApp() {
                   </div>
                 </div>
               ) : (
-                <p style={{color:"#ddd",lineHeight:2,margin:0,fontStyle:"italic",fontSize:"0.95rem",animation:"fadeUp .5s ease"}}>"{aiStory}"</p>
+                <div style={{color:"#ddd",lineHeight:2,fontStyle:"italic",fontSize:"0.95rem",animation:"fadeUp .5s ease"}}>
+                  {aiStory.split("\n\n").map((para,i)=>(
+                    <p key={i} style={{margin:"0 0 14px 0"}}>"{para}"</p>
+                  ))}
+                </div>
               )}
             </div>
 
@@ -1236,7 +1264,7 @@ function ExperienceCard({exp,day,index,isFree,timeLabel}){
         </div>
         {isFree
           ? <span style={{background:"rgba(39,174,96,.2)",border:"1px solid rgba(39,174,96,.4)",color:"#2ecc71",fontSize:"0.78rem",fontWeight:"700",padding:"4px 12px",borderRadius:"20px",whiteSpace:"nowrap",marginLeft:"8px"}}>FREE</span>
-          : <span style={{color:"#ffd700",fontSize:"1.1rem",fontWeight:"bold",marginLeft:"10px",whiteSpace:"nowrap"}}>{exp.price===0?"Free":exp.price?"$"+exp.price:""}</span>
+          : <span style={{color:"#ffd700",fontSize:"1.1rem",fontWeight:"bold",marginLeft:"10px",whiteSpace:"nowrap"}}>{exp.price===0?"Free":exp.price?(exp.cat==="Sports"||exp.cat==="Concert")?"From $"+exp.price:"$"+exp.price:""}</span>
         }
       </div>
       <p style={{color:"#bbb",fontSize:"0.85rem",lineHeight:1.7,margin:"0 0 14px"}}>{exp.desc}</p>
