@@ -206,7 +206,7 @@ const QUESTIONS = [
       {v:"nightout",label:"Night Out",emoji:"🥃",desc:"Clubs, shows & no rules"},
       {v:"first-timer",label:"First Time in Vegas",emoji:"🎰",desc:"The iconic, done perfectly"},
     ]},
-  { id:"interest", question:"What's calling you to Vegas?", subtitle:"Pick up to 3 — we'll cover them all", cols:2, multi:true, max:3,
+  { id:"interest", question:"What's calling you to Vegas?", subtitle:"", cols:2, multi:true, max:3,
     options:[
       {v:"show",label:"Shows & Live Entertainment",emoji:"🎭",desc:"Cirque, Sphere, concerts & tributes"},
       {v:"nightlife",label:"Wild Nights Out",emoji:"🥂",desc:"Clubs, bar crawls & pool parties"},
@@ -982,7 +982,7 @@ export default function VegasApp() {
               <div style={{background:"rgba(255,215,0,.12)",border:"2px solid rgba(255,215,0,.5)",borderRadius:"10px",padding:"12px 16px",marginBottom:"14px",display:"flex",alignItems:"center",gap:"10px"}}>
                 <span style={{fontSize:"1.1rem"}}>✨</span>
                 <span style={{color:"#ffd700",fontSize:"0.95rem",fontWeight:"700"}}>
-                  {multiCount===0?`Select up to ${currentQ.max} options`:multiCount<currentQ.max?`${multiCount} selected — pick one more`:`${multiCount} selected — ready!`}
+                  {multiCount===0?`✨ Select up to ${currentQ.max} — we'll cover them all`:multiCount<currentQ.max?`${multiCount} selected — pick one more`:`${multiCount} selected — ready!`}
                 </span>
               </div>
             )}
@@ -1057,7 +1057,13 @@ export default function VegasApp() {
                   </div>
                 </div>
               ) : (
-                <p style={{color:"#ddd",lineHeight:2,margin:0,fontStyle:"italic",fontSize:"0.95rem",animation:"fadeUp .5s ease"}}>"{aiStory}"</p>
+                <div style={{animation:"fadeUp .5s ease"}}>
+                  {aiStory.split("\n\n").filter(p=>p.trim()).map((para,i)=>(
+                    <p key={i} style={{color:"#ddd",lineHeight:1.9,margin:i===0?"0 0 14px 0":"0 0 14px 0",fontStyle:"italic",fontSize:"0.92rem"}}>
+                      {i===0?"\"":""}{para}{i===aiStory.split("\n\n").filter(p=>p.trim()).length-1?"\"":""}
+                    </p>
+                  ))}
+                </div>
               )}
             </div>
 
