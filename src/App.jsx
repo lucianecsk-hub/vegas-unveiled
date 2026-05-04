@@ -85,7 +85,7 @@ const PAID = [
   { id:81, name:"Dolly Parton Live at Allegiant Stadium", cat:"Concert", price:1843, rating:4.9, reviews:100, dur:"2.5 hrs", emoji:"🎸", desc:"The Queen of Country. Live at Allegiant Stadium. September shows only — premium event, limited seats.", url:"https://vegas.vdvm.net/gRAzj9", provider:"VCO", tags:["solo","couple","group","family","kids"], vibes:["adventure"], times:["night"], seasons:["spring","summer","fall"], interests:["show"], tier:"luxury", girlsTrip:true, limitedTime:"Until Sep 26, 2026" },
   { id:82, name:"NHRA Nationals Las Vegas", cat:"Sports", price:45, rating:4.8, reviews:80, dur:"Full day", emoji:"🚗", desc:"The fastest cars on the planet. The loudest event in Vegas. NHRA drag racing at its absolute best.", url:"https://vegas.vdvm.net/enrDn1", provider:"VCO", tags:["solo","group","family","kids"], vibes:["adventure"], times:["morning","day"], seasons:["winter","spring","fall"], interests:["sports","adventure"], tier:"budget", guysTrip:true, limitedTime:"Until Nov 1" },
   { id:83, name:"NBA Summer League", cat:"Sports", price:30, rating:4.7, reviews:150, dur:"2.5 hrs", emoji:"🏀", desc:"Watch NBA rookies and future stars before they make it big. Thomas & Mack Center. Vegas summers just got better.", url:"https://vegas.vdvm.net/B5zj5B", provider:"VCO", tags:["solo","couple","group"], vibes:["luxury"], times:["day","night"], seasons:["fall"], interests:["sports"], tier:"budget", limitedTime:"Until Jul 19" },
-  { id:84, name:"NASCAR Cup Series Las Vegas", cat:"Sports", price:75, rating:4.8, reviews:200, dur:"Full day", emoji:"🏁", desc:"500 miles of pure adrenaline at Las Vegas Motor Speedway. The loudest Sunday you'll ever have.", url:"https://vegas.vdvm.net/6kPvkQ", provider:"VCO", tags:["solo","couple","group"], vibes:[], times:["morning","day"], seasons:["spring"], interests:["sports","adventure"], tier:"mid", guysTrip:true, limitedTime:"Until Oct 4" },
+  { id:84, name:"NASCAR Cup Series Las Vegas", cat:"Sports", price:75, rating:4.8, reviews:200, dur:"Full day", emoji:"🏁", desc:"500 miles of pure adrenaline at Las Vegas Motor Speedway. The loudest Sunday you'll ever have.", url:"https://vegas.vdvm.net/6kPvkQ", provider:"VCO", tags:["solo","couple","group"], vibes:[], times:["morning","day"], seasons:["fall"], interests:["sports","adventure"], tier:"mid", guysTrip:true, limitedTime:"Until Oct 4" },
   { id:85, name:"Formula 1 Las Vegas Grand Prix", cat:"Sports", price:500, rating:4.9, reviews:300, dur:"Full day", emoji:"🏎️", desc:"F1 racing on the Las Vegas Strip at night. The most spectacular sporting event in the world — right here.", url:"https://vegas.vdvm.net/dy9xyW", provider:"VCO", tags:["group","family","kids"], vibes:["adventure"], times:["day","night"], seasons:["summer"], interests:["sports","adventure"], tier:"luxury", guysTrip:true, limitedTime:"Until Nov 21" },
   { id:86, name:"BTS — Live in Las Vegas", cat:"Concert", price:101, rating:4.9, reviews:200, dur:"2.5 hrs", emoji:"💜", desc:"BTS live at Allegiant Stadium. Shows May 23, 24, 27 & 28. The biggest K-pop event of the year — don't miss it.", url:"https://vegas.vdvm.net/m4XeGa", provider:"VCO", tags:["solo","group","family"], vibes:["adventure"], times:["night"], seasons:["fall"], interests:["show"], tier:"mid", girlsTrip:true, lgbtq:true, limitedTime:"May 23–28, 2026" },
   { id:87, name:"Cowabunga Canyon Water Park", cat:"Adventure", price:45, rating:4.7, reviews:300, dur:"Full day", emoji:"💦", desc:"Vegas' best water park. Slides, lazy river, wave pool — the perfect summer day with kids of all ages.", url:"https://vegas.vdvm.net/xkWeD1", provider:"VCO", tags:["solo","couple","group","family","kids"], vibes:[], times:["morning","day"], seasons:["summer"], interests:["adventure","unique"], tier:"budget" },
@@ -216,6 +216,11 @@ const QUESTIONS = [
       {v:"sports",label:"Sports & Action",emoji:"🏆",desc:"Live games & sportsbooks"},
       {v:"adventure",label:"Thrill & Adventure",emoji:"⚡",desc:"ATV, helicopter & adrenaline"},
       {v:"luxury",label:"Pure Luxury",emoji:"💎",desc:"Only the best — no compromises"},
+    ]},
+  { id:"alreadyInVegas", question:"Are you already in Vegas?", subtitle:"This helps us tailor your itinerary perfectly", cols:2, multi:false,
+    options:[
+      {v:"already",label:"I'm Here Now! 🎰",emoji:"✈️",desc:"Already in Vegas — skip the hotel search"},
+      {v:"planning",label:"Planning My Trip",emoji:"🗓️",desc:"Coming soon — I need hotel recommendations"},
     ]},
   { id:"hotelPref", question:"What matters most in your hotel?", subtitle:"We'll match you with the right property", cols:2, multi:false,
     options:[
@@ -781,6 +786,14 @@ export default function VegasApp() {
       // Skip vibe only for girls/mixed — guys and lgbtq have their own vibe options
       const skipVibe = !isGuysNow && !isLGBTQNow && newAns.tripType !== "family";
 
+      // Skip hotelPref if already in Vegas
+      if(nextQ?.id==="hotelPref" && newAns.alreadyInVegas==="already"){
+        const finalAns = {...newAns, hotelPref:"location"};
+        setAnswers(finalAns);
+        setStep(nextStep+1);
+        return;
+      }
+
       // For girls/lgbtq/mixed: skip Q3 vibe AND Q4 interest separately
       // Instead interest shows as Q3 (handled in currentQ display)
       // Skip Q3 (vibe) — jump straight to interest
@@ -938,9 +951,9 @@ export default function VegasApp() {
           <div style={{animation:"fadeUp .6s ease .2s both"}}>
             <div style={{background:"linear-gradient(135deg,rgba(255,45,85,.07),rgba(255,215,0,.04))",border:"1px solid rgba(255,215,0,.12)",borderRadius:"20px",padding:"36px 28px",textAlign:"center",marginBottom:"24px"}}>
               <div style={{fontSize:"2.8rem",marginBottom:"16px"}}>🎰</div>
-              <h2 style={{fontSize:"1.3rem",color:"#fff",margin:"0 0 12px",fontWeight:"normal"}}>There's a side of Vegas <em style={{color:"#ff2d55"}}>most people never find.</em></h2>
-              <p style={{color:"#ccc",lineHeight:1.8,margin:"0 0 8px",fontSize:"1.05rem"}}>Answer a few questions and we'll reveal your personal traveler profile — then build you an itinerary as unique as you are.</p>
-              <p style={{color:"#999",fontSize:"0.92rem",margin:0,fontStyle:"italic"}}>Quick, personal, free.</p>
+              <h2 style={{fontSize:"1.3rem",color:"#fff",margin:"0 0 12px",fontWeight:"normal"}}>Most people leave Vegas having seen <em style={{color:"#ff2d55"}}>nothing</em>.</h2>
+              <p style={{color:"#ccc",lineHeight:1.8,margin:"0 0 8px",fontSize:"0.92rem"}}>Tell us about your trip. Get a custom itinerary with direct booking links — plus free insider tips most tourists never discover.</p>
+              <p style={{color:"#999",fontSize:"0.82rem",margin:0,fontStyle:"italic"}}>Quick, personal, free.</p>
             </div>
             <button onClick={handleNext} style={{width:"100%",padding:"17px",borderRadius:"12px",border:"none",background:"linear-gradient(135deg,#ff2d55,#ff6b35)",color:"#fff",fontSize:"0.95rem",fontWeight:"700",cursor:"pointer",letterSpacing:"0.08em",textTransform:"uppercase",boxShadow:"0 8px 32px rgba(255,45,85,.38)",transition:"all .2s"}}
               onMouseEnter={e=>{e.currentTarget.style.transform="translateY(-2px)";e.currentTarget.style.boxShadow="0 14px 40px rgba(255,45,85,.55)"}}
@@ -966,9 +979,9 @@ export default function VegasApp() {
             <p style={{color:"#aaa",fontSize:"0.82rem",margin:"0 0 18px",fontStyle:"italic"}}>{currentQ.subtitle}</p>
 
             {currentQ.multi&&(
-              <div style={{background:"rgba(255,215,0,.06)",border:"1px solid rgba(255,215,0,.16)",borderRadius:"8px",padding:"7px 12px",marginBottom:"14px",display:"flex",alignItems:"center",gap:"8px"}}>
-                <span style={{fontSize:"0.7rem"}}>✨</span>
-                <span style={{color:"#ffd700",fontSize:"0.7rem"}}>
+              <div style={{background:"rgba(255,215,0,.12)",border:"2px solid rgba(255,215,0,.5)",borderRadius:"10px",padding:"12px 16px",marginBottom:"14px",display:"flex",alignItems:"center",gap:"10px"}}>
+                <span style={{fontSize:"1.1rem"}}>✨</span>
+                <span style={{color:"#ffd700",fontSize:"0.95rem",fontWeight:"700"}}>
                   {multiCount===0?`Select up to ${currentQ.max} options`:multiCount<currentQ.max?`${multiCount} selected — pick one more`:`${multiCount} selected — ready!`}
                 </span>
               </div>
@@ -1044,11 +1057,7 @@ export default function VegasApp() {
                   </div>
                 </div>
               ) : (
-                <div style={{color:"#ddd",lineHeight:2,fontStyle:"italic",fontSize:"0.95rem",animation:"fadeUp .5s ease"}}>
-                  {aiStory.split("\n\n").map((para,i)=>(
-                    <p key={i} style={{margin:"0 0 14px 0"}}>"{para}"</p>
-                  ))}
-                </div>
+                <p style={{color:"#ddd",lineHeight:2,margin:0,fontStyle:"italic",fontSize:"0.95rem",animation:"fadeUp .5s ease"}}>"{aiStory}"</p>
               )}
             </div>
 
@@ -1060,7 +1069,7 @@ export default function VegasApp() {
             </div>
 
             {/* HOTELS FIRST */}
-            {hotels.length>0&&(
+            {hotels.length>0&&answers.alreadyInVegas!=="already"&&(
               <div style={{marginBottom:"28px"}}>
                 <h3 style={{color:"#fff",fontSize:"1.1rem",margin:"0 0 4px",fontWeight:"700"}}>🏨 Where to Stay</h3>
                 <p style={{color:"#888",fontSize:"0.78rem",margin:"0 0 14px"}}>Matched to your profile & budget</p>
@@ -1214,10 +1223,10 @@ export default function VegasApp() {
             </div>
 
             <button onClick={()=>{setStep(0);setAnswers({});setSelected(null);setAiStory("");setAiReady(false);setItinerary([]);setFreeExp([]);setHotels([]);setEmail("");setEmailSent(false);}}
-              style={{width:"100%",padding:"14px",borderRadius:"10px",background:"transparent",border:"1px solid rgba(255,255,255,.09)",color:"#666",fontSize:"0.82rem",cursor:"pointer",transition:"all .2s"}}
-              onMouseEnter={e=>{e.currentTarget.style.color="#fff";e.currentTarget.style.borderColor="rgba(255,255,255,.2)"}}
-              onMouseLeave={e=>{e.currentTarget.style.color="#666";e.currentTarget.style.borderColor="rgba(255,255,255,.09)"}}>
-              ↩ Start Over — New Itinerary
+              style={{width:"100%",padding:"16px",borderRadius:"10px",background:"rgba(255,255,255,.06)",border:"1px solid rgba(255,255,255,.2)",color:"#bbb",fontSize:"0.95rem",fontWeight:"600",cursor:"pointer",transition:"all .2s"}}
+              onMouseEnter={e=>{e.currentTarget.style.color="#fff";e.currentTarget.style.background="rgba(255,255,255,.12)"}}
+              onMouseLeave={e=>{e.currentTarget.style.color="#bbb";e.currentTarget.style.background="rgba(255,255,255,.06)"}}>
+              ↩ Start Over — Build a New Itinerary
             </button>
 
             <p style={{textAlign:"center",color:"#444",fontSize:"0.65rem",marginTop:"16px"}}>
@@ -1264,7 +1273,7 @@ function ExperienceCard({exp,day,index,isFree,timeLabel}){
         </div>
         {isFree
           ? <span style={{background:"rgba(39,174,96,.2)",border:"1px solid rgba(39,174,96,.4)",color:"#2ecc71",fontSize:"0.78rem",fontWeight:"700",padding:"4px 12px",borderRadius:"20px",whiteSpace:"nowrap",marginLeft:"8px"}}>FREE</span>
-          : <span style={{color:"#ffd700",fontSize:"1.1rem",fontWeight:"bold",marginLeft:"10px",whiteSpace:"nowrap"}}>{exp.price===0?"Free":exp.price?(exp.cat==="Sports"||exp.cat==="Concert")?"From $"+exp.price:"$"+exp.price:""}</span>
+          : <span style={{color:"#ffd700",fontSize:"1.1rem",fontWeight:"bold",marginLeft:"10px",whiteSpace:"nowrap"}}>{exp.price===0?"Free":exp.price?"$"+exp.price:""}</span>
         }
       </div>
       <p style={{color:"#bbb",fontSize:"0.85rem",lineHeight:1.7,margin:"0 0 14px"}}>{exp.desc}</p>
