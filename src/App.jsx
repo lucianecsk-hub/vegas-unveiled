@@ -955,16 +955,18 @@ export default function VegasApp() {
         {/* INTRO */}
         {step===0&&(
           <div style={{animation:"fadeUp .6s ease .2s both"}}>
-            <div style={{background:"linear-gradient(135deg,rgba(255,45,85,.07),rgba(255,215,0,.04))",border:"1px solid rgba(255,215,0,.12)",borderRadius:"20px",padding:"36px 28px",textAlign:"center",marginBottom:"24px"}}>
-              <div style={{fontSize:"2.8rem",marginBottom:"16px"}}>🎰</div>
-              <h2 style={{fontSize:"1.3rem",color:"#fff",margin:"0 0 12px",fontWeight:"normal"}}>Most people leave Vegas having seen <em style={{color:"#ff2d55"}}>nothing</em>.</h2>
-              <p style={{color:"#ccc",lineHeight:1.8,margin:"0 0 8px",fontSize:"0.92rem"}}>Tell us about your trip. Get a custom itinerary with direct booking links — plus free insider tips most tourists never discover.</p>
-              <p style={{color:"#999",fontSize:"0.82rem",margin:0,fontStyle:"italic"}}>Quick, personal, free.</p>
+            <div style={{background:"linear-gradient(135deg,rgba(255,45,85,.07),rgba(255,215,0,.04))",border:"1px solid rgba(255,215,0,.12)",borderRadius:"20px",padding:"40px 28px",textAlign:"center",marginBottom:"24px"}}>
+              <div style={{fontSize:"3rem",marginBottom:"20px"}}>🎰</div>
+              <h2 style={{fontSize:"1.45rem",color:"#fff",margin:"0 0 18px",fontWeight:"700",lineHeight:1.35}}>
+                There's a side of Vegas <em style={{color:"#ff2d55",fontStyle:"italic"}}>most people never find.</em>
+              </h2>
+              <p style={{color:"#ccc",lineHeight:1.85,margin:"0 0 10px",fontSize:"0.95rem"}}>Answer a few questions and we'll reveal your personal traveler profile — then build you an itinerary as unique as you are.</p>
+              <p style={{color:"#999",fontSize:"0.85rem",margin:0,fontStyle:"italic"}}>Quick, personal, free.</p>
             </div>
-            <button onClick={handleNext} style={{width:"100%",padding:"17px",borderRadius:"12px",border:"none",background:"linear-gradient(135deg,#ff2d55,#ff6b35)",color:"#fff",fontSize:"0.95rem",fontWeight:"700",cursor:"pointer",letterSpacing:"0.08em",textTransform:"uppercase",boxShadow:"0 8px 32px rgba(255,45,85,.38)",transition:"all .2s"}}
+            <button onClick={handleNext} style={{width:"100%",padding:"19px",borderRadius:"12px",border:"none",background:"linear-gradient(135deg,#ff2d55,#ff6b35)",color:"#fff",fontSize:"0.95rem",fontWeight:"700",cursor:"pointer",letterSpacing:"0.08em",textTransform:"uppercase",boxShadow:"0 8px 32px rgba(255,45,85,.38)",transition:"all .2s"}}
               onMouseEnter={e=>{e.currentTarget.style.transform="translateY(-2px)";e.currentTarget.style.boxShadow="0 14px 40px rgba(255,45,85,.55)"}}
               onMouseLeave={e=>{e.currentTarget.style.transform="none";e.currentTarget.style.boxShadow="0 8px 32px rgba(255,45,85,.38)"}}>
-              Reveal My Secret Itinerary →
+              REVEAL MY SECRET ITINERARY →
             </button>
             <p style={{textAlign:"center",color:"#aaa",fontSize:"0.82rem",margin:"12px 0 0",fontStyle:"italic"}}>
               ✨ Includes free hidden gems only locals know
