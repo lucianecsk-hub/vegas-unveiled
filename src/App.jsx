@@ -1044,7 +1044,11 @@ export default function VegasApp() {
                   </div>
                 </div>
               ) : (
-                <p style={{color:"#ddd",lineHeight:2,margin:0,fontStyle:"italic",fontSize:"0.95rem",animation:"fadeUp .5s ease"}}>"{aiStory}"</p>
+                <div style={{color:"#ddd",lineHeight:2,fontStyle:"italic",fontSize:"0.95rem",animation:"fadeUp .5s ease"}}>
+                  {aiStory.split("\n\n").map((para,i)=>(
+                    <p key={i} style={{margin:"0 0 14px 0"}}>"{para}"</p>
+                  ))}
+                </div>
               )}
             </div>
 
