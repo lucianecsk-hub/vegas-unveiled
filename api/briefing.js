@@ -33,19 +33,19 @@ A short traveler archetype codename, max 5 words. Like a classified profile titl
 FIELD "text":
 Write exactly 3 short paragraphs in English that feel like the person is reading their own travel horoscope — specific, revealing, slightly cinematic, never generic.
 
-PARAGRAPH 1 — THE TRAVELER (2-3 sentences):
+PARAGRAPH 1 — THE TRAVELER (2 sentences max):
 Describe how this person travels — their real behavior and decisions. Specific, behavioral, a touch of dry humor. They should think "how did this app know that?"
 
-PARAGRAPH 2 — VEGAS FOR THEM (2-3 sentences):
+PARAGRAPH 2 — VEGAS FOR THEM (1 sentences only):
 What Vegas has specifically for this profile that they won't find anywhere else. Not obvious — the layer of Vegas that matches exactly who they are.
 
-PARAGRAPH 3 — THE SEASON (2-3 sentences):
+PARAGRAPH 3 — THE SEASON (1 sentences only):
 Vegas in ${season} — sensory, seductive, specific details. End with one sentence that makes them want to be there right now.
 
 RULES:
 - Return ONLY valid JSON, no markdown, no backticks
 - English only
-- Max 3 sentences per paragraph — be concise and punchy
+- be concise and punchy
 - Never use: "vibrant" "bustling" "amazing" "unforgettable" "unique experience"
 - Tone: intimate, knowing, cinematic
 - No quotes, no titles, no labels inside the text field`
