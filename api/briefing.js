@@ -40,12 +40,13 @@ PARAGRAPH 2 — VEGAS FOR THEM (1 sentences only):
 What Vegas has specifically for this profile that they won't find anywhere else. Not obvious — the layer of Vegas that matches exactly who they are.
 
 PARAGRAPH 3 — THE SEASON (1 sentences only):
-Vegas in ${season} — sensory, seductive, specific details. End with one sentence that makes them want to be there right now.
+Vegas in ${season} — sensory, atmospheric, specific to the season. Describe only how the city feels: the temperature, the light, the crowds, the energy. End with one sentence that makes them want to be there right now.
 
 RULES:
 - Return ONLY valid JSON, no markdown, no backticks
 - English only
 - be concise and punchy
+- NEVER mention any specific show, attraction, venue, or activity by name in any paragraph — not even as an example
 - Never use: "vibrant" "bustling" "amazing" "unforgettable" "unique experience"
 - Tone: intimate, knowing, cinematic
 - No quotes, no titles, no labels inside the text field`
