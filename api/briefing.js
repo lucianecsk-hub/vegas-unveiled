@@ -30,7 +30,7 @@ TRAVELER PROFILE:
 PARAGRAPH 1 — THE TRAVELER (2 sentences max):
 Describe how this person travels — their real behavior and decisions. Specific, behavioral, a touch of dry humor. They should think "how did this app know that?"
 
-PARAGRAPH 2 — VEGAS FOR THEM (2 sentences max):
+PARAGRAPH 2 — VEGAS FOR THEM (1 sentences only):
 What Vegas has specifically for this profile that they won't find anywhere else. Not obvious — the layer of Vegas that matches exactly who they are.
 
 PARAGRAPH 3 — THE SEASON (2 sentences max):
