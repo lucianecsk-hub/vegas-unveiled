@@ -33,7 +33,7 @@ Describe how this person travels — their real behavior and decisions. Specific
 PARAGRAPH 2 — VEGAS FOR THEM (1 sentences only):
 What Vegas has specifically for this profile that they won't find anywhere else. Not obvious — the layer of Vegas that matches exactly who they are.
 
-PARAGRAPH 3 — THE SEASON (2 sentences max):
+PARAGRAPH 3 — THE SEASON (1 sentences only):
 Vegas in ${season} — sensory, seductive, specific details. End with one sentence that makes them want to be there right now.
 
 RULES:
