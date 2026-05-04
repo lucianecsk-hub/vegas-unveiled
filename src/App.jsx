@@ -226,6 +226,7 @@ const QUESTIONS = [
     options:[
       {v:"location",label:"Strip Location",emoji:"🏙️",desc:"Center of the action — walk everywhere"},
       {v:"price",label:"Best Price",emoji:"💰",desc:"Smart value — more budget for experiences"},
+      {v:"value",label:"Best Value on Strip",emoji:"🏙️💰",desc:"Central location without overpaying"},
       {v:"luxury",label:"Luxury & Amenities",emoji:"💎",desc:"The best of everything"},
       {v:"quiet",label:"Quiet & Relaxing",emoji:"🧘",desc:"No casino noise — peaceful retreat"},
       {v:"nosmoking",label:"No Smoking",emoji:"🚭",desc:"100% smoke-free property"},
@@ -535,9 +536,9 @@ function getHotels(ans) {
   if(ans.tripType==="couple" || (ans.tripType==="solo" && ans.groupGender==="girls")) profile.push("couple");
   if(ans.tripType==="family" || ans.hotelPref==="kitchen") profile.push("family");
   if(ans.tripType==="work" || ans.hotelPref==="quiet") profile.push("work");
-  if(ans.vibe==="first-timer" || ans.hotelPref==="location" || ans.tripType==="solo") profile.push("first-timer");
+  if(ans.vibe==="first-timer" || ans.hotelPref==="location" || ans.hotelPref==="value" || ans.tripType==="solo") profile.push("first-timer");
   if(ans.hotelPref==="nosmoking") profile.push("couple","work","family");
-  if(ans.budget==="budget" || ans.hotelPref==="price") profile.push("budget");
+  if(ans.budget==="budget" || ans.hotelPref==="price" || ans.hotelPref==="value") profile.push("budget");
   if(profile.length===0) profile.push("first-timer");
 
   // Start with hotels matching profile
@@ -548,6 +549,7 @@ function getHotels(ans) {
   else if(ans.hotelPref==="kitchen") filtered = HOTELS.filter(h=>h.kitchen).filter(h=>h.profiles.some(p=>profile.includes(p)));
   else if(ans.hotelPref==="quiet") filtered = HOTELS.filter(h=>h.nosmoking||h.name.includes("Vdara")||h.name.includes("Park MGM")||h.name.includes("Signature")||h.name.includes("Trump")).filter(h=>h.profiles.some(p=>profile.includes(p)));
   else if(ans.hotelPref==="location") filtered = HOTELS.filter(h=>h.location==="center").filter(h=>h.profiles.some(p=>profile.includes(p)));
+  else if(ans.hotelPref==="value") filtered = HOTELS.filter(h=>h.location==="center" && h.tiers.includes("budget") || h.tiers.includes("mid")).filter(h=>h.profiles.some(p=>profile.includes(p)));
 
   // ALWAYS filter by budget tier — hard rule
   const tierFiltered = filtered.filter(h => h.tiers.includes(userTier));
