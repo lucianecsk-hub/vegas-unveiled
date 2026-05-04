@@ -939,8 +939,8 @@ export default function VegasApp() {
             <div style={{background:"linear-gradient(135deg,rgba(255,45,85,.07),rgba(255,215,0,.04))",border:"1px solid rgba(255,215,0,.12)",borderRadius:"20px",padding:"36px 28px",textAlign:"center",marginBottom:"24px"}}>
               <div style={{fontSize:"2.8rem",marginBottom:"16px"}}>🎰</div>
               <h2 style={{fontSize:"1.3rem",color:"#fff",margin:"0 0 12px",fontWeight:"normal"}}>There's a side of Vegas <em style={{color:"#ff2d55"}}>most people never find.</em></h2>
-              <p style={{color:"#ccc",lineHeight:1.8,margin:"0 0 8px",fontSize:"0.92rem"}}>Answer a few questions and we'll reveal your personal traveler profile — then build you an itinerary as unique as you are.</p>
-              <p style={{color:"#999",fontSize:"0.82rem",margin:0,fontStyle:"italic"}}>Quick, personal, free.</p>
+              <p style={{color:"#ccc",lineHeight:1.8,margin:"0 0 8px",fontSize:"1.05rem"}}>Answer a few questions and we'll reveal your personal traveler profile — then build you an itinerary as unique as you are.</p>
+              <p style={{color:"#999",fontSize:"0.92rem",margin:0,fontStyle:"italic"}}>Quick, personal, free.</p>
             </div>
             <button onClick={handleNext} style={{width:"100%",padding:"17px",borderRadius:"12px",border:"none",background:"linear-gradient(135deg,#ff2d55,#ff6b35)",color:"#fff",fontSize:"0.95rem",fontWeight:"700",cursor:"pointer",letterSpacing:"0.08em",textTransform:"uppercase",boxShadow:"0 8px 32px rgba(255,45,85,.38)",transition:"all .2s"}}
               onMouseEnter={e=>{e.currentTarget.style.transform="translateY(-2px)";e.currentTarget.style.boxShadow="0 14px 40px rgba(255,45,85,.55)"}}
