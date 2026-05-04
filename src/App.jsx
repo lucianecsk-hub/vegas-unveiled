@@ -121,7 +121,7 @@ const HOTELS = [
   { name:"Trump International Hotel", stars:5, price:"$150–$400/night", feature:"No casino, suites with kitchen", url:"https://vegas.vdvm.net/GmzdA6", profiles:["luxury","couple","family","work"], tiers:["high","vip"], location:"off-strip", nosmoking:true, kitchen:true },
   { name:"Aria Resort & Casino", stars:5, price:"$180–$450/night", feature:"Modern luxury, best casino tech", url:"https://vegas.vdvm.net/MKDrA2", profiles:["luxury","work"], tiers:["high","vip"], location:"center", nosmoking:false, kitchen:false },
   { name:"MGM Grand", stars:4, price:"$100–$300/night", feature:"Huge casino, great pools", url:"https://vegas.vdvm.net/DWb4Lo", profiles:["first-timer","work"], tiers:["mid","high"], location:"center", nosmoking:false, kitchen:false },
-  { name:"Mandalay Bay", stars:4, price:"$120–$350/night", feature:"Beach pool, lazy river — best for families", url:"https://vegas.vdvm.net/WqmQxO", profiles:["couple","girls","family"], tiers:["mid","high"], location:"north-south", nosmoking:false, kitchen:false },
+  { name:"Mandalay Bay", stars:4, price:"$120–$350/night", feature:"Beach pool, lazy river — away from the Strip chaos", url:"https://vegas.vdvm.net/WqmQxO", profiles:["couple","girls","family","work"], tiers:["mid","high"], location:"north-south", nosmoking:false, kitchen:false },
   { name:"The Signature at MGM Grand", stars:4, price:"$120–$350/night", feature:"All suites, separate entrance, no casino noise", url:"https://vegas.vdvm.net/rQ6o4d", profiles:["couple","family","work"], tiers:["mid","high"], location:"center", nosmoking:true, kitchen:true },
   { name:"Hilton Grand Vacations Club Elara", stars:4, price:"$130–$300/night", feature:"Suite with full kitchen, Center Strip", url:"https://vegas.vdvm.net/PzrobX", profiles:["couple","family"], tiers:["mid","high"], location:"center", nosmoking:true, kitchen:true },
   { name:"Park MGM", stars:4, price:"$80–$200/night", feature:"Only 100% smoke-free casino on Strip", url:"https://vegas.vdvm.net/L0x90L", profiles:["couple","first-timer","work"], tiers:["mid","high"], location:"center", nosmoking:true, kitchen:false },
@@ -224,13 +224,12 @@ const QUESTIONS = [
     ]},
   { id:"hotelPref", question:"What matters most in your hotel?", subtitle:"We'll match you with the right property", cols:2, multi:false,
     options:[
-      {v:"location",label:"Strip Location",emoji:"🏙️",desc:"Center of the action — walk everywhere"},
-      {v:"price",label:"Best Price",emoji:"💰",desc:"Smart value — more budget for experiences"},
-      {v:"value",label:"Best Value on Strip",emoji:"🏙️💰",desc:"Central location without overpaying"},
-      {v:"luxury",label:"Luxury & Amenities",emoji:"💎",desc:"The best of everything"},
-      {v:"quiet",label:"Quiet & Relaxing",emoji:"🧘",desc:"No casino noise — peaceful retreat"},
-      {v:"nosmoking",label:"No Smoking",emoji:"🚭",desc:"100% smoke-free property"},
-      {v:"kitchen",label:"Suite with Kitchen",emoji:"🍳",desc:"Cook your own meals — ideal for families"},
+      {v:"price",label:"⭐⭐⭐ Strip · Budget",emoji:"🏙️",desc:"Center of the action, smart price"},
+      {v:"location",label:"⭐⭐⭐⭐ Strip · Mid-Range",emoji:"🏙️",desc:"Great location, great quality"},
+      {v:"luxury",label:"⭐⭐⭐⭐⭐ Strip · Luxury",emoji:"💎",desc:"The full Vegas experience"},
+      {v:"quiet",label:"🧘 Quiet & Peaceful",emoji:"🧘",desc:"Away from casino noise, actually sleep"},
+      {v:"nosmoking",label:"🚭 Smoke-Free Only",emoji:"🚭",desc:"Non-negotiable — 100% clean air"},
+      {v:"kitchen",label:"🍳 Suite with Kitchen",emoji:"🍳",desc:"Cook your own meals, ideal for families"},
     ]},
   { id:"season", question:"When are you visiting?", subtitle:"Vegas transforms completely with each season", cols:2, multi:false,
     options:[
@@ -945,7 +944,7 @@ export default function VegasApp() {
             backgroundClip:"text",animation:"flicker 9s infinite, shimmer 4s linear infinite",lineHeight:1.1}}>
             VEGAS UNVEILED
           </h1>
-          <p style={{color:"#777",fontSize:"0.78rem",margin:0,letterSpacing:"0.15em"}}>Experiences they don't put in the brochures</p>
+          <p style={{color:"#aaa",fontSize:"0.85rem",margin:0,letterSpacing:"0.1em"}}>Experiences they don't put in the brochures</p>
         </div>
 
         {/* INTRO */}
