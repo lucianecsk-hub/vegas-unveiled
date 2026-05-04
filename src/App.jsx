@@ -224,12 +224,12 @@ const QUESTIONS = [
     ]},
   { id:"hotelPref", question:"What matters most in your hotel?", subtitle:"We'll match you with the right property", cols:2, multi:false,
     options:[
-      {v:"price",label:"⭐⭐⭐ Strip · Budget",emoji:"🏙️",desc:"Center of the action, smart price"},
-      {v:"location",label:"⭐⭐⭐⭐ Strip · Mid-Range",emoji:"🏙️",desc:"Great location, great quality"},
-      {v:"luxury",label:"⭐⭐⭐⭐⭐ Strip · Luxury",emoji:"💎",desc:"The full Vegas experience"},
-      {v:"quiet",label:"🧘 Quiet & Peaceful",emoji:"🧘",desc:"Away from casino noise, actually sleep"},
-      {v:"nosmoking",label:"🚭 Smoke-Free Only",emoji:"🚭",desc:"Non-negotiable — 100% clean air"},
-      {v:"kitchen",label:"🍳 Suite with Kitchen",emoji:"🍳",desc:"Cook your own meals, ideal for families"},
+      {v:"price",label:"⭐⭐⭐ Strip · Budget",emoji:"",desc:"Center of the action, smart price"},
+      {v:"location",label:"⭐⭐⭐⭐ Strip · Mid-Range",emoji:"",desc:"Great location, great quality"},
+      {v:"luxury",label:"⭐⭐⭐⭐⭐ Strip · Luxury",emoji:"",desc:"The full Vegas experience"},
+      {v:"quiet",label:"🧘 Quiet & Peaceful",emoji:"",desc:"Away from casino noise, actually sleep"},
+      {v:"nosmoking",label:"🚭 Smoke-Free Only",emoji:"",desc:"Non-negotiable — 100% clean air"},
+      {v:"kitchen",label:"🍳 Suite with Kitchen",emoji:"",desc:"Cook your own meals, ideal for families"},
     ]},
   { id:"season", question:"When are you visiting?", subtitle:"Vegas transforms completely with each season", cols:2, multi:false,
     options:[
@@ -708,6 +708,7 @@ export default function VegasApp() {
   const [freeExp,setFreeExp]=useState([]);
   const [hotels,setHotels]=useState([]);
   const [aiStory,setAiStory]=useState();
+  const [aiTitle,setAiTitle]=useState("");
   const [aiReady,setAiReady]=useState(false);
   const [email,setEmail]=useState();
   const [emailSent,setEmailSent]=useState(false);
@@ -878,16 +879,20 @@ export default function VegasApp() {
     // Fetch AI briefing in background and update when ready
     const budgetDesc = {budget:"looks for the best experience at the lowest cost — hostels, free attractions, street food, nothing wasted",mid:"balances spending consciously — saves on some things to splurge on others, always asking if it's worth it",high:"travels comfortably without overthinking costs — chooses quality over price but isn't reckless",vip:"cost is never the deciding factor — only the best hotels, restaurants and experiences make the cut"}[newAns.budget] || "";
 
+    const experienceNames = results.map(e=>e.name);
+    const freeNames = freeResults.map(e=>e.name);
+
     fetch("/api/briefing",{
       method:"POST",
       headers:{"Content-Type":"application/json"},
       body:JSON.stringify({
         travelerType, vibeDesc, interestDesc, budgetDesc,
-        season:newAns.season, days:newAns.days, timeOfDay:newAns.timeOfDay
+        season:newAns.season, days:newAns.days, timeOfDay:newAns.timeOfDay,
+        experiences: experienceNames, freeExperiences: freeNames
       })
     }).then(r=>r.json()).then(data=>{
       const text = data.text;
-      if(text && text.length > 30) { setAiStory(text); setAiReady(true); }
+      if(text && text.length > 30) { setAiStory(text); if(data.title) setAiTitle(data.title); setAiReady(true); }
       else setAiReady(true);
     }).catch(()=>{ setAiReady(true); });
   }
@@ -1059,6 +1064,12 @@ export default function VegasApp() {
                 </div>
               ) : (
                 <div style={{animation:"fadeUp .5s ease"}}>
+                  {aiTitle && (
+                    <div style={{marginBottom:"14px"}}>
+                      <span style={{fontSize:"0.65rem",letterSpacing:"0.18em",color:"#888",textTransform:"uppercase"}}>Traveler Profile</span>
+                      <div style={{fontSize:"1.05rem",fontWeight:"700",color:"#ffd700",fontStyle:"normal",letterSpacing:"0.04em",marginTop:"4px"}}>{aiTitle}</div>
+                    </div>
+                  )}
                   {aiStory.split("\n\n").filter(p=>p.trim()).map((para,i)=>(
                     <p key={i} style={{color:"#ddd",lineHeight:1.9,margin:i===0?"0 0 14px 0":"0 0 14px 0",fontStyle:"italic",fontSize:"0.92rem"}}>
                       {i===0?"\"":""}{para}{i===aiStory.split("\n\n").filter(p=>p.trim()).length-1?"\"":""}
@@ -1229,7 +1240,7 @@ export default function VegasApp() {
               </a>
             </div>
 
-            <button onClick={()=>{setStep(0);setAnswers({});setSelected(null);setAiStory("");setAiReady(false);setItinerary([]);setFreeExp([]);setHotels([]);setEmail("");setEmailSent(false);}}
+            <button onClick={()=>{setStep(0);setAnswers({});setSelected(null);setAiStory("");setAiTitle("");setAiReady(false);setItinerary([]);setFreeExp([]);setHotels([]);setEmail("");setEmailSent(false);}}
               style={{width:"100%",padding:"16px",borderRadius:"10px",background:"rgba(255,255,255,.06)",border:"1px solid rgba(255,255,255,.2)",color:"#bbb",fontSize:"0.95rem",fontWeight:"600",cursor:"pointer",transition:"all .2s"}}
               onMouseEnter={e=>{e.currentTarget.style.color="#fff";e.currentTarget.style.background="rgba(255,255,255,.12)"}}
               onMouseLeave={e=>{e.currentTarget.style.color="#bbb";e.currentTarget.style.background="rgba(255,255,255,.06)"}}>
