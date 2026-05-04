@@ -15,7 +15,7 @@ export default async function handler(req, res) {
         'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
       },
       body: JSON.stringify({
-        from: 'Vegas Unveiled <onboarding@resend.dev>',
+        from: 'Vegas Unveiled <hello@unveiledvegas.com>',
         to: [to_email],
         subject: '🎰 Your Secret Vegas Itinerary is Here',
         html: content,
