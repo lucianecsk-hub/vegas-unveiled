@@ -13,7 +13,7 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({
         model: 'claude-haiku-4-5-20251001',
-        max_tokens: 280,
+        max_tokens: 400,
         messages: [{
           role: 'user',
           content: `You are an expert in traveler profiles who knows Las Vegas deeply. Based on the profile below, write exactly 3 short paragraphs in English that feel like the person is reading their own travel horoscope — specific, revealing, slightly cinematic, never generic.
