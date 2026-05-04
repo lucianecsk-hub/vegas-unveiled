@@ -41,7 +41,7 @@ RULES:
 - Max 3 sentences per paragraph — be concise and punchy
 - Never use: "vibrant" "bustling" "amazing" "unforgettable" "unique experience"
 - Tone: intimate, knowing, cinematic
-- No quotes, no titles, no labels before the text`
+- No quotes, no titles, no labels before the text
 - Separate each paragraph with a blank line`
         }]
       })
