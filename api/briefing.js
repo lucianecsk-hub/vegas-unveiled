@@ -58,3 +58,4 @@ RULES:
     res.status(500).json({ error: err.message });
   }
 }
+- Separate each paragraph with a blank line
