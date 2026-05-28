@@ -580,13 +580,6 @@ function getHotels(ans) {
   }
   return result;
 }
-
-// ─── EMAIL CAPTURE ────────────────────────────────────────────────────────
-async function sendItineraryEmail(toEmail, itinerary, freeExp, hotels, answers, aiStory) {
-  const EMAILJS_SERVICE = "service_edep1kv";
-  const EMAILJS_TEMPLATE = "template_q80x74g";
-  const EMAILJS_KEY = "dieVpaeqWt_BhxNUe";
-
   const seasonLabels={winter:"Winter",spring:"Spring",summer:"Summer",fall:"Fall"};
   const daysLabels={"1-2":"Weekend","3-4":"4-Day","5-7":"7-Day","1week":"Full Week"};
 
@@ -658,7 +651,7 @@ async function sendItineraryEmail(toEmail, itinerary, freeExp, hotels, answers, 
   </div>
 
   <div style="border-left:3px solid #ff2d55;margin:32px 32px 0;padding:16px 20px;background:#1a0505">
-    <p style="color:#ff2d55;font-size:10px;letter-spacing:4px;margin:0 0 10px;font-family:monospace">◆ YOUR SECRET BRIEFING</p>
+    <div style={{color:"#ff2d55",fontSize:"0.75rem",letterSpacing:"0.18em",marginBottom:"12px",fontWeight:"700",textTransform:"uppercase",fontFamily:"'DM Sans',sans-serif"}}>Traveler Profile</div>
     <p style="color:#ccc;font-style:italic;line-height:1.8;margin:0;font-size:13px">${aiStory || "Your secret Vegas itinerary is ready."}</p>
   </div>
 
@@ -983,7 +976,7 @@ export default function VegasApp() {
             </div>
 
             <h2 style={{fontSize:"1.4rem",color:"#fff",margin:"0 0 5px",fontWeight:"normal"}}>{currentQ.question}</h2>
-            <p style={{color:"#aaa",fontSize:"0.82rem",margin:"0 0 18px",fontStyle:"italic"}}>{currentQ.subtitle}</p>
+            <p style={{color:"#ff2d55",fontSize:"0.82rem",margin:"0 0 18px",fontStyle:"italic",fontFamily:"'DM Sans',sans-serif"}}>{currentQ.subtitle}</p>
 
             {currentQ.multi&&(
               <div style={{background:"rgba(255,215,0,.12)",border:"2px solid rgba(255,215,0,.5)",borderRadius:"10px",padding:"12px 16px",marginBottom:"14px",display:"flex",alignItems:"center",gap:"10px"}}>
@@ -1000,8 +993,8 @@ export default function VegasApp() {
                 const isDisabled=currentQ.multi&&!isSel&&multiCount>=(currentQ.max||2);
                 return (
                   <button key={opt.v} onClick={()=>!isDisabled&&handleSelect(opt.v)} style={{padding:"16px 12px",borderRadius:"13px",border:"none",cursor:isDisabled?"not-allowed":"pointer",
-                    background:isSel?"linear-gradient(135deg,rgba(255,45,85,.25),rgba(255,215,0,.15))":"rgba(255,255,255,.03)",
-                    outline:isSel?"1.5px solid rgba(255,215,0,.55)":"1px solid rgba(255,255,255,.06)",
+                    background:isSel?"linear-gradient(135deg,rgba(255,45,85,.25),rgba(255,215,0,.15))":"rgba(255,255,255,.08)",
+outline:isSel?"1.5px solid rgba(255,215,0,.55)":"1px solid rgba(255,255,255,.15)",
                     opacity:isDisabled&&!isSel?.45:1,color:"#fff",textAlign:"left",transition:"all .2s",
                     transform:isSel?"scale(1.03)":"scale(1)"}}>
                     <div style={{fontSize:"1.4rem",marginBottom:"6px"}}>{opt.emoji}</div>
