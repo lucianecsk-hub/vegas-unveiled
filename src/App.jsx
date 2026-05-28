@@ -1107,7 +1107,8 @@ outline:isSel?"1.5px solid rgba(255,215,0,.55)":"1px solid rgba(255,255,255,.15)
 
             {/* PAID EXPERIENCES + FREE INTERCALATED — grouped by day */}
             <h2 style={{color:"#fff",fontSize:"1.2rem",margin:"0 0 4px",fontWeight:"700"}}>Your Itinerary</h2>
-            <p style={{color:"#888",fontSize:"0.78rem",margin:"0 0 18px"}}>Book directly — links below</p>
+            <p style={{color:"#888",fontSize:"0.78rem",margin:"0 0 4px",fontFamily:"'DM Sans',sans-serif"}}>Book directly — links below</p>
+<p style={{color:"#666",fontSize:"0.68rem",margin:"0 0 18px",fontStyle:"italic",fontFamily:"'DM Sans',sans-serif"}}>* Prices are indicative and subject to availability. Rates may change without notice. We are not responsible for price variations at the time of booking.</p>
 
             <div style={{display:"flex",flexDirection:"column",gap:"20px",marginBottom:"28px"}}>
               {(() => {
@@ -1285,8 +1286,7 @@ function ExperienceCard({exp,day,index,isFree,timeLabel}){
         </div>
         {isFree
           ? <span style={{background:"rgba(39,174,96,.2)",border:"1px solid rgba(39,174,96,.4)",color:"#2ecc71",fontSize:"0.78rem",fontWeight:"700",padding:"4px 12px",borderRadius:"20px",whiteSpace:"nowrap",marginLeft:"8px"}}>FREE</span>
-          : <span style={{color:"#ffd700",fontSize:"1.1rem",fontWeight:"bold",marginLeft:"10px",whiteSpace:"nowrap"}}>{exp.price===0?"Free":exp.price?"$"+exp.price:""}</span>
-        }
+         : <span style={{color:"#ffd700",fontSize:"0.95rem",fontWeight:"bold",marginLeft:"10px",whiteSpace:"nowrap",fontFamily:"'DM Sans',sans-serif"}}>From ${exp.price}</span>
       </div>
       <p style={{color:"#bbb",fontSize:"0.85rem",lineHeight:1.7,margin:"0 0 14px"}}>{exp.desc}</p>
       <a href={exp.url} target="_blank" rel="noopener noreferrer"
