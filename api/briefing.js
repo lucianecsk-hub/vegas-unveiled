@@ -1,8 +1,6 @@
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end();
-
   const { travelerType, vibeDesc, interestDesc, budgetDesc, season, days, timeOfDay } = req.body;
-
   try {
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
@@ -12,12 +10,11 @@ export default async function handler(req, res) {
         'anthropic-version': '2023-06-01',
       },
       body: JSON.stringify({
-        model: 'claude-haiku-4-5-20251001',
-        max_tokens: 350,
+        model: 'claude-haiku-4-5',
+        max_tokens: 600,
         messages: [{
           role: 'user',
           content: `You are an expert in traveler profiles who knows Las Vegas deeply. Based on the profile below, return a JSON object with exactly two fields: "title" and "text".
-
 TRAVELER PROFILE:
 - Trip type: ${travelerType}
 - Travel style/vibe: ${vibeDesc}
@@ -26,46 +23,43 @@ TRAVELER PROFILE:
 - Season: ${season}
 - Trip length: ${days} days
 - Preferred time: ${timeOfDay}
-
 FIELD "title":
 A short traveler archetype codename, max 5 words. Like a classified profile title. Examples: "The Midnight Thrill Architect", "The Calculated Luxury Hunter", "The Solo Shadow Collector". Make it feel personal and specific to this profile.
-
 FIELD "text":
 Write exactly 3 short paragraphs in English that feel like the person is reading their own travel horoscope — specific, revealing, slightly cinematic, never generic.
-
 PARAGRAPH 1 — THE TRAVELER (2 sentences max):
 Describe how this person travels — their real behavior and decisions. Specific, behavioral, a touch of dry humor. They should think "how did this app know that?"
-
-PARAGRAPH 2 — VEGAS FOR THEM (1 sentences only):
+PARAGRAPH 2 — VEGAS FOR THEM (1 sentence only):
 What Vegas has specifically for this profile that they won't find anywhere else. Not obvious — the layer of Vegas that matches exactly who they are.
-
-PARAGRAPH 3 — THE SEASON (1 sentences only):
-Vegas in ${season} — sensory, atmospheric, specific to the season. Describe only how the city feels: the temperature, the light, the crowds, the energy. End with one sentence that makes them want to be there right now.
-
+PARAGRAPH 3 — THE SEASON (1 sentence only):
+Vegas in ${season} — sensory, atmospheric, specific to the season. Describe only how the city feels: the temperature, the light, the crowds, the energy. End with something that makes them want to be there right now.
 RULES:
 - Return ONLY valid JSON, no markdown, no backticks
+- The "text" field must use \\n\\n to separate paragraphs
 - English only
-- be concise and punchy
-- NEVER mention any specific show, attraction, venue, or activity by name in any paragraph — not even as an example
+- Be concise and punchy — nothing generic
+- NEVER mention any specific show, attraction, venue, or activity by name
 - Never use: "vibrant" "bustling" "amazing" "unforgettable" "unique experience"
 - Tone: intimate, knowing, cinematic
-- No quotes, no titles, no labels inside the text field`
+- No quotes, titles or labels inside the text field`
         }]
       })
     });
-
     const data = await response.json();
     const raw = data.content?.[0]?.text || '';
-
     try {
-      const parsed = JSON.parse(raw.replace(/```json|```/g, '').trim());
+      const cleaned = raw.replace(/```json/g, '').replace(/```/g, '').trim();
+      const firstBrace = cleaned.indexOf('{');
+      const lastBrace = cleaned.lastIndexOf('}');
+      const jsonStr = cleaned.slice(firstBrace, lastBrace + 1);
+      const parsed = JSON.parse(jsonStr);
+      if (parsed.text) parsed.text = parsed.text.replace(/\\n/g, '\n');
       if (parsed.text && parsed.text.length > 30) {
         res.status(200).json({ title: parsed.title || '', text: parsed.text });
       } else {
         res.status(500).json({ error: 'Empty response' });
       }
     } catch {
-      // fallback: se não parsear JSON, devolve o texto cru sem título
       if (raw.length > 30) {
         res.status(200).json({ title: '', text: raw });
       } else {
