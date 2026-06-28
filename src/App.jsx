@@ -1,1302 +1,874 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-// ─── EXPERIENCE DATABASE (Real affiliate links) ────────────────────────────
-const PAID = [
-  { id:1, name:"High Roller Ticket", cat:"Views", price:21, rating:4.6, reviews:4458, dur:"30 min", emoji:"🎡", desc:"Spin above the Strip. The most iconic view in Las Vegas — day or night, solo or together.", url:"https://www.getyourguide.com/las-vegas-l58/the-high-roller-ride-at-the-linq-ticket-t270522/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","couple","group","family","work","kids"], vibes:["romantic","first-timer"], times:["morning","day","night"], seasons:["winter","spring","summer","fall"], interests:["unique"], tier:"budget" },
-  { id:2, name:"Atomic Golf", cat:"Entertainment", price:22, rating:0, reviews:0, dur:"2 hrs", emoji:"⛳", desc:"Rooftop entertainment complex with golf bays, food and craft cocktails. Vegas reinvented the sport.", url:"https://vegas.vdvm.net/dy9YAq", provider:"VCO", tags:["solo","couple","group"], vibes:[], times:["day","night"], seasons:["winter","spring","summer","fall"], interests:["unique","nightlife"], tier:"budget", isNew:true },
-  { id:4, name:"Flyover Las Vegas", cat:"Adventure", price:25, rating:4.7, reviews:649, dur:"30 min", emoji:"🪂", desc:"A simulated flight over Las Vegas. Wind, scents, movement — you'll forget you're inside.", url:"https://vegas.vdvm.net/a1LxZQ", provider:"VCO", tags:["family","kids"], vibes:["adventure"], times:["day","night"], seasons:["winter","spring","summer","fall"], interests:["unique","adventure"], tier:"budget" },
-  { id:5, name:"Dig This — Drive Excavators", cat:"Unique", price:28, rating:5.0, reviews:17, dur:"1 hr", emoji:"🚜", desc:"Drive real excavators and bulldozers in the desert. The most unexpected fun you'll have in Vegas.", url:"https://vegas.vdvm.net/QjbP19", provider:"VCO", tags:["solo","couple","group","family","kids"], vibes:["romantic","first-timer"], times:["morning","day"], seasons:["winter","spring","summer","fall"], interests:["unique","adventure"], tier:"budget" },
-  { id:6, name:"Eiffel Tower Viewing Deck", cat:"Views", price:35, rating:4.6, reviews:1116, dur:"1 hr", emoji:"🗼", desc:"Paris is better when you're 46 stories above the Vegas Strip at sunset.", url:"https://www.getyourguide.com/las-vegas-l58/las-vegas-eiffel-tower-viewing-deck-skip-the-line-ticket-t276227/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","couple","group","family","work","kids"], vibes:["first-timer"], times:["day","night"], seasons:["winter","spring","summer","fall"], interests:["unique"], tier:"budget" },
-  { id:7, name:"Titanic Exhibition — Luxor", cat:"Culture", price:36, rating:4.6, reviews:305, dur:"1.5 hrs", emoji:"🚢", desc:"Real artifacts from the Titanic. The ship that changed history, inside a pyramid. Only Vegas.", url:"https://www.getyourguide.com/las-vegas-l58/luxor-hotel-titanic-the-artifact-exhibition-entry-ticket-t395730/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","couple"], vibes:["dark"], times:["day","night"], seasons:["winter","spring","summer","fall"], interests:["unique"], tier:"budget" },
-  { id:8, name:"FANTASY Burlesque", cat:"Show", price:37, rating:4.7, reviews:1014, dur:"1.5 hrs", emoji:"💃", desc:"The Strip's longest-running adult show. At Luxor. Beautiful performers, Vegas glamour, zero pretense.", url:"https://vegas.vdvm.net/4P13Po", provider:"VCO", tags:["family","kids"], vibes:[], times:["day","night"], seasons:["winter","spring","summer","fall"], interests:["show"], tier:"budget", guysTrip:true },
-  { id:10, name:"Piff the Magic Dragon", cat:"Show", price:39, rating:4.7, reviews:1678, dur:"1.5 hrs", emoji:"🐉", desc:"A magician in a dragon suit. As seen on America's Got Talent. Funnier than anything on the Strip.", url:"https://vegas.vdvm.net/dy9Y0M", provider:"VCO", tags:["solo","couple"], vibes:[], times:["night"], seasons:["winter","spring","summer","fall"], interests:["show"], tier:"budget" },
-  { id:11, name:"VIP Club Crawl + Open Bar", cat:"Nightlife", price:40, rating:4.9, reviews:40, dur:"5 hrs", emoji:"🥂", desc:"Party bus, open bar and VIP entry to the best clubs on the Strip. The night that never ends.", url:"https://www.getyourguide.com/las-vegas-l58/las-vegas-cocktail-class-party-bus-and-vip-club-entry-t1230903/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","couple","group","bachelorette"], vibes:[], times:["night"], seasons:["winter","spring","summer","fall"], interests:["nightlife"], tier:"budget", girlsTrip:true },
-  { id:12, name:"Piano Man — Kyle Martin", cat:"Show", price:42, rating:4.8, reviews:1037, dur:"1.5 hrs", emoji:"🎹", desc:"The Vegas piano show that Billy Joel himself would respect. Miracle Mile Shops. Every night.", url:"https://vegas.vdvm.net/qWEY35", provider:"VCO", tags:["solo","couple","work"], vibes:["dark"], times:["night"], seasons:["winter","spring","summer","fall"], interests:["show"], tier:"budget" },
-  { id:13, name:"The King Comes Home — Elvis", cat:"Show", price:41, rating:4.7, reviews:124, dur:"1.5 hrs", emoji:"👑", desc:"The most convincing Elvis tribute in Vegas. Westgate Hotel — where the real Elvis performed.", url:"https://vegas.vdvm.net/5gXJVN", provider:"VCO", tags:["solo","couple","group"], vibes:["dark"], times:["night"], seasons:["winter","spring","summer","fall"], interests:["show"], tier:"budget" },
-  { id:15, name:"Interstellar Arc — AREA15", cat:"Unique", price:44, rating:4.8, reviews:14, dur:"1 hr", emoji:"🌌", desc:"An otherworldly art installation inside AREA15. The future is already here — Vegas just doesn't advertise it.", url:"https://vegas.vdvm.net/9VM075", provider:"VCO", tags:["group","family","kids"], vibes:[], times:["day","night"], seasons:["winter","spring","summer","fall"], interests:["unique"], tier:"budget" },
-  { id:16, name:"All Shook Up — Elvis Show", cat:"Show", price:45, rating:4.8, reviews:1340, dur:"1.5 hrs", emoji:"🎸", desc:"Open bar cabin above the Strip. Premium experience, best views in Vegas. No group needed — perfect solo.", url:"https://www.getyourguide.com/las-vegas-l58/las-vegas-all-shook-up-the-ultimate-elvis-tribute-t693302/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","couple","group"], vibes:["luxury","romantic"], times:["night"], seasons:["winter","spring","summer","fall"], interests:["show"], tier:"budget" },
-  { id:17, name:"Blue Man Group — Luxor", cat:"Show", price:47, rating:4.4, reviews:4893, dur:"1.5 hrs", emoji:"💙", desc:"Three blue-painted performers, musical machines, and audience chaos. Zero words. Maximum impact.", url:"https://vegas.vdvm.net/21aPxA", provider:"VCO", tags:["family","kids"], vibes:["adventure"], times:["day","night"], seasons:["winter","spring","summer","fall"], interests:["show"], tier:"budget" },
-  { id:18, name:"High Roller Open Bar Cabin", cat:"Views", price:48, rating:4.6, reviews:1285, dur:"30 min", emoji:"🎡", desc:"The Strip from 550 feet. Open bar. No limits. Best at sunset.", url:"https://www.getyourguide.com/las-vegas-l58/the-high-roller-ride-at-the-linq-ticket-t436735/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["couple","group","family"], vibes:[], times:["day","night"], seasons:["winter","spring","summer","fall"], interests:["unique","nightlife"], tier:"budget", girlsTrip:true },
-  { id:19, name:"Mojave + 7 Magic Mountains Tour", cat:"Tour", price:49, rating:4.7, reviews:362, dur:"2 hrs", emoji:"🏔️", desc:"The neon totem poles in the middle of the Mojave desert. Plus the Vegas sign. Art meets nowhere.", url:"https://www.getyourguide.com/las-vegas-l58/las-vegas-seven-magic-mountains-and-las-vegas-sign-tour-t400361/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","group","work"], vibes:["adventure"], times:["day"], seasons:["winter","spring","summer","fall"], interests:["unique","adventure"], tier:"budget" },
-  { id:20, name:"Mat Franco Magic Show", cat:"Show", price:50, rating:4.8, reviews:2686, dur:"1.5 hrs", emoji:"🪄", desc:"Winner of America's Got Talent. At The LINQ. Still the best magic show in Vegas — by far.", url:"https://vegas.vdvm.net/ZVx77X", provider:"VCO", tags:["couple","family","work"], vibes:["luxury"], times:["night"], seasons:["winter","spring","summer","fall"], interests:["show"], tier:"budget" },
-  { id:21, name:"Machine Guns Vegas", cat:"Adventure", price:50, rating:4.8, reviews:144, dur:"1 hr", emoji:"🔫", desc:"Real machine guns in a supervised Vegas shooting range. The only place on Earth this makes sense.", url:"https://vegas.vdvm.net/Py36Z6", provider:"VCO", tags:["solo","couple","group","kids"], vibes:["dark"], times:["morning","day"], seasons:["winter","spring","summer","fall"], interests:["adventure"], tier:"budget" },
-  { id:22, name:"Mystère — Cirque du Soleil", cat:"Show", price:49, rating:4.6, reviews:5750, dur:"1.5 hrs", emoji:"🎭", desc:"The original Cirque in Vegas. Treasure Island. 30+ years of acrobatics that defy physics.", url:"https://vegas.vdvm.net/LKVW3L", provider:"VCO", tags:["solo","couple","group","bachelorette","work"], vibes:["dark"], times:["night"], seasons:["winter","spring","summer","fall"], interests:["show"], tier:"budget" },
-  
-  { id:24, name:"Bars Unknown Bar Crawl", cat:"Nightlife", price:54, rating:5.0, reviews:5, dur:"3 hrs", emoji:"🍸", desc:"The Strip's hidden bars. Most tourists walk past them every night without knowing. You won't.", url:"https://www.getyourguide.com/las-vegas-l58/bars-unknown-the-las-vegas-strip-bar-crawl-t708411/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","couple","group","family","kids"], vibes:[], times:["night"], seasons:["winter","spring","summer","fall"], interests:["nightlife","unique"], tier:"budget", girlsTrip:true },
-  { id:25, name:"Vegas! The Show", cat:"Show", price:47, rating:4.6, reviews:2599, dur:"1.5 hrs", emoji:"✨", desc:"Vegas history told through its greatest hits. Sinatra, Elvis, Liberace — all in one show.", url:"https://vegas.vdvm.net/R0O77N", provider:"VCO", tags:["solo","couple"], vibes:["dark","romantic"], times:["night"], seasons:["winter","spring","summer","fall"], interests:["show"], tier:"budget" },
-  { id:26, name:"Hop-On Hop-Off Bus", cat:"Tour", price:58, rating:4.3, reviews:907, dur:"24 hrs", emoji:"🚌", desc:"See every inch of the Strip at your own pace. First-timers' best friend.", url:"https://www.getyourguide.com/las-vegas-l58/las-vegas-24-or-48-hour-hop-on-hop-off-tour-t61878/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","couple","group","family","work","kids"], vibes:["luxury","romantic","first-timer"], times:["morning","day","night"], seasons:["winter","spring","summer","fall"], interests:["unique"], tier:"budget" },
-  { id:27, name:"ROUGE — Sensual Cabaret", cat:"Show", price:54, rating:4.4, reviews:843, dur:"1.5 hrs", emoji:"❤️", desc:"The STRAT's adults-only cabaret. Sensual, fearless, intimate. The perfect date night show on the Strip.", url:"https://vegas.vdvm.net/m5znGa", provider:"VCO", tags:["couple","group","bachelorette"], vibes:["dark"], times:["night"], seasons:["winter","spring","summer","fall"], interests:["show"], tier:"mid" },
-  { id:28, name:"Cirque du Soleil O", cat:"Show", price:64, rating:4.8, reviews:1564, dur:"1.5 hrs", emoji:"🌊", desc:"Water. Acrobats. A stage that defies physics. The show that defines Las Vegas.", url:"https://www.getyourguide.com/las-vegas-l58/las-vegas-o-by-cirque-du-soleil-at-bellagio-t398243/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["couple","bachelorette"], vibes:["dark"], times:["night"], seasons:["winter","spring","summer","fall"], interests:["show"], tier:"mid", girlsTrip:true },
-  { id:29, name:"Atomic Saloon Show", cat:"Show", price:64, rating:4.4, reviews:490, dur:"1.5 hrs", emoji:"🤠", desc:"Wild West meets Vegas cabaret. The Venetian's best-kept secret. Adults only.", url:"https://vegas.vdvm.net/9g5B1y", provider:"VCO", tags:["couple","group","bachelorette"], vibes:["dark"], times:["night"], seasons:["winter","spring","summer","fall"], interests:["show"], tier:"mid", girlsTrip:true },
-  { id:30, name:"Magic Mike Live", cat:"Show", price:54, rating:4.7, reviews:649, dur:"1.5 hrs", emoji:"🔥", desc:"The show every bachelorette group talks about for years. SAHARA Las Vegas. You already know.", url:"https://www.getyourguide.com/las-vegas-l58/las-vegas-magic-mike-live-at-the-sahara-t525549/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","couple","group"], vibes:[], times:["night"], seasons:["spring"], interests:["show"], tier:"mid", girlsTrip:true },
-  { id:31, name:"Chippendales", cat:"Show", price:67, rating:4.6, reviews:468, dur:"1.5 hrs", emoji:"💪", desc:"Planet Hollywood. The original male revue. Still the wildest night on the Strip.", url:"https://vegas.vdvm.net/DyOEj2", provider:"VCO", tags:["solo","couple","group","work"], vibes:["adventure"], times:["night"], seasons:["winter","spring","fall"], interests:["show"], tier:"mid", girlsTrip:true },
-  { id:32, name:"Hoover Dam Mini Tour", cat:"Tour", price:70, rating:4.8, reviews:778, dur:"3 hrs", emoji:"🏗️", desc:"One of the greatest engineering feats in history. Hotel pickup included — no car needed. Most tourists never go.", url:"https://www.getyourguide.com/las-vegas-l58/award-winning-3-hour-vip-hoover-dam-small-group-mini-tour-t203887/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["family","kids"], vibes:["adventure"], times:["morning","day"], seasons:["winter","spring","summer","fall"], interests:["unique","adventure"], tier:"mid" },
-  { id:33, name:"Tournament of Kings", cat:"Show", price:63, rating:4.5, reviews:1891, dur:"1.5 hrs", emoji:"⚔️", desc:"Medieval knights, jousting, explosions — and dinner included. Excalibur. Kids go absolutely wild.", url:"https://vegas.vdvm.net/oq1xGn", provider:"VCO", tags:["solo","couple","group","family"], vibes:["luxury","romantic"], times:["night"], seasons:["winter","spring","summer","fall"], interests:["show"], tier:"mid" },
-  { id:34, name:"Awakening — Wynn", cat:"Show", price:74, rating:4.4, reviews:1576, dur:"1.5 hrs", emoji:"💫", desc:"A brand-new Wynn original. Dance, illusion, technology — what Vegas shows look like in 2026.", url:"https://vegas.vdvm.net/MmJP2n", provider:"VCO", tags:["solo","couple","group","bachelorette"], vibes:["dark"], times:["night"], seasons:["winter","spring","summer","fall"], interests:["show"], tier:"mid" },
-  { id:35, name:"Thunder From Down Under", cat:"Show", price:74, rating:4.5, reviews:722, dur:"1.5 hrs", emoji:"⚡", desc:"Australian men. Excalibur. The bachelorette show that started it all.", url:"https://vegas.vdvm.net/VmROXR", provider:"VCO", tags:["solo","couple","group"], vibes:["adventure"], times:["night"], seasons:["winter","spring","summer","fall"], interests:["show"], tier:"mid", girlsTrip:true },
-  { id:36, name:"Military Hummer Tour", cat:"Tour", price:79, rating:4.8, reviews:95, dur:"2.5 hrs", emoji:"🪖", desc:"The Strip, the neon signs and the desert — from inside a military Hummer. Vegas from a different angle.", url:"https://www.getyourguide.com/las-vegas-l58/las-vegas-strip-sightseeing-tour-in-a-military-hummer-t828401/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","couple","group"], vibes:[], times:["morning","day","night"], seasons:["winter","spring","summer","fall"], interests:["unique","adventure"], tier:"mid" },
-  { id:37, name:"Pawn Stars + Shelby Tour", cat:"Culture", price:85, rating:4.5, reviews:486, dur:"4 hrs", emoji:"🏆", desc:"The actual Pawn Stars store, Count's Kustoms, and the Shelby Museum. Vegas for car and TV lovers.", url:"https://www.getyourguide.com/las-vegas-l58/vip-pawn-stars-tour-t39631/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","couple","group","work"], vibes:[], times:["morning","day"], seasons:["winter","spring","summer","fall"], interests:["unique"], tier:"mid" },
-  { id:38, name:"Wizard of Oz — Sphere", cat:"Show", price:114, rating:4.5, reviews:1319, dur:"1.5 hrs", emoji:"🌐", desc:"The Sphere. 160,000 sq ft of LED. Wizard of Oz has never looked anything like this.", url:"https://www.getyourguide.com/las-vegas-l58/las-vegas-the-sphere-experience-the-wizard-of-oz-t969545/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","couple","group","family","kids"], vibes:["luxury","adventure","first-timer"], times:["day","night"], seasons:["winter","spring","summer","fall"], interests:["show","unique"], tier:"mid" },
-  { id:39, name:"Michael Jackson ONE", cat:"Show", price:96, rating:4.8, reviews:1048, dur:"1.5 hrs", emoji:"🕺", desc:"Cirque du Soleil meets MJ. Mandalay Bay. The most emotional show on the Strip.", url:"https://www.getyourguide.com/las-vegas-l58/las-vegas-michael-jackson-one-by-cirque-du-soleil-ticket-t400944/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","couple","group","family","work","kids"], vibes:["luxury"], times:["night"], seasons:["winter","spring","summer","fall"], interests:["show"], tier:"mid" },
-  { id:40, name:"Desert ATV Tour", cat:"Adventure", price:109, rating:4.7, reviews:712, dur:"3 hrs", emoji:"🏜️", desc:"Real ATVs in the real Mojave. Nothing between you and the desert. Pure adrenaline.", url:"https://www.getyourguide.com/las-vegas-l58/las-vegas-guided-las-vegas-desert-atv-tour-t417683/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","couple","group"], vibes:[], times:["morning","day"], seasons:["winter","spring","summer","fall"], interests:["adventure"], tier:"mid" },
-  { id:41, name:"Mt. Charleston Day Trip", cat:"Tour", price:109, rating:4.7, reviews:82, dur:"Half day", emoji:"❄️", desc:"30 minutes from the Strip. Hotel pickup included — no car needed. Snow in winter, pine forests in spring.", url:"https://www.getyourguide.com/las-vegas-l58/las-vegas-mount-charleston-and-lee-canyon-day-trip-t371990/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","couple","group","work"], vibes:[], times:["morning","day"], seasons:["winter"], interests:["adventure","unique"], tier:"mid" },
-  { id:42, name:"Exotics Racing", cat:"Adventure", price:109, rating:4.8, reviews:188, dur:"1 hr", emoji:"🏎️", desc:"Drive a Lamborghini, Ferrari or Porsche on a real track. South of the Strip. Lives changed here.", url:"https://vegas.vdvm.net/eK4ZeZ", provider:"VCO", tags:["solo","group"], vibes:["adventure"], times:["morning","day"], seasons:["winter","spring","summer","fall"], interests:["adventure"], tier:"mid" },
-  { id:43, name:"Red Rock Canyon Trekker", cat:"Adventure", price:123, rating:4.8, reviews:125, dur:"4 hrs", emoji:"🪨", desc:"The red sandstone cliffs that frame Vegas — from inside them. Hotel pickup included. Small group. No tourists.", url:"https://www.getyourguide.com/las-vegas-l58/red-rock-canyon-by-tour-trekker-from-las-vegas-t7455/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","couple","group","family"], vibes:["adventure"], times:["morning","day"], seasons:["winter","spring"], interests:["adventure"], tier:"mid" },
-  { id:44, name:"Grand Canyon + Hoover Dam", cat:"Tour", price:99, rating:4.8, reviews:3066, dur:"10.5 hrs", emoji:"🏔️", desc:"Two natural and engineering wonders in one day. Hotel pickup included — no car needed. The most-booked tour from Vegas.", url:"https://www.getyourguide.com/las-vegas-l58/vegas-grand-canyon-hoover-dam-lunchskywalk-options-wifi-t190065/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","couple","group","work"], vibes:["luxury","adventure"], times:["morning","day"], seasons:["winter","spring","summer","fall"], interests:["adventure","unique"], tier:"mid" },
-  { id:45, name:"Helicopter Night Strip", cat:"Adventure", price:129, rating:4.6, reviews:1687, dur:"15 min", emoji:"🚁", desc:"The Strip from a helicopter at night. The most iconic view in America — from 1,000 feet.", url:"https://www.getyourguide.com/las-vegas-l58/las-vegas-strip-helicopter-flight-without-transfers-t33967/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","couple","group","family"], vibes:["adventure"], times:["day","night"], seasons:["winter","spring","summer","fall"], interests:["adventure"], tier:"mid", girlsTrip:true },
-  { id:46, name:"Valley of Fire Tour", cat:"Tour", price:99, rating:4.8, reviews:572, dur:"6 hrs", emoji:"🔥", desc:"50-mile stretch of ancient red rock. Hotel pickup included — no car needed. Petroglyphs, silence, Mars on Earth.", url:"https://www.getyourguide.com/las-vegas-l58/vegas-valley-of-fire-state-park-1-day-tour-t700962/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","couple","group","family","work","kids"], vibes:["adventure"], times:["morning","day"], seasons:["winter","spring","fall"], interests:["adventure","unique"], tier:"mid" },
-  { id:47, name:"Machine Gun Shooting — Outdoor", cat:"Adventure", price:159, rating:4.9, reviews:264, dur:"3 hrs", emoji:"💥", desc:"Outdoor machine gun range with shuttle. The most American afternoon you'll spend anywhere.", url:"https://www.getyourguide.com/las-vegas-l58/las-vegas-outdoor-machine-gun-and-rifle-shooting-w-pickup-t524974/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","couple","group"], vibes:["luxury","adventure","romantic"], times:["morning","day"], seasons:["winter","spring","summer","fall"], interests:["adventure"], tier:"premium" },
-  { id:48, name:"Bryce + Zion National Parks", cat:"Tour", price:169, rating:4.7, reviews:1126, dur:"13 hrs", emoji:"🌲", desc:"Two of America's most spectacular national parks in one day. Hotel pickup included — no car needed. Hoodoos and red arches.", url:"https://www.getyourguide.com/las-vegas-l58/las-vegas-bryce-and-zion-national-parks-tour-with-lunch-t304518/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","couple","group"], vibes:["adventure"], times:["morning","day"], seasons:["winter","spring","fall"], interests:["adventure","unique"], tier:"premium" },
-  { id:49, name:"Death Valley Sunset + Stars", cat:"Tour", price:249, rating:4.9, reviews:242, dur:"12 hrs", emoji:"🌟", desc:"The lowest point in North America at sunset. Hotel pickup included — no car needed. Then the Milky Way. No words.", url:"https://www.getyourguide.com/las-vegas-l58/from-las-vegas-best-of-death-valley-small-group-tour-t405877/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","couple","group","work"], vibes:["adventure"], times:["day","night"], seasons:["winter","spring","summer","fall"], interests:["adventure","unique"], tier:"premium" },
-  { id:50, name:"Desert Horseback + BBQ Dinner", cat:"Adventure", price:160, rating:4.7, reviews:459, dur:"6 hrs", emoji:"🐴", desc:"Horses in the Mojave at sunset. Hotel pickup included — no car needed. Real cowboy BBQ dinner under the stars.", url:"https://www.getyourguide.com/las-vegas-l58/wild-west-sunset-bbq-dinner-horseback-ride-t5169/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","couple","group","family"], vibes:["adventure"], times:["day"], seasons:["spring","fall"], interests:["adventure"], tier:"premium", girlsTrip:true },
-  { id:51, name:"Emerald Cave Kayak", cat:"Adventure", price:119, rating:4.7, reviews:269, dur:"4 hrs", emoji:"🚣", desc:"Kayak into a glowing emerald cave on the Colorado River. Shuttle included — no car needed. The best outdoor secret near Vegas.", url:"https://www.getyourguide.com/las-vegas-l58/las-vegas-colorado-river-to-emerald-cave-half-day-kayak-t518013/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","couple"], vibes:["dark","adventure"], times:["morning","day"], seasons:["winter","spring","fall"], interests:["adventure"], tier:"mid" },
-  { id:52, name:"Moonlight Kayak — Colorado River", cat:"Adventure", price:149, rating:5.0, reviews:10, dur:"3 hrs", emoji:"🌙", desc:"Kayaking on the Colorado River under the full moon. The most romantic outdoor adventure near Vegas.", url:"https://www.getyourguide.com/las-vegas-l58/from-las-vegas-moonlight-kayak-tour-on-the-colorado-river-t449853/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["couple","group","family"], vibes:["adventure","romantic"], times:["night"], seasons:["winter","spring","fall"], interests:["adventure","unique"], tier:"mid", girlsTrip:true },
-  { id:53, name:"Antelope Canyon + Horseshoe Bend", cat:"Tour", price:189, rating:4.7, reviews:2104, dur:"15 hrs", emoji:"🏞️", desc:"The most photographed slot canyon on Earth, plus Horseshoe Bend. Hotel pickup included — no car needed.", url:"https://www.getyourguide.com/las-vegas-l58/las-vegas-antelope-canyon-horseshoe-bend-with-lunch-wifi-t173577/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","couple","group","family"], vibes:["adventure"], times:["morning","day"], seasons:["winter","spring","summer","fall"], interests:["adventure","unique"], tier:"premium" },
-  { id:54, name:"Area 51 Full-Day Tour", cat:"Tour", price:242, rating:4.8, reviews:252, dur:"10 hrs", emoji:"👽", desc:"The classified base. The black mailbox. Hotel pickup included — no car needed. Whether you believe or not — this is eerie.", url:"https://www.getyourguide.com/las-vegas-l58/area-51-tour-from-las-vegas-t47582/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","couple","group","family"], vibes:["dark","adventure","romantic"], times:["morning","day"], seasons:["winter","spring","summer","fall"], interests:["unique","adventure"], tier:"premium" },
-  { id:55, name:"Personal Photographer", cat:"Experience", price:304, rating:4.8, reviews:39, dur:"1-3 hrs", emoji:"📸", desc:"A professional travel photographer. Your whole trip documented. Worth every dollar.", url:"https://www.getyourguide.com/las-vegas-l58/las-vegas-personal-travel-vacation-photographer-t129907/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","couple","group"], vibes:["adventure","romantic"], times:["morning","day","night"], seasons:["spring","fall"], interests:["unique"], tier:"luxury", girlsTrip:true },
-  { id:56, name:"Limo Tour + Champagne + Club VIP", cat:"Nightlife", price:499, rating:4.8, reviews:11, dur:"4 hrs", emoji:"🚘", desc:"Stretch limo pickup, champagne on the way, VIP club entry. The bachelorette night Vegas was built for.", url:"https://www.getyourguide.com/las-vegas-l58/las-vegas-limo-tour-with-champagne-and-nightclub-entry-t981477/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","couple","group"], vibes:["dark","adventure"], times:["day","night"], seasons:["winter","spring","fall"], interests:["nightlife"], tier:"luxury", girlsTrip:true },
-  { id:57, name:"Elvis Wedding — Graceland", cat:"Romantic", price:324, rating:4.9, reviews:331, dur:"1.5 hrs", emoji:"💍", desc:"The Graceland Wedding Chapel. Elvis officiates. Completely legal. Completely Vegas.", url:"https://www.getyourguide.com/las-vegas-l58/las-vegas-traditional-wedding-or-vow-renewal-t437514/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["couple"], vibes:["luxury","romantic"], times:["morning","day","night"], seasons:["winter","spring","summer","fall"], interests:["unique"], tier:"luxury" },
-  { id:58, name:"Grand Canyon Helicopter Landing", cat:"Adventure", price:519, rating:4.8, reviews:1415, dur:"4.5 hrs", emoji:"🚁", desc:"Land inside the Grand Canyon. Champagne picnic on the canyon floor. Nothing comes close.", url:"https://www.getyourguide.com/las-vegas-l58/grand-canyon-helicopter-landing-tour-ecostar-t9617/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["couple","group","bachelorette"], vibes:["luxury"], times:["morning","day"], seasons:["winter","spring","summer","fall"], interests:["adventure"], tier:"luxury" },
-  { id:59, name:"KÀ Royal VIP + Backstage", cat:"Show", price:370, rating:5.0, reviews:1, dur:"3 hrs", emoji:"🎪", desc:"Cirque's most spectacular show — plus backstage access, artist meet and greet, VIP lounge. Once in a lifetime.", url:"https://www.getyourguide.com/las-vegas-l58/las-vegas-ka-by-cirque-du-soleil-at-mgm-grand-ticket-t405483/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["couple"], vibes:["luxury","romantic"], times:["night"], seasons:["winter","spring","summer","fall"], interests:["show"], tier:"luxury" },
-  { id:60, name:"Helicopter Wedding Ceremony", cat:"Romantic", price:1350, rating:5.0, reviews:2, dur:"2 hrs", emoji:"💒", desc:"Get married in a helicopter over the Las Vegas Strip at night. The most Vegas thing possible.", url:"https://www.getyourguide.com/las-vegas-l58/las-vegas-night-strip-helicopter-wedding-ceremony-package-t774621/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","couple","group","work"], vibes:["luxury","adventure","romantic"], times:["night"], seasons:["winter","spring","fall"], interests:["unique"], tier:"luxury" },
-  { id:61, name:"Four Seasons Spa Day", cat:"Wellness", price:150, rating:4.9, reviews:50, dur:"Full day", emoji:"💆", desc:"Forbes 5-star. Mineral pools, expert therapists, complete silence. The reset Vegas can actually give you.", url:"https://vegas.vdvm.net/JkL7PE", provider:"VCO", tags:["solo","couple","work"], vibes:["luxury","romantic"], times:["morning"], seasons:["winter","spring","summer","fall"], interests:["wellness","unique"], tier:"premium", girlsTrip:true },
-  { id:62, name:"Canyon Ranch Spa — Venetian", cat:"Wellness", price:120, rating:4.8, reviews:200, dur:"Half day", emoji:"🧖", desc:"The world's most famous spa brand, inside The Venetian. Massages, fitness, complete transformation.", url:"https://vegas.vdvm.net/xJ2YMv", provider:"VCO", tags:["couple"], vibes:["luxury","romantic"], times:["morning"], seasons:["winter","spring","summer","fall"], interests:["wellness","unique"], tier:"premium", girlsTrip:true },
-  { id:63, name:"The Spa at Encore — Wynn", cat:"Wellness", price:130, rating:4.9, reviews:150, dur:"Half day", emoji:"🌿", desc:"One of the most awarded spas in North America. Inside Encore at Wynn. Pure luxury, no casino noise.", url:"https://vegas.vdvm.net/dy9YMk", provider:"VCO", tags:["solo","couple"], vibes:["luxury","romantic"], times:["morning"], seasons:["winter","spring","summer","fall"], interests:["wellness","unique"], tier:"premium", girlsTrip:true },
-  { id:64, name:"Vdara Spa & Salon", cat:"Wellness", price:80, rating:4.7, reviews:100, dur:"Half day", emoji:"🛁", desc:"No casino. No noise. Just a world-class spa in the most peaceful hotel on the Strip.", url:"https://vegas.vdvm.net/6kPmjG", provider:"VCO", tags:["solo","couple","bachelorette","work"], vibes:["luxury","romantic"], times:["morning"], seasons:["winter","spring","summer","fall"], interests:["wellness","unique"], tier:"mid" },
-  { id:65, name:"Nelson Ghost Town & Mine Tour", cat:"Dark", price:134, rating:4.7, reviews:68, dur:"4 hrs", emoji:"👻", desc:"An abandoned 1800s gold mining town 45 minutes from Vegas. Rusty cars, real ghost stories, an actual mine. The dark side Nevada doesn't advertise.", url:"https://www.getyourguide.com/nelson-ghost-town-nevada-l187538/las-vegas-nelson-ghost-town-with-mine-tour-option-t1221627/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","couple"], vibes:["luxury","romantic"], times:["morning","day"], seasons:["winter","spring","summer","fall"], interests:["unique","adventure"], tier:"mid" },
-  { id:74, name:"Strip Club Crawl + Open Bar + Party Bus", cat:"Nightlife", price:99, rating:4.7, reviews:150, dur:"4 hrs", emoji:"🍾", desc:"Party bus, open bar and VIP entry to Vegas' top strip clubs. The bachelor party night this city was built for.", url:"https://www.getyourguide.com/las-vegas-l58/strip-club-crawl-open-bar-party-bus-t442598/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","couple","group"], vibes:["luxury"], times:["night"], seasons:["winter","spring","summer","fall"], interests:["nightlife"], tier:"mid", guysTrip:true },
-  { id:66, name:"Pool Party Crawl by Party Bus", cat:"Nightlife", price:99, rating:4.5, reviews:110, dur:"5 hrs", emoji:"🏊", desc:"Party bus to a Vegas pool party with free drinks and VIP entry. The definitive Vegas summer experience.", url:"https://www.getyourguide.com/las-vegas-l58/las-vegas-pool-party-crawl-by-party-bus-t439815/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","work"], vibes:["luxury"], times:["morning","day"], seasons:["winter","spring","summer","fall"], interests:["nightlife"], tier:"mid", girlsTrip:true },
-  { id:67, name:"3-Stop Pool Party Crawl — Party Bus", cat:"Nightlife", price:99, rating:4.5, reviews:110, dur:"5 hrs", emoji:"🎉", desc:"Party bus hits 3 Vegas pool parties in one day. Free drinks, VIP entry at each stop. Summer in Vegas, maximized.", url:"https://www.getyourguide.com/las-vegas-l58/las-vegas-strip-3-stop-pool-party-crawl-with-party-bus-t384399/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["solo","couple","group"], vibes:["dark","adventure"], times:["morning","day"], seasons:["winter","spring","fall"], interests:["nightlife"], tier:"mid", girlsTrip:true },
-  // ── LGBT EXPERIENCES ──
-  { id:68, name:"EDC Las Vegas 2026", cat:"Festival", price:350, rating:4.9, reviews:500, dur:"3 nights", emoji:"🎡", desc:"Electric Daisy Carnival — the world's most iconic EDM festival. Las Vegas Motor Speedway. Three nights of pure freedom.", url:"https://vegas.vdvm.net/L0xvKL", provider:"VCO", tags:["solo","couple","group","bachelorette"], vibes:["adventure"], times:["night"], seasons:["spring","summer"], interests:["show","nightlife"], tier:"luxury", lgbtq:true },
-  { id:69, name:"Phoenix Bar and Lounge", cat:"Nightlife", price:20, rating:4.8, reviews:200, dur:"Night", emoji:"🌈", desc:"Vegas' most welcoming LGBT bar. No attitude, all energy. The kind of place you don't want to leave.", url:"https://vegas.vdvm.net/5kMey2", provider:"VCO", tags:["solo","couple","group","bachelorette"], vibes:["adventure"], times:["night"], seasons:["spring","summer"], interests:["nightlife"], tier:"budget", lgbtq:true },
-  { id:70, name:"Faaabulous! Ultimate Drag Brunch", cat:"Show", price:75, rating:4.9, reviews:150, dur:"2 hrs", emoji:"👑", desc:"The most spectacular drag brunch in Vegas. Lip sync battles, comedy, audience moments. Saturday mornings at their most fabulous.", url:"https://vegas.vdvm.net/Gb06Em", provider:"VCO", tags:["solo","group"], vibes:["adventure"], times:["morning"], seasons:["spring"], interests:["show"], tier:"mid", lgbtq:true },
-  { id:71, name:"Drag Brunch Las Vegas", cat:"Show", price:65, rating:4.8, reviews:120, dur:"2 hrs", emoji:"💅", desc:"Bottomless mimosas, drag queens, and the most fun brunch you've ever had. Reservations essential.", url:"https://vegas.vdvm.net/n4ROgA", provider:"VCO", tags:["solo","couple","group"], vibes:["dark"], times:["morning","day"], seasons:["winter","spring","summer","fall"], interests:["show"], tier:"mid", lgbtq:true },
-  { id:72, name:"RuPaul's Drag Race LIVE!", cat:"Show", price:99, rating:4.9, reviews:800, dur:"1.5 hrs", emoji:"🏆", desc:"The queens from RuPaul's Drag Race, live on the Vegas Strip. Iconic. Unmissable. The most entertaining show in town.", url:"https://vegas.vdvm.net/QYNqGY", provider:"VCO", tags:["solo","couple","group"], vibes:[], times:["night"], seasons:["winter","spring","summer","fall"], interests:["show"], tier:"mid", lgbtq:true },
-  { id:73, name:"Drag Your Sass to Brunch — Hamburger Mary's", cat:"Show", price:55, rating:4.8, reviews:90, dur:"2 hrs", emoji:"🍔", desc:"Hamburger Mary's legendary drag brunch. Outrageous, hilarious, and inclusive. The most fun $55 you'll spend in Vegas.", url:"https://vegas.vdvm.net/B5zWG9", provider:"VCO", tags:["solo","couple","group"], vibes:[], times:["morning","day"], seasons:["winter","spring","summer","fall"], interests:["show"], tier:"budget", lgbtq:true },
-  // ── SPORTS ──
-  { id:75, name:"Circa Las Vegas Sportsbook", cat:"Sports", price:0, rating:4.9, reviews:300, dur:"Any time", emoji:"🏆", desc:"The largest sportsbook in the world. 4 stories, 350 screens, stadium seating. Watch any game like nowhere else on Earth.", url:"https://vegas.vdvm.net/jRnEoP", provider:"VCO", tags:["solo","couple","group"], vibes:[], times:["day","night"], seasons:["winter","spring","summer","fall"], interests:["sports","unique"], tier:"budget", guysTrip:true },
-  { id:76, name:"MGM Grand Race & Sports Book", cat:"Sports", price:0, rating:4.7, reviews:200, dur:"Any time", emoji:"🎰", desc:"One of Vegas' most iconic sportsbooks. Inside MGM Grand. Great screens, great action, great atmosphere.", url:"https://vegas.vdvm.net/vD4LLv", provider:"VCO", tags:["solo","group","bachelorette"], vibes:["dark"], times:["day","night"], seasons:["winter","spring","summer","fall"], interests:["sports","unique"], tier:"budget", guysTrip:true },
-  { id:77, name:"Vegas Golden Knights — NHL Game", cat:"Sports", price:80, rating:4.9, reviews:500, dur:"3 hrs", emoji:"🏒", desc:"T-Mobile Arena. The team that made Vegas a real sports city. The most electric atmosphere in the NHL.", url:"https://vegas.vdvm.net/YVq55P", provider:"VCO", tags:["solo","couple","group","work"], vibes:["casino"], times:["day","night"], seasons:["winter","spring","summer","fall"], interests:["sports"], tier:"mid", guysTrip:true },
-  { id:78, name:"Las Vegas Aces — WNBA Game", cat:"Sports", price:40, rating:4.8, reviews:200, dur:"2.5 hrs", emoji:"🏀", desc:"Back-to-back WNBA champions. Michelob Ultra Arena. The most exciting women's basketball in the world.", url:"https://vegas.vdvm.net/xJ2xx1", provider:"VCO", tags:["solo","group","work"], vibes:["casino"], times:["day","night"], seasons:["winter","spring","summer","fall"], interests:["sports"], tier:"budget", girlsTrip:true },
-  { id:79, name:"Las Vegas Aviators — Baseball Game", cat:"Sports", price:20, rating:4.7, reviews:150, dur:"3 hrs", emoji:"⚾", desc:"Triple-A baseball at Las Vegas Ballpark. Affordable, fun for all ages. The best family sports experience in Vegas.", url:"https://vegas.vdvm.net/PzrLLe", provider:"VCO", tags:["solo","couple","group","family","work"], vibes:["adventure"], times:["day","night"], seasons:["winter","spring","fall"], interests:["sports"], tier:"budget" },
-  { id:80, name:"Henderson Silver Knights — Hockey", cat:"Sports", price:25, rating:4.7, reviews:100, dur:"2.5 hrs", emoji:"🥅", desc:"The VGK's farm team. Dollar Arena in Henderson. Great hockey, small venue, affordable — the locals' choice.", url:"https://vegas.vdvm.net/L0xvJM", provider:"VCO", tags:["solo","couple","group","family","kids"], vibes:["adventure"], times:["day","night"], seasons:["spring","summer"], interests:["sports"], tier:"budget", guysTrip:true },
-  // ── LIMITED TIME ──
-  { id:82, name:"NHRA Nationals Las Vegas", cat:"Sports", price:45, rating:4.8, reviews:80, dur:"Full day", emoji:"🚗", desc:"The fastest cars on the planet. The loudest event in Vegas. NHRA drag racing at its absolute best.", url:"https://vegas.vdvm.net/enrDn1", provider:"VCO", tags:["solo","group","family","kids"], vibes:["adventure"], times:["morning","day"], seasons:["winter","spring","fall"], interests:["sports","adventure"], tier:"budget", guysTrip:true, limitedTime:"Until Nov 1" },
-  { id:83, name:"NBA Summer League", cat:"Sports", price:30, rating:4.7, reviews:150, dur:"2.5 hrs", emoji:"🏀", desc:"Watch NBA rookies and future stars before they make it big. Thomas & Mack Center. Vegas summers just got better.", url:"https://vegas.vdvm.net/B5zj5B", provider:"VCO", tags:["solo","couple","group"], vibes:["luxury"], times:["day","night"], seasons:["fall"], interests:["sports"], tier:"budget", limitedTime:"Until Jul 19" },
-  { id:84, name:"NASCAR Cup Series Las Vegas", cat:"Sports", price:75, rating:4.8, reviews:200, dur:"Full day", emoji:"🏁", desc:"500 miles of pure adrenaline at Las Vegas Motor Speedway. The loudest Sunday you'll ever have.", url:"https://vegas.vdvm.net/6kPvkQ", provider:"VCO", tags:["solo","couple","group"], vibes:[], times:["morning","day"], seasons:["fall"], interests:["sports","adventure"], tier:"mid", guysTrip:true, limitedTime:"Until Oct 4" },
-  { id:85, name:"Formula 1 Las Vegas Grand Prix", cat:"Sports", price:500, rating:4.9, reviews:300, dur:"Full day", emoji:"🏎️", desc:"F1 racing on the Las Vegas Strip at night. The most spectacular sporting event in the world — right here.", url:"https://vegas.vdvm.net/dy9xyW", provider:"VCO", tags:["group","family","kids"], vibes:["adventure"], times:["day","night"], seasons:["summer"], interests:["sports","adventure"], tier:"luxury", guysTrip:true, limitedTime:"Until Nov 21" },
-  { id:86, name:"BTS — Live in Las Vegas", cat:"Concert", price:101, rating:4.9, reviews:200, dur:"2.5 hrs", emoji:"💜", desc:"BTS live at Allegiant Stadium. Shows May 23, 24, 27 & 28. The biggest K-pop event of the year — don't miss it.", url:"https://vegas.vdvm.net/m4XeGa", provider:"VCO", tags:["solo","group","family"], vibes:["adventure"], times:["night"], seasons:["fall"], interests:["show"], tier:"mid", girlsTrip:true, lgbtq:true, limitedTime:"May 23–28, 2026" },
-  { id:87, name:"Cowabunga Canyon Water Park", cat:"Adventure", price:45, rating:4.7, reviews:300, dur:"Full day", emoji:"💦", desc:"Vegas' best water park. Slides, lazy river, wave pool — the perfect summer day with kids of all ages.", url:"https://vegas.vdvm.net/xkWeD1", provider:"VCO", tags:["solo","couple","group","family","kids"], vibes:[], times:["morning","day"], seasons:["summer"], interests:["adventure","unique"], tier:"budget" },
-  { id:88, name:"New Kids on the Block", cat:"Concert", price:69, rating:4.9, reviews:23, dur:"2.5 hrs", emoji:"🎤", desc:"Back to the stage at Park MGM. The Boys are back — and Vegas is their venue.", url:"https://vegas.vdvm.net/B5z74y", provider:"VCO", tags:["solo","group"], vibes:["adventure"], times:["night"], seasons:["fall"], interests:["show"], tier:"mid", girlsTrip:true, limitedTime:"Until Jul 3" },
-  { id:89, name:"Ed Sheeran — Allegiant Stadium", cat:"Concert", price:87, rating:4.8, reviews:50, dur:"2.5 hrs", emoji:"🎸", desc:"Ed Sheeran live at Allegiant Stadium. One of the biggest touring artists in the world — right here in Vegas.", url:"https://vegas.vdvm.net/k4aYxL", provider:"VCO", tags:["solo","couple","group","work"], vibes:["luxury","adventure"], times:["night"], seasons:["fall"], interests:["show"], tier:"mid", girlsTrip:true, limitedTime:"Until Jul 17" },
-  { id:90, name:"Scorpions — Planet Hollywood", cat:"Concert", price:91, rating:4.6, reviews:44, dur:"2 hrs", emoji:"🦂", desc:"Rock legends at Planet Hollywood. The Scorpions residency — a bucket list night for rock fans.", url:"https://vegas.vdvm.net/Pzr7P6", provider:"VCO", tags:["solo","couple","group","family","work"], vibes:["luxury","adventure"], times:["night"], seasons:["winter","spring","summer","fall"], interests:["show"], tier:"mid", guysTrip:true, limitedTime:"Until Oct 2" },
-  { id:91, name:"Allegiant Stadium Guided Tour", cat:"Culture", price:59, rating:4.8, reviews:49, dur:"1.5 hrs", emoji:"🏟️", desc:"Go behind the scenes of the most technologically advanced stadium in NFL history. Home of the Raiders.", url:"https://vegas.vdvm.net/9VM05e", provider:"VCO", tags:["couple"], vibes:["luxury","romantic"], times:["morning","day"], seasons:["winter","spring","summer","fall"], interests:["unique","sports"], tier:"mid", guysTrip:true },
-  { id:92, name:"Elvis Wedding + Limousine", cat:"Romantic", price:549, rating:5.0, reviews:23, dur:"2 hrs", emoji:"🚘", desc:"Get married by Elvis — then ride away in a stretch limo. The most Vegas honeymoon moment possible.", url:"https://www.getyourguide.com/las-vegas-l58/las-vegas-elvis-themed-wedding-with-limousine-t844123/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["couple","group","bachelorette"], vibes:["luxury"], times:["day","night"], seasons:["winter","spring","summer","fall"], interests:["unique"], tier:"luxury" },
-  { id:93, name:"Arts District Limo + Meal", cat:"Experience", price:199, rating:4.3, reviews:10, dur:"4 hrs", emoji:"🎨", desc:"Stretch limo ride through the Arts District with a meal included. Vegas' creative side, in style.", url:"https://www.getyourguide.com/las-vegas-l58/las-vegas-arts-district-tour-with-limo-ride-bubbly-meal-t844124/?partner_id=FIT427X&utm_medium=online_publisher", provider:"GYG", tags:["couple","bachelorette","group"], vibes:["luxury"], times:["day","night"], seasons:["spring","summer","fall","winter"], interests:["unique"], tier:"premium", girlsTrip:true },
+// ─── BASE DE DATOS ────────────────────────────────────────────────────────
+const VEGAS_BG = "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAoHBwgHBgoICAgLCgoLDhgQDg0NDh0VFhEYIx8lJCIfIiEmKzcvJik0KSEiMEExNDk7Pj4+JS5ESUM8SDc9Pjv/2wBDAQoLCw4NDhwQEBw7KCIoOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozv/wAARCANMAYYDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDyWiiiuwxCiiigAooooAKKKKACiiigQUUUUDCiiigQUUUUAFFFFAwooooAKKKKACiiigAooooAKKKKACiiigAooooEFFFFAwooooAKKKKACiiigBKWiigAooooAKKKKACiiigAooooAWkpaKAEooooAKKKKACiiigAooooAKKKKBBRRRQAUUUUAFFFFABRRRQMKKWkoAKKKKACiiigAooooEFFFFABRRRQMKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAWiiigQUlLRQAUlLRQAlFLRQMSilpKBBRS9qSgBRSUuKKAEopaKACk70tFABRRRQAUlLRQAlFFFABRS4ooGFFFFAgpKWkNABRRS0AJRS0UAJRRRQMKKKKACilooASiiikAUUUUwDvRRRQAUUUUAFFHaigApaMUYoEFFGKKADNFJS96ACikpaACiikoAXvRRRQAZozRSUALmiiigAooooAKKKKQwooooEFFFFMAooopDCiiimAUUUUAJS0lLQAUlLSUAFFLRQAlLRSUALSUtFACUuKKKQBSUuKKAEpcUUCgBMUUtFAhDRS0Uxi0lFFMBaQilooEJijFLRQAnSgDilooATFJinUUgExRRR2pgHakp2KSkAlLRijFABRRRQAUUlLQAUUUUAJS0UUAFFJRQAtFFFABRRRQAlFFFAC0lLSUDFopKKACiiigQUUUYoAWikpaQBRRRQMKKKDQAUUlFMBaKKKAD8KKWiqFcKSlooC4UlFLQFxKWikxSC4tFGKMUDEooooAWikpaBBRRRQAUn4UtFACUClooAO1IaWigYUmKWikISkPSnUUxiUlOooEN70uKKWkAlFLSUAFJTqTHNACdqKWkoAKKKKAEooopjFopKKBC0UUlIY6ikHSigAooooEFFFFADqKOaKsQUUYpeaACijmigAopKWgApKWigQnejFLRQMSilpKVgDFJS0UWHcSiloxRYBMUdKKKVgFpKKKLBcWikooC4UtJRQAtFJzRzQAtFJzRmgAoozRQIKKKKACiiigAooooAMUUUUAIaMUtFAxKMUtLQA2jrS0UgEpaMUUAJRS0UCHUUUVoAUtJS0gCijNJQAYooozQAGiiigBKWgUUAFJS0lABRRRQAUUUtABSUtJQAYpMUtFKwCEUYpaKQCUtFGaACiijpQADFGKKKQBRiij6UxiUYpaOKAE4o7UuKMUAJmiigCkAUUYxRQIKWkopgFLSZNGaQxaKKM0AJRQaKACijNFADqKKK0JFoozRmgAxSYpaKBiUUtFACUUUUAGaM0YooAKKBRQAUUZopAFJS0UAJmiiigQUuaSigAooooGFFGaM0rAFFGaKAEzS0CjvSAKKKKBhRQaMUAGaM0UCgQmaKDS0h2DNGKTFBoCwYoNHeg0CF6ikOM0o6UUDEopaKYCYopaQ0AGKKPrRQBJRim0c1pYkXFGKM0ZoAMUYozRmgYYoxS5opANpaOKKACkpaMUAFJilpKQBikpaKYCUUveigBKKMUYoAKKKMUAJS0YopAJRiiloASl7UUUAJRRRRYBaKSlpWASl7UlLRYLhSUUYosAtFFJSsFxc0daSigLhRRxRQAtJRkUUDuLmikoosAUUUU7CCiiigB9FLSVsSFFFLQA2ilxRSGJRS0UrAJS0UUWC4lLRRSC4UUUUBcSilopDEopaKAEopaKAEooooAKD0oooASjtS0UAFJilooASjFLRQAhFFLRQAlFLRSASkpcUUAJRS4oxQAlFKKMUAJRS0YoASjFLijFACUtJS0AGKKKKACiiigB9FLSYrYgKKKKQBRQaSiw7i0tJS0guFIRS0lABik706kpAIaKXFHagLCUUuKMUANpaMUUgAUUUUDuFFFFILhRSUUDFxSUtFAriUUUUDCilooASilpKACiiigAooooAKKKKACiiigApKWkoAWiikpALRiiigAooooAKKKKYElJTsUYraxmNoxxTsUmKVhjcUYp1JigBOaBxS4pKADNLSUYoAKKKKVgCikpaLDCijtRSC4UlLRQAlFLRigBKKWiiwCUUUUWAMUUUUrAJRS0UWASilopWAKT8aWiiwCUUtFFhiUUUUrAFFFFAwooooAKKMUUAFGKM0ZoAKKKKACiiloAKKSigRPSYp1FbmY2kp2KWgYwijFOIpMUANoxTsUmKQCd6MUtBoAbijFLRSATFJTqKAG0UuKMUDEooopAJS5o5pKBi5ooooC4UUUUgCkpaKYCUUtGKAExRS0UhCUUtJRYYUUtFFgEpKWjtQAlFLijFKwXEopcUUWASilxR3pWHcSiijFFguAoopaADFFFFAriGilxRSAsUYp2KTFdBlcbijFLiigdxvTrRSkUgpBcKKXHvSUDEpMU6jFAXG4NFOIpMUBcQ0UuKTFIYUmKXFFKwDcUU40lACYpKdSYoATFFLRigBMUUuKO1ACUUuKMUgEooooGFFFLQAlFBooAKKKKACkpaKAEpaKKACiiigBKKXFJSAKMUUtACUUtFACUtFFACUUtFAFrFJinYoxW5kNxRilxRilYBpFJinYoINADMUU72oIpDG0YpcUYxQFxMUmKWkpDuFJinUUANxRiloIoGNxSU4UUguJRijAoxQMSjFLR+FFgEoxS4pKQBSGnUlFgEoxS0UAFGKKKAExzRS0UAJRS0YpAJiiiigAFFFFAwoopcUCEpKXFGKAEopaQ0AFFFLQAfhSUtFFgEooooAuUYp2KMV0GFxlFOxSYpWHcSkp1Ia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CmIUmkopDQIM0UUUwFooHSigAopKKAFoozSZoEFGKWigYlLSZpaAAE0u7JpKKVgFpQQB0ptLxQMUNhg1IetL+tGR3FIBCTxjijJIwTS4HY0lACUdaOPSimIXGBmkozRQAUlLSttAGPxoATPHPaiikoAXFH44oooAXHuKTmiigA5o79aT8aWgA+lGaKKAAk0oJpKKAH8be1NOKSigBeKM0lFAB1oopaYAGwMUhJNHFHJpAFFJS8UAFJRkUZpgLRSZFLQAUUUd6ADtRQOlFAAaKKKACkpaKAExRilooASjFLRQAlLmiigAzRk0UUAGaKKKACkpaKACiiikAUUUUAHFFFFABRRRQAUUUUAFFFFMAooooAKKKSkAtGaSloAM0ZoooAKKKKADpSUtFMBMUYpaKAExRilooATFFLQKACiiigAooooAKO9FFAgooooGJRmlooASlpMUYoAKKMUYoAWikxRigAzS0YoxQAUmaMUYoAM0UtJigApc0mKWgBM0ZoxS0AJmilooASilooAKKKKADNJRiloATNFLSYoAKM0uKKAEpaAKTFABRmlooATNFLijFACZozRilxQAlLRiigAooooAKKKKBBRRRQMKKWkoAKKKKACiijFABRRiigAoooxQAUtJzRzQAtJRRQAUUUUAFFFHNABRRRQAUUYo5oAKKKKACijFFABRRRQAUtJRQAUUYooAKKKKACiijmgAoo5ooAKWko5oAKKMUYoAKKWkoEFFFLQAlLRSUDCilooASiiigApaKKACkoooAWiiigBKWkpaACiikoAKWkpaACkpaSgBaKSloAKSiigBaKKSgAoopaACikooAKWkpaACkpaSgBaKKKACkpaSgBaKKSgApaSloAKSlpKAClpKWgApKKKAFooooAKKSigBaKSigBaSlpKACiiigBaSlpKAFpKKWgBKWkooAKKKWgBKKKKAFpKWkoAWikpaAEoopaAEoopaAEpaSigAopaKACikooAKKWkoAWikooAKKWigBKKKWgBKWkooAKKWkoAWkoooAWkpaSgBaSiloASiiigAooooAWiikoAKKKWgBKKWigBKWkpaACkpaSgAoopaAEooooAWiiigAooooASilpKAClpKWgApKWkoAWiiigApKWkoAWiiigBKWikoAKKWigBKWiigBKKWkoAWikpaACiiigAooooASlpKKAFpKWkoAKKKKAFopKWgBKWkpaACiiigAooooAKSlooAKKKKACkopaACiikoAKWiigAoopKACloooAKSiloAKKKKACikpaACkpaKAEpaKKACiikoAWiiigApKKKAFooooASlpKWgAooooASilooAKSiigAooooAWkoooAWiiigBKWiigAoopKAFpKKWgAopKKAClpKWgApKKWgBKKKWgApKKKACiiigApaSloAKKSigBaKSigBaSiigBaKKSgBaKSloAKSiigAopaSgBaKSigBaKKKACkoooAWkpaSgAopaSgAooopgFFFLSASiiigBaSiloASilooASilpKACiiigAopaSmAUUUUgFpKKKACiiigAooooAWkopaAEooooAWikooAKWkooGFFFFAgooooAKKKKAFopKKACilpKACirDWkiWUd0fuO5Ufh3/n+VQUAJRRRQAUUtJQAUUUUAFFFFMAoopaQCUUUUALRRSUALRRRmgBKKWigBMUUtFABSUtFACUUtJQAUUUUAFFLRQAUlLSUAFFFFAC0lFFABRRRTABRS0UgEopaSgApaKKAEooooAWkpaSgAq7p+mTX0gIBSIfec/09TVWOQxSCRQCVOQGGR+VdBp2uJO6w3CrG54Vl+6fb2oYzQls4ZbM2hXEe3Ax29DXK3lhPYybZV+U/dcdDXY9OtYV/ry5aK1RXHQu4yD9BSQGHRQzbmJOOTngYpKYgooopgLSUUUAFFFFAC0lG5f7w/Ok3L/eH50gFopNy/3h+dG5f7y/nQMdSUm5f7y/nRuX+8PzoAWlpu5f7y/nS7l/vL+dAgopNy/3l/Ojcv8AeX86BjqKTcv95fzo3r/eH50CFopNy/3l/Ojcv94fnQAUUm5f7w/Ojcv95fzoGLS03cv94fnS7l/vD86BC0U3cv8AeX86Xcv95fzoAWko3L/eH50bl/vD86ACijcv95fzo3L/AHl/OgBaSjcv94fnRuX+8v50AFFJuX+8Pzpdy/3h+dAxaSjcv95fzpNy/wB5fzoEOopu5f7y/nRuX+8PzoAWik3L/eX86Ny/3l/OgYtLSbl/vD86Ny/3h+dAhaSk3L/eX86Ny/3h+dAx1FJvX+8Pzo3L/eH50CNefVmk0aOHf++Y7H9do7/j/jWTTdy/3l/Ojev94fnQMWik3L/eH50bl/vL+dAhaKTcv95fzo3L/eX86Bi0Um9f7y/nS7l/vL+dABRRuX+8v50UXA+sPstv/wA+0P8A36X/AAo+y2//AD7w/wDfpf8ACpKK5zUj+y2//PvD/wB+l/wo+y2//PvD/wB+l/wqSjNAEf2W3/594f8Av0v+FJ9lt/8An3h/79L/AIVLRQBF9lt/+feH/v0v+FH2W3/594f+/S/4VLRmgCL7Lb/8+8P/AH6X/Cj7Lb/8+0P/AH6X/CpaKAIvstv/AM+0P/fpf8KPstv/AM+8P/fpf8KlooAi+y2//PvD/wB+l/wo+y2//PvD/wB+l/wqWjNAEf2W3/594f8Av0v+FJ9lt/8An3h/79L/AIVLRQBH9lt/+feH/v0v+FH2W3/594f+/S/4VJRQBF9lt/8An3h/79L/AIUfZbf/AJ94f+/S/wCFS0UARfZbf/n3h/79L/hR9lt/+feH/v0v+FS0UARfZbf/AJ94f+/S/wCFL9lt/wDn3h/79L/hUlFAEX2W3/594f8Av0v+FH2W3/594f8Av0v+FS0UARfZbf8A594f+/S/4UfZbf8A594f+/S/4VLRQBF9mt/+feH/AL9L/hR9lt/+feH/AL9L/hUlLQBF9lt/+feH/v0v+FH2W3/594f+/S/4VLRQBF9lt/8An3h/79L/AIUfZbf/AJ94f+/S/wCFS0ZoAj+y2/8Az7w/9+l/wo+y2/8Az7w/9+l/wqSigCL7Lb/8+8P/AH6X/Cl+y2//AD7w/wDfpf8ACpKKAIvstv8A8+8P/fpf8KPstv8A8+8P/fpf8KlooAi+y2//AD7w/wDfpf8ACj7Lb/8APtD/AN+l/wAKlooAi+y2/wDz7w/9+l/wo+y23/PtB/36X/CpaKAIvstt/wA+0H/fpf8ACj7Lbf8APtB/36X/AAqWkpAR/Zbb/n2g/wC/S/4UfZbf/n2g/wC/S/4VLRTAi+y23/PvB/36X/CipaKACiiikAUUUUAJS0UlABS0lFAC0UUUAUNU1T7CqRQx+feT8Qwjv7n0Aq1aC4W0iF26PPt/eFBhSfasWMf2JrEs98TNFeNhbxhzGf7jeg+lb/WgAoopKAFooooAKSiloASilooAKKSigBayLm6v7zU5bDT5I7dbdQZp3XccnooFa9Y+mkL4i1eMnDsYnA9V29aAFax11Buj1mORh0R7YBT7EirWk37ajZebJH5UyO0cqDoGHXFXax/DbCS3vZl+5LeSMh9RxQBsUlLSUAFLRSUAFFLSUAFFFLQAUUlFADhyayLXUrifw/cXzBBNH5u3C8fKeOK1l6j61z+n8eD7z/tv/M0AXbvUJ4dItbpAnmTNEGyOPmxnFah4JFYOof8AIvaf/wBdLf8ApW8ep+tMBKSiikAUtFFABSUUtABRRRQAUUUUAJRRRQAUtJS0AJRS0lAC0UlLQAUlLRQAyaGK4heGZA8bjDK3Qim2ttHZ20dvFu2RrtXc2Tj61JS0AFFFFABRSUUAFFFFAC0UUlABRRRQAtUL/R7XUJUnfzIp0GFmhfYwHp71fpKAMpvD0Ui7JtQ1CVD1Vrjg/pWlb28VrAkEEYjjjGFUdqkooAKSiigAopaKACkpaSgBaKSigAopaSgBehqrHp1tFYyWSKwhk3bhu5+brzVqkoAgksLeW0itXUmKIoVG7n5enNWCaKKAEooooAKWkopgFFFFABRRRQAUUUUAf//Z";
+
+const DB = {
+  // ── SIN FILTRO DE FECHA ──────────────────────────────────────────────
+  atracciones: [
+    { name:"The Neon Museum",                       emoji:"🌟", price:"Desde $36",  dur:"1 hr",    rating:4.7, desc:"El cementerio de los carteles de neón que hicieron famosa a Las Vegas. Una visita nocturna imprescindible.", url:"https://vegas.vdvm.net/QyoarY" },
+    { name:"Torre Eiffel — Mirador Las Vegas",      emoji:"🗼", price:"Desde $35",  dur:"1 hr",    rating:4.6, desc:"París recreada en el Strip. Vistas desde 46 pisos al atardecer — una de las mejores fotos de tu viaje.", url:"https://gyg.me/zvZksqFf" },
+    { name:"Big Apple Coaster — New York-New York", emoji:"🎢", price:"Desde $26",  dur:"30 min",  rating:4.5, desc:"La montaña rusa más icónica del Strip. Rodea el hotel New York-New York a toda velocidad.", url:"https://vegas.vdvm.net/baxr9b" },
+    { name:"Bodies… The Exhibition",               emoji:"🫀", price:"Desde $36",  dur:"1.5 hrs", rating:4.6, desc:"Cuerpos humanos reales preservados. Una experiencia científica y artística única. Solo en Las Vegas.", url:"https://vegas.vdvm.net/k0BoGM" },
+    { name:"SkyJump — The STRAT",                  emoji:"🪂", price:"Desde $35",  dur:"30 min",  rating:4.8, desc:"Salta desde 260 metros de altura desde la torre más alta de Vegas. La caída libre más espectacular de América.", url:"https://vegas.vdvm.net/WyO7me" },
+    { name:"Madame Tussauds Las Vegas",             emoji:"🗿", price:"Desde $30",  dur:"1.5 hrs", rating:4.3, desc:"Las figuras de cera más famosas del mundo en el corazón del Strip. Foto perfecta garantizada.", url:"https://vegas.vdvm.net/g1jmB5" },
+    { name:"High Roller — La Noria Gigante",       emoji:"🎡", price:"Desde $21",  dur:"30 min",  rating:4.6, desc:"La vista más icónica de Las Vegas desde 167 metros de altura. De día o de noche, solo o en pareja.", url:"https://www.getyourguide.com/las-vegas-l58/the-high-roller-ride-at-the-linq-ticket-t270522/?partner_id=FIT427X&utm_medium=online_publisher" },
+    { name:"Interstellar Arc — AREA15",            emoji:"🌌", price:"Desde $47",  dur:"1 hr",    rating:4.8, desc:"Una instalación de arte extraterrestre dentro de AREA15. El futuro ya está aquí.", url:"https://vegas.vdvm.net/9VM075" },
+    { name:"Exposición Titanic — Luxor",           emoji:"🚢", price:"Desde $44",  dur:"1.5 hrs", rating:4.6, desc:"Artefactos reales del Titanic. El barco que cambió la historia, dentro de una pirámide. Solo en Vegas.", url:"https://www.getyourguide.com/las-vegas-l58/luxor-hotel-titanic-the-artifact-exhibition-entry-ticket-t395730/?partner_id=FIT427X&utm_medium=online_publisher" },
+  ],
+
+  ninos: [
+    { name:"Flyover Las Vegas",                  emoji:"🪂", price:"Desde $36",  dur:"30 min",  rating:4.7, desc:"Un vuelo simulado sobre Las Vegas. Viento, aromas, movimiento — olvidarás que estás dentro de un edificio.", url:"https://vegas.vdvm.net/a1LxZQ" },
+    { name:"Meow Wolf's Omega Mart",             emoji:"🛒", price:"Desde $50",  dur:"2 hrs",   rating:4.8, desc:"Un supermercado que esconde portales a mundos alternativos. Arte inmersivo que enloquece a niños y adultos.", url:"https://vegas.vdvm.net/NkZ5bq" },
+    { name:"Dig This — Maneja Excavadoras",      emoji:"🚜", price:"Desde $28",  dur:"1 hr",    rating:5.0, desc:"Maneja excavadoras y bulldozers reales en el desierto. La diversión más inesperada que tendrás en Vegas.", url:"https://vegas.vdvm.net/QjbP19" },
+    { name:"Torneo de Reyes — Cena Medieval",    emoji:"⚔️", price:"Desde $63",  dur:"1.5 hrs", rating:4.5, desc:"Caballeros medievales, justas, explosiones y cena incluida. Excalibur. Los niños enloquecen — y los adultos también.", url:"https://vegas.vdvm.net/oq1xGn" },
+    { name:"Shark Reef Aquarium — Mandalay Bay", emoji:"🦈", price:"Desde $30",  dur:"1.5 hrs", rating:4.7, desc:"Más de 2,000 animales de 100 especies en el único acuario acreditado de Nevada. Tiburones, dragón de Komodo y tortugas marinas.", url:"https://vegas.vdvm.net/anqbLb" },
+  ],
+
+  experiencias: [
+    { name:"Universal Horror Unleashed",            emoji:"👹", price:"Desde $45",  dur:"3 hrs",  rating:4.7, desc:"Terror real en Vegas. Los monstruos más icónicos del cine cobran vida. Solo apto para valientes.", url:"https://vegas.vdvm.net/aO76jj" },
+    { name:"Machine Guns Vegas",                    emoji:"🔫", price:"Desde $50",  dur:"1 hr",   rating:4.8, desc:"Armas reales en un campo de tiro supervisado. El único lugar del mundo donde esto tiene tanto sentido.", url:"https://vegas.vdvm.net/Py36Z6" },
+    { name:"Exotics Racing — Ferrari y Lamborghini",emoji:"🏎️", price:"Desde $109", dur:"1 hr",   rating:4.8, desc:"Maneja un Lamborghini, Ferrari o Porsche en un circuito real. Al sur del Strip. Vidas que cambian aquí.", url:"https://vegas.vdvm.net/eK4ZeZ" },
+    { name:"Blackout — Dining in the Dark",         emoji:"🖤", price:"Desde $85",  dur:"2 hrs",  rating:4.6, desc:"Una cena gourmet completamente a oscuras. Sin vista, los demás sentidos explotan. Una experiencia que no olvidarás.", url:"https://vegas.vdvm.net/0ZWgjN" },
+    { name:"FLY LINQ — Zipline sobre el Strip",     emoji:"🤸", price:"Desde $49",  dur:"30 min", rating:4.5, desc:"Deslízate en tirolesa sobre el Strip de Las Vegas. Vista aérea única desde el LINQ.", url:"https://vegas.vdvm.net/4eLyeG" },
+    { name:"Helicóptero Nocturno sobre el Strip",   emoji:"🚁", price:"Desde $129", dur:"15 min", rating:4.6, desc:"El Strip desde un helicóptero de noche. La vista más icónica de América desde 300 metros de altura.", url:"https://www.getyourguide.com/las-vegas-l58/las-vegas-strip-helicopter-flight-without-transfers-t33967/?partner_id=FIT427X&utm_medium=online_publisher" },
+    { name:"Boda o renovación de votos en la capilla de Graceland con temática de Elvis", emoji:"💍", price:"Desde $356", dur:"1.5 hrs", rating:4.8, desc:"La primera capilla del mundo en celebrar bodas temáticas de Elvis desde 1977. Limusina incluida, impersonador de Elvis en vivo, ramo de rosas y fotógrafo. Hasta 30 personas.", url:"https://gyg.me/aDqAHYeg" },
+  ],
+
+  nightlife: [
+    { name:"FANTASY Burlesque — Luxor",         emoji:"💃", price:"Desde $34",  dur:"1.5 hrs", rating:4.7, desc:"El show para adultos más longevo del Strip. Artistas increíbles, glamour de Vegas. Solo mayores de 21.", url:"https://vegas.vdvm.net/4P13Po" },
+    { name:"Magic Mike Live",                   emoji:"🔥", price:"Desde $54",  dur:"1.5 hrs", rating:4.7, desc:"El show del que todos hablan durante años. SAHARA Las Vegas. Ya sabes de qué va.", url:"https://www.getyourguide.com/las-vegas-l58/las-vegas-magic-mike-live-at-the-sahara-t525549/?partner_id=FIT427X&utm_medium=online_publisher" },
+    { name:"Chippendales — Planet Hollywood",   emoji:"💪", price:"Desde $67",  dur:"1.5 hrs", rating:4.6, desc:"Planet Hollywood. El original. La noche más salvaje del Strip.", url:"https://vegas.vdvm.net/DyOEj2" },
+    { name:"Thunder From Down Under",           emoji:"⚡", price:"Desde $74",  dur:"1.5 hrs", rating:4.5, desc:"Australianos. Excalibur. El show de despedida de soltera que lo empezó todo.", url:"https://vegas.vdvm.net/VmROXR" },
+    { name:"ROUGE — Cabaret Sensual",           emoji:"❤️", price:"Desde $54",  dur:"1.5 hrs", rating:4.4, desc:"El cabaret solo para adultos del STRAT. Sensual, atrevido, íntimo. La noche perfecta en el Strip.", url:"https://vegas.vdvm.net/m5znGa" },
+    { name:"Club Crawl VIP + Barra Libre",      emoji:"🥂", price:"Desde $60",  dur:"5 hrs",   rating:4.9, desc:"Bus de fiesta, barra libre y entrada VIP a los mejores clubs del Strip. La noche que nunca termina.", url:"https://gyg.me/JMj9b8Kx" },
+    { name:"Pool Party en Bus de Fiesta",       emoji:"🏊", price:"Desde $55",  dur:"5 hrs",   rating:4.5, desc:"Bus de fiesta a una pool party de Vegas con bebidas gratis y entrada VIP.", url:"https://www.getyourguide.com/las-vegas-l58/las-vegas-pool-party-crawl-by-party-bus-t439815/?partner_id=FIT427X&utm_medium=online_publisher" },
+    { name:"Las Vegas: Tour VIP de la Vida Nocturna a Bar, Club Nocturno y Strip Club", emoji:"🍾", price:"Desde $44", dur:"4 hrs", rating:4.7, desc:"Bus de fiesta, barra libre y entrada VIP a los mejores clubs de Vegas.", url:"https://www.getyourguide.com/las-vegas-l58/strip-club-crawl-open-bar-party-bus-t442598/?partner_id=FIT427X&utm_medium=online_publisher" },
+    { name:"Limo + Champán + Club VIP",         emoji:"🚘", price:"Desde $499", dur:"4 hrs",   rating:4.8, desc:"Limusina stretch, champán en el camino, entrada VIP al club. La noche de despedida de soltera para la que Vegas fue construida.", url:"https://www.getyourguide.com/las-vegas-l58/las-vegas-limo-tour-with-champagne-and-nightclub-entry-t981477/?partner_id=FIT427X&utm_medium=online_publisher" },
+    { name:"Bares desconocidos: el tour de bares original de Las Vegas Strip", emoji:"🍸", price:"Desde $39", dur:"3 hrs", rating:5.0, desc:"Los bares escondidos del Strip. La mayoría de turistas los pasa de largo cada noche sin saberlo.", url:"https://www.getyourguide.com/las-vegas-l58/bars-unknown-the-las-vegas-strip-bar-crawl-t708411/?partner_id=FIT427X&utm_medium=online_publisher" },
+    { name:"High Roller — Cabina Open Bar",     emoji:"🎡", price:"Desde $48",  dur:"30 min",  rating:4.6, desc:"El Strip desde 167 metros. Barra libre. Sin límites. Mejor al atardecer.", url:"https://www.getyourguide.com/las-vegas-l58/the-high-roller-ride-at-the-linq-ticket-t436735/?partner_id=FIT427X&utm_medium=online_publisher" },
+    { name:"Atomic Saloon Show",                emoji:"🤠", price:"Desde $64",  dur:"75 min",  rating:4.4, desc:"Comedia, acrobacias y burlesque en el Lejano Oeste. The Venetian. Un show que mezcla humor adulto y espectáculo.", url:"https://vegas.vdvm.net/jRJ1mM" },
+    { name:"X Burlesque — Sexy Topless Revue",  emoji:"🌹", price:"Desde $65",  dur:"75 min",  rating:4.0, desc:"El show topless más icónico del Strip. Flamingo Las Vegas. Glamour, sensualidad y energía desde 1999.", url:"https://vegas.vdvm.net/Pzma7j" },
+    { name:"X Country — Kick'n Topless Revue",  emoji:"🤠", price:"Desde $46",  dur:"90 min",  rating:4.5, desc:"Country music, botas y un show topless lleno de energía. Harrah's Cabaret. Para los que quieren Vegas con sabor a Oeste.", url:"https://vegas.vdvm.net/VO2476" },
+  ],
+
+  shows: [
+    { name:"Mystère — Cirque du Soleil",      emoji:"🎭", price:"Desde $49",  dur:"1.5 hrs", rating:4.6, desc:"El Cirque original en Vegas. Treasure Island. Más de 30 años de acrobacias que desafían la física.", url:"https://vegas.vdvm.net/LKVW3L" },
+    { name:"Cirque du Soleil O",              emoji:"🌊", price:"Desde $158", dur:"1.5 hrs", rating:4.8, desc:"Agua. Acróbatas. Un escenario que desafía la física. El espectáculo que define Las Vegas.", url:"https://gyg.me/O2w14MLI" },
+    { name:"Michael Jackson ONE — Cirque",   emoji:"🕺", price:"Desde $96",  dur:"1.5 hrs", rating:4.8, desc:"Cirque du Soleil con MJ. Mandalay Bay. El show más emotivo del Strip.", url:"https://www.getyourguide.com/las-vegas-l58/las-vegas-michael-jackson-one-by-cirque-du-soleil-ticket-t400944/?partner_id=FIT427X&utm_medium=online_publisher" },
+    { name:"KÀ — Cirque du Soleil VIP",      emoji:"🎪", price:"Desde $70",  dur:"3 hrs",   rating:5.0, desc:"El espectáculo más grandioso del Cirque — backstage, encuentro con artistas, lounge VIP. Una vez en la vida.", url:"https://www.getyourguide.com/las-vegas-l58/las-vegas-ka-by-cirque-du-soleil-at-mgm-grand-ticket-t405483/?partner_id=FIT427X&utm_medium=online_publisher" },
+    { name:"Awakening — Wynn",               emoji:"💫", price:"Desde $65",  dur:"1.5 hrs", rating:4.4, desc:"Un original del Wynn. Danza, ilusión, tecnología — así son los espectáculos de Vegas en 2026.", url:"https://vegas.vdvm.net/MmJP2n" },
+    { name:"VEGAS! THE SHOW",                emoji:"🎰", price:"Desde $49",  dur:"75 min",  rating:4.6, desc:"La historia de Las Vegas en un show: showgirls, Elvis, Sinatra y más. Planet Hollywood. Un clásico del Strip.", url:"https://vegas.vdvm.net/R0O77N" },
+    { name:"Criss Angel MINDFREAK",          emoji:"🎩", price:"Desde $97",  dur:"75 min",  rating:4.3, desc:"El mago más extremo del mundo en su teatro propio en Planet Hollywood. Ilusiones que desafían lo imposible.", url:"https://vegas.vdvm.net/R02RbX" },
+    { name:"Mat Franco — Magic Reinvented Nightly", emoji:"✨", price:"Desde $50", dur:"90 min", rating:4.8, desc:"El ganador de America's Got Talent. LINQ Hotel. Magia íntima y sorprendente que deja al público sin palabras.", url:"https://vegas.vdvm.net/KByxz7" },
+    { name:"V — The Ultimate Variety Show",  emoji:"🎪", price:"Desde $33",  dur:"75 min",  rating:4.3, desc:"Comedia, magia, acrobacias y más en el corazón del Strip. Planet Hollywood. El show que tiene algo para todos.", url:"https://vegas.vdvm.net/m4onrq" },
+    { name:"WOW – The Vegas Spectacular",    emoji:"💧", price:"Desde $60",  dur:"90 min",  rating:4.5, desc:"Más de 30 artistas internacionales. Acróbatas, bailarines y efectos de agua. Rio Hotel. Ganador de 4 premios Best of Las Vegas.", url:"https://vegas.vdvm.net/KByxNz" },
+    { name:"Tape Face",                      emoji:"📼", price:"Desde $60",  dur:"75 min",  rating:4.4, desc:"Como visto en America's Got Talent. MGM Grand. Una comedia física sin palabras que hace reír a todas las edades.", url:"https://vegas.vdvm.net/enkRY1" },
+    { name:"Allstars of Magic",              emoji:"🪄", price:"Desde $26",  dur:"75 min",  rating:4.0, desc:"Varios magistas en un mismo escenario. Planet Hollywood. El show perfecto para los amantes de la magia a precio accesible.", url:"https://vegas.vdvm.net/B5RK7B" },
+  ],
+
+  tours: [
+    { name:"Tour Valle de Fuego",                  emoji:"🔥", price:"Desde $99",  dur:"6 hrs",   rating:4.8, desc:"50 millas de roca roja ancestral. Traslado incluido. Petroglifos, silencio, Marte en la Tierra.", url:"https://www.getyourguide.com/las-vegas-l58/from-las-vegas-small-group-valley-of-fire-tour-t356680/?partner_id=FIT427X&utm_medium=online_publisher" },
+    { name:"Excursión al Cañón del Antílope y Horseshoe Bend en la Hora Dorada", emoji:"🏞️", price:"Desde $209", dur:"15 hrs", rating:4.7, desc:"El cañón de ranura más fotografiado del planeta, más Horseshoe Bend. Traslado incluido.", url:"https://www.getyourguide.com/las-vegas-l58/from-las-vegas-antelope-canyon-horseshoe-bend-tour-t404294/?partner_id=FIT427X&utm_medium=online_publisher" },
+    { name:"Tour panorámico de lujo por Bryce y Zion con almuerzo", emoji:"🌲", price:"Desde $219", dur:"13 hrs", rating:4.7, desc:"Dos de los parques nacionales más espectaculares de América en un día. Hoodoos y arcos rojos.", url:"https://www.getyourguide.com/las-vegas-l58/las-vegas-bryce-and-zion-national-parks-tour-with-lunch-t304518/?partner_id=FIT427X&utm_medium=online_publisher" },
+    { name:"Tour Área 51 — Día Completo",          emoji:"👽", price:"Desde $242", dur:"10 hrs",  rating:4.8, desc:"La base clasificada. El buzón negro. Traslado incluido. Creas o no — esto da escalofríos.", url:"https://www.getyourguide.com/las-vegas-l58/area-51-tour-from-las-vegas-t47582/?partner_id=FIT427X&utm_medium=online_publisher" },
+    { name:"Kayak — Cueva Esmeralda",              emoji:"🚣", price:"Desde $119", dur:"4 hrs",   rating:4.7, desc:"Kayak hacia una cueva esmeralda brillante en el Río Colorado. Traslado incluido.", url:"https://www.getyourguide.com/las-vegas-l58/from-las-vegas-emerald-cave-kayak-tour-with-hotel-pickup-t856688/?partner_id=FIT427X&utm_medium=online_publisher" },
+    { name:"Tour ATV en el Desierto",              emoji:"🏜️", price:"Desde $109", dur:"3 hrs",   rating:4.7, desc:"ATVs reales en el Mojave auténtico. Nada entre tú y el desierto. Adrenalina pura.", url:"https://www.getyourguide.com/las-vegas-l58/las-vegas-guided-las-vegas-desert-atv-tour-t417683/?partner_id=FIT427X&utm_medium=online_publisher" },
+  ],
+
+  tributos: [
+    { name:"All Shook Up — Tributo a Elvis Presley",             emoji:"🕺", price:"Desde $30",  dur:"75 min",  rating:4.7, desc:"El único show en Las Vegas dedicado exclusivamente a Elvis. Alexis Park. Con banda en vivo — los más auténticos hits del Rey.", url:"https://vegas.vdvm.net/MKRKQn" },
+    { name:"The King Comes Home — Tributo a Elvis",              emoji:"👑", price:"Desde $41",  dur:"90 min",  rating:4.7, desc:"Elvis en el mismo hotel donde actuó 636 noches consecutivas. Westgate Las Vegas. La experiencia más histórica del Strip.", url:"https://vegas.vdvm.net/5gXJVN" },
+    { name:"Piano Man — Tributo a Elton John y Billy Joel",      emoji:"🎹", price:"Desde $42",  dur:"75 min",  rating:4.7, desc:"El ganador de Broadway que fue elegido por Billy Joel en persona. Planet Hollywood. 17 grandes éxitos en un show de alta energía.", url:"https://vegas.vdvm.net/qWEY35" },
+    { name:"Australian Bee Gees",                                emoji:"🕺", price:"Desde $30",  dur:"90 min",  rating:4.8, desc:"Más de 6,500 actuaciones en 55 países. Excalibur. Dos veces elegido Mejor Tributo en Las Vegas. Disco fever guaranteed.", url:"https://vegas.vdvm.net/1raAmm" },
+    { name:"Sinatra Live! — Starring Michael Sinatra",           emoji:"🎙️", price:"Desde $55",  dur:"70 min",  rating:4.8, desc:"El nieto de Frank Sinatra en un íntimo supper club. Alexis Park. Fly Me to the Moon, My Way y los clásicos del Rat Pack.", url:"https://vegas.vdvm.net/bkDYz9" },
+    { name:"All Tina and Whitney",                               emoji:"👸", price:"Desde $20",  dur:"60 min",  rating:4.0, desc:"Dos leyendas del pop en un solo show. Lamarre Theater. La voz de Tina Turner y Whitney Houston en una noche épica.", url:"https://vegas.vdvm.net/5k1kA1" },
+    { name:"Ikons of Rock",                                      emoji:"🎸", price:"Desde $62",  dur:"90 min",  rating:4.8, desc:"Los grandes clásicos del rock en vivo. Hard Rock Cafe. Led Zeppelin, Queen, Bowie y más — tocados como nunca antes.", url:"https://vegas.vdvm.net/PzmzKN" },
+    { name:"Queen Selena — Tributo a Selena Quintanilla",        emoji:"🌹", price:"Desde $40",  dur:"70 min",  rating:4.7, desc:"Bidi Bidi Bom Bom, Como La Flor y Dreaming of You en vivo. Alexis Park. El tributo más emotivo a la Reina del Pop Latino.", url:"https://vegas.vdvm.net/AgRgmN" },
+    { name:"MJ Live — Tributo a Michael Jackson",                emoji:"🌟", price:"Desde $62",  dur:"85 min",  rating:4.7, desc:"El tributo #1 a Michael Jackson en el mundo. Harrah's Las Vegas. Bad, Billie Jean, Thriller — como si el Rey del Pop estuviera ahí.", url:"https://vegas.vdvm.net/B5R5Px" },
+    { name:"Chase Brown's Vegas Country",                        emoji:"🤠", price:"Desde $41",  dur:"90 min",  rating:4.9, desc:"El Singing Cowboy de Fremont Street. Notoriety — Neonopolis. Country clásico con energía moderna. Solo para mayores de 18.", url:"https://vegas.vdvm.net/3kmkNn" },
+    { name:"Purple Reign — THE Prince Tribute Show",             emoji:"💜", price:"Desde $27",  dur:"90 min",  rating:4.5, desc:"El tributo a Prince más aclamado de Las Vegas. Planet Hollywood. Purple Rain, Kiss, When Doves Cry — pura magia morada.", url:"https://vegas.vdvm.net/4agaN3" },
+    { name:"Carpenters Legacy",                                  emoji:"🎵", price:"Desde $44",  dur:"75 min",  rating:4.2, desc:"Seis veces ganador del Best of Las Vegas. V Theater. We've Only Just Begun, Yesterday Once More y el solo de batería de Karen.", url:"https://vegas.vdvm.net/KByB5e" },
+  ],
+
+  // ── CON FILTRO DE FECHA ───────────────────────────────────────────────
+  deportes: [
+    { name:"Circa Sportsbook — El Más Grande del Mundo", emoji:"🏆", price:"Gratis",      dur:"Cualquier hora", rating:4.9, dates:[], desc:"El sportsbook más grande del mundo. 4 pisos, 350 pantallas, asientos de estadio. Ve cualquier partido como en ningún otro lugar.", url:"https://vegas.vdvm.net/jRnEoP" },
+    { name:"Vegas Golden Knights — NHL",                 emoji:"🏒", price:"Desde $80",   dur:"3 hrs",          rating:4.9, dates:["2026-10-01","2026-12-31"], desc:"T-Mobile Arena. El equipo que convirtió Vegas en ciudad deportiva real. La atmósfera más eléctrica de la NHL.", url:"https://vegas.vdvm.net/YVq55P" },
+    { name:"Las Vegas Aces — WNBA",                      emoji:"🏀", price:"Desde $40",   dur:"2.5 hrs",        rating:4.8, dates:["2026-06-18","2026-09-22"], desc:"Campeonas de la WNBA. Michelob Ultra Arena. El baloncesto femenino más emocionante del mundo.", url:"https://vegas.vdvm.net/xJ2xx1" },
+    { name:"Las Vegas Aviators — Béisbol",               emoji:"⚾", price:"Desde $20",   dur:"3 hrs",          rating:4.7, dates:["2026-07-01","2026-09-21"], desc:"Béisbol Triple-A en Las Vegas Ballpark. Económico, familiar y muy divertido.", url:"https://vegas.vdvm.net/PzrLLe" },
+    { name:"Tour Allegiant Stadium — Raiders",           emoji:"🏟️", price:"Desde $72",   dur:"1.5 hrs",        rating:4.8, dates:[], desc:"Descubre los bastidores del estadio más tecnológico de la NFL. La casa de los Raiders de Las Vegas.", url:"https://vegas.vdvm.net/9VM05e" },
+    { name:"NBA Summer League",                          emoji:"🏀", price:"Desde $35",   dur:"Todo el día",    rating:4.7, dates:["2026-07-09","2026-07-19"], desc:"Todos los equipos de la NBA en Las Vegas. Thomas & Mack Center / UNLV. 9 al 19 de julio. Los próximos grandes del basket.", url:"https://vegas.vdvm.net/B5zj5B" },
+    { name:"NASCAR — South Point 400",                   emoji:"🏁", price:"Desde $50",   dur:"Todo el día",    rating:4.7, dates:["2026-10-04","2026-10-04"], desc:"NASCAR Cup Series. Las Vegas Motor Speedway. 4 de octubre. Coches a 300 km/h a pocos kilómetros del Strip.", url:"https://vegas.vdvm.net/6kPvkQ" },
+    { name:"NHRA Nationals — Drag Racing",               emoji:"🚗", price:"Desde $50",   dur:"Todo el día",    rating:4.7, dates:["2026-10-29","2026-11-01"], desc:"El campeonato de drag racing más rápido del mundo. Las Vegas Motor Speedway. 29 oct – 1 nov. Velocidades de más de 500 km/h.", url:"https://vegas.vdvm.net/enrDn1" },
+    { name:"PBR Team Series Championship",               emoji:"🤠", price:"Desde $50",   dur:"3 hrs",          rating:4.8, dates:["2026-11-06","2026-11-08"], desc:"La final del campeonato de bull riding. T-Mobile Arena. 6 al 8 de noviembre. Los mejores jinetes del mundo.", url:"https://vegas.vdvm.net/9Vyg44" },
+    { name:"NFR — National Finals Rodeo",                emoji:"🐎", price:"Desde $95",   dur:"3 hrs",          rating:4.9, dates:["2026-12-03","2026-12-12"], desc:"El Super Bowl del rodeo. Thomas & Mack Center. 3 al 12 de diciembre. 10 noches que transforman Las Vegas en el Oeste.", url:"https://vegas.vdvm.net/JkRze2" },
+    { name:"Formula 1 Gran Premio Las Vegas",            emoji:"🏎️", price:"Desde $500",  dur:"Todo el día",    rating:4.9, dates:["2026-11-19","2026-11-21"], desc:"F1 en el Strip de Las Vegas de noche. 19 al 21 de noviembre. El evento deportivo más espectacular del mundo — aquí mismo.", url:"https://vegas.vdvm.net/dy9xyW" },
+  ],
+
+  conciertos: [
+    { name:"Santana — An Intimate Evening: Greatest Hits Live", emoji:"🎸", price:"Desde $99",  dur:"2 hrs",   rating:4.8, dates:["2026-05-13","2026-05-14","2026-05-16","2026-05-17","2026-05-20","2026-05-21","2026-05-23","2026-05-24","2026-09-16","2026-09-17","2026-09-19","2026-09-20","2026-09-23","2026-09-24","2026-09-26","2026-09-27"], desc:"14 años de residencia. House of Blues — Mandalay Bay. Mayo y septiembre. El maestro de la guitarra en un venue íntimo único.", url:"https://vegas.vdvm.net/QY2YO9" },
+    { name:"Kelly Clarkson: Studio Sessions",              emoji:"🎤", price:"Desde $99",  dur:"2 hrs",   rating:4.7, dates:["2026-07-17","2026-07-18","2026-07-24","2026-07-25","2026-07-31","2026-08-01","2026-08-07","2026-08-08","2026-08-14","2026-08-15"], desc:"La ganadora de American Idol en el Colosseum de Caesars Palace. Julio y agosto. Stronger, Since U Been Gone y más.", url:"https://vegas.vdvm.net/k4J4jx" },
+    { name:"Scorpions — Coming Home to Las Vegas",         emoji:"🦂", price:"Desde $80",  dur:"2 hrs",   rating:4.7, dates:["2026-09-17","2026-09-19","2026-09-22","2026-09-24","2026-09-26","2026-09-29","2026-10-01","2026-10-03"], desc:"Los legendarios rockeros alemanes en Planet Hollywood. 17 sep – 3 oct. Wind of Change y Rock You Like a Hurricane en vivo.", url:"https://vegas.vdvm.net/Pzr7P6" },
+    { name:"New Kids on the Block: The Right Stuff",       emoji:"🎶", price:"Desde $79",  dur:"2 hrs",   rating:4.6, dates:["2026-06-19","2026-06-20","2026-06-24","2026-06-26","2026-06-27","2026-07-01","2026-07-03","2026-07-04","2026-10-02","2026-10-03","2026-10-07","2026-10-09","2026-10-10","2026-10-14","2026-10-16","2026-10-17"], desc:"El boy band que reinventó Vegas. Dolby Live — Park MGM. Junio, julio y octubre. Hangin' Tough nunca sonó tan bien.", url:"https://vegas.vdvm.net/B5z74y" },
+    { name:"Barry Manilow: The Hits Come Home",            emoji:"🎹", price:"Desde $69",  dur:"2 hrs",   rating:4.8, dates:["2026-07-09","2026-07-10","2026-07-11","2026-07-16","2026-07-17","2026-07-18","2026-08-20","2026-08-22","2026-08-27","2026-08-29","2026-09-17","2026-09-18","2026-09-19","2026-09-24","2026-09-25","2026-09-26","2026-10-08","2026-10-09","2026-10-10","2026-10-15","2026-10-16","2026-10-17","2026-11-05","2026-11-06","2026-11-07","2026-12-03","2026-12-04","2026-12-05","2026-12-10","2026-12-12","2026-12-17","2026-12-18","2026-12-19"], desc:"Residencia de por vida. Westgate Las Vegas. Julio a diciembre. Mandy, Copacabana y el show más vendido de la ciudad.", url:"https://vegas.vdvm.net/enknK1" },
+    { name:"Wayne Newton: Up Close and Personal",          emoji:"🎙️", price:"Desde $55",  dur:"90 min",  rating:4.6, dates:["2026-09-01","2026-12-31"], desc:"Mr. Las Vegas en el Flamingo. Septiembre a diciembre. 50 años sobre los escenarios de Vegas. Danke Schoen en persona.", url:"https://vegas.vdvm.net/ZVYVQK" },
+    { name:"Mary J. Blige: My Life, My Story",             emoji:"👑", price:"Desde $80",  dur:"2 hrs",   rating:4.8, dates:["2026-05-06","2026-10-31"], desc:"La Reina del Hip-Hop Soul en Dolby Live — Park MGM. Mayo, julio, agosto y octubre. Family Affair, No More Drama y más.", url:"https://vegas.vdvm.net/zznzN0" },
+    { name:"Rod Stewart: The Encore Shows",                emoji:"🎸", price:"Desde $99",  dur:"2 hrs",   rating:4.7, dates:["2026-05-27","2026-06-02","2026-06-04","2026-06-06","2026-08-18","2026-08-20","2026-08-22","2026-08-25","2026-08-27","2026-08-29"], desc:"El Caballero del rock en el Colosseum de Caesars Palace. Mayo, junio y agosto. Do Ya Think I'm Sexy y Tonight's the Night.", url:"https://vegas.vdvm.net/n4W4LV" },
+    { name:"LISA — Viva La LISA",                          emoji:"💃", price:"Desde $100", dur:"90 min",  rating:4.8, dates:["2026-11-13","2026-11-28"], desc:"La estrella global de BLACKPINK en el Colosseum de Caesars Palace. 13 y 14 nov + 27 y 28 nov. Coreografía y pop de otro nivel.", url:"https://vegas.vdvm.net/7X1X5Y" },
+    { name:"Rosalía — Lux Tour",                           emoji:"🌹", price:"Desde $46",  dur:"2 hrs",   rating:4.9, dates:["2026-06-27","2026-06-27"], desc:"La artista española más importante del momento. T-Mobile Arena. 27 de junio. Flamenco, avant-pop y electrónica. Sublime.", url:"https://vegas.vdvm.net/qWOgDY" },
+    { name:"Keyshia Cole",                                 emoji:"🎵", price:"Desde $93",  dur:"2 hrs",   rating:4.7, dates:["2026-06-26","2026-06-27"], desc:"La reina del R&B de soul. Encore Theater — Wynn Las Vegas. 26 y 27 de junio. Love, I Just Want It to Be Over y más clásicos.", url:"https://vegas.vdvm.net/vDE2Z3" },
+    { name:"One Night of Queen",                           emoji:"🎸", price:"Desde $50",  dur:"2 hrs",   rating:4.7, dates:["2026-07-24","2026-07-24"], desc:"El tributo internacional a Queen. Bel-Aire Backyard. 24 de julio. Bohemian Rhapsody, We Are the Champions y más en vivo.", url:"https://vegas.vdvm.net/DWRWQa" },
+  ],
+
+  sphere: [
+    { name:"The Wizard of Oz at Sphere",     emoji:"🌐", price:"Desde $114", dur:"75 min",  rating:4.5, dates:[], desc:"160,000 m² de LED. El Mago de Oz como nunca lo habías visto. Múltiples sesiones diarias. La experiencia inmersiva más espectacular del mundo.", url:"https://www.getyourguide.com/las-vegas-l58/las-vegas-the-sphere-experience-the-wizard-of-oz-t969545/?partner_id=FIT427X&utm_medium=online_publisher" },
+    { name:"Kenny Chesney — Live at Sphere", emoji:"🤠", price:"Desde $96",  dur:"2 hrs",   rating:4.8, dates:["2026-06-19","2026-07-11"], desc:"El rey del country en la Sphere. 19 jun – 11 jul. Una playa de neón y 167,000 altavoces. El show de verano perfecto.", url:"https://vegas.vdvm.net/AgRg0J" },
+    { name:"Illenium — Presents Odyssey",    emoji:"🎧", price:"Desde $99",  dur:"2 hrs",   rating:4.9, dates:["2026-07-03","2026-07-04"], desc:"El productor electrónico más ambicioso en el venue más avanzado del mundo. 3 y 4 de julio. Un viaje sensorial sin igual.", url:"https://vegas.vdvm.net/L0RKyV" },
+    { name:"Backstreet Boys — Into the Millennium", emoji:"🎤", price:"Desde $120", dur:"2 hrs", rating:4.9, dates:["2026-07-16","2026-08-29"], desc:"Los primeros artistas pop en Sphere. 16 jul – 29 ago. 21 shows. I Want It That Way en 360 grados. Nostalgia máxima.", url:"https://vegas.vdvm.net/JkL7EN" },
+    { name:"Carín León at Sphere",           emoji:"🌵", price:"Desde $80",  dur:"2 hrs",   rating:4.9, dates:["2026-09-04","2026-09-13"], desc:"El fenómeno del regional mexicano en la Sphere. 4 al 13 de septiembre. Primera cita, Que Vuelvas — música con alma en el venue del futuro.", url:"https://vegas.vdvm.net/5k15e2" },
+    { name:"Eagles — Live at Sphere",        emoji:"🦅", price:"Desde $145", dur:"2 hrs",   rating:4.9, dates:["2026-09-18","2026-11-28"], desc:"La residencia más larga en Sphere. Sep, nov. Hotel California y 50 años de hits envolviendo al público en 16K. Histórico.", url:"https://vegas.vdvm.net/DWRyZ5" },
+    { name:"Metallica — Life Burns Faster",  emoji:"🎸", price:"Desde $283", dur:"2.5 hrs", rating:4.9, dates:["2026-10-01","2026-11-07"], desc:"Los maestros del metal en Sphere. Oct y nov. No Repeat Weekend — dos noches, dos setlists diferentes. El rock más épico de la historia.", url:"https://vegas.vdvm.net/4arXkG" },
+  ],
+
+  // ── RESTAURANTES ─────────────────────────────────────────────────────
+  restaurantes: [
+    // Con Vista al Bellagio
+    { name:"Spago — Wolfgang Puck",       emoji:"🌊", cat:"Con Vista al Bellagio", tipo:"Cocina de Autor · Mediterránea", preco:"$$$",  local:"Bellagio",          rating:4.2, tags:[], desc:"Terraza al aire libre frente a las fuentes del Bellagio. Sientes el agua. Cocina mediterránea de autor con pastas frescas y platos elegantes. La mejor relación vista-precio del Bellagio.", maps:"https://www.google.com/maps/search/Spago+Wolfgang+Puck+Bellagio+Las+Vegas" },
+    { name:"Mon Ami Gabi",                emoji:"🥐", cat:"Con Vista al Bellagio", tipo:"Bistró Francés",                 preco:"$$",   local:"Paris Las Vegas",    rating:4.7, tags:["gf"], desc:"Bistró francés con terraza al nivel de la calle, justo frente a las fuentes. Crepes, steak frites y desayunos increíbles. Con viento en los shows, puedes sentir el agua desde la mesa.", maps:"https://www.google.com/maps/search/Mon+Ami+Gabi+Paris+Las+Vegas" },
+    { name:"Chéri Rooftop",               emoji:"🗼", cat:"Con Vista al Bellagio", tipo:"Cócteles · Francesa",            preco:"$$",   local:"Paris Las Vegas",    rating:4.3, tags:[], desc:"Rooftop bajo la Torre Eiffel de París con vista directa al Bellagio. Ambiente de jardín parisino de los años 50, cócteles creativos y platos franceses. El secreto mejor guardado.", maps:"https://www.google.com/maps/search/Cheri+Rooftop+Paris+Las+Vegas" },
+    { name:"Eiffel Tower Restaurant",     emoji:"🗼", cat:"Con Vista al Bellagio", tipo:"Alta Cocina Francesa",           preco:"$$$$", local:"Paris Las Vegas",    rating:4.6, tags:[], desc:"Cena en el piso 11 de la Torre Eiffel de Vegas. Vista panorámica directa a las fuentes del Bellagio. El más romántico del Strip.", maps:"https://www.google.com/maps/search/Eiffel+Tower+Restaurant+Paris+Las+Vegas" },
+    // Rooftop
+    { name:"Beer Park",                   emoji:"🍺", cat:"Rooftop",              tipo:"Cervezas · Hamburguesas",        preco:"$$",   local:"Paris Las Vegas",    rating:4.2, tags:[], desc:"Terraza abierta sobre el Strip con vista al Bellagio. Cervezas artesanales, hamburguesas y el mejor atardecer de Vegas. Ideal para ver el Strip sin gastar de más.", maps:"https://www.google.com/maps/search/Beer+Park+Paris+Las+Vegas" },
+    { name:"BrewDog Las Vegas",           emoji:"🍻", cat:"Rooftop",              tipo:"Craft Beer · Bar & Grill",       preco:"$$",   local:"Las Vegas Strip",    rating:4.7, tags:[], desc:"Rooftop bar escocés con vistas al Strip. Múltiples barras, cervezas artesanales, hamburguesas y ambiente relajado. Uno de los favoritos de los locales.", maps:"https://www.google.com/maps/search/BrewDog+Las+Vegas+Strip" },
+    { name:"Ole Red Las Vegas",           emoji:"🤠", cat:"Rooftop",              tipo:"Bar Country · Cocina Tejana",    preco:"$$",   local:"Horseshoe Las Vegas", rating:4.6, tags:[], desc:"Bar country de 3 pisos con música en vivo todas las noches. Comida tejana, karaoke, rooftop y ambiente de fiesta hasta las 4am. El favorito de los fans del country.", maps:"https://www.google.com/maps/search/Ole+Red+Las+Vegas+Horseshoe" },
+    { name:"Hard Rock Cafe",              emoji:"🎸", cat:"Rooftop",              tipo:"Hamburguesas · Rock & Roll",     preco:"$$",   local:"Las Vegas Strip",    rating:4.4, tags:[], desc:"El templo del rock and roll. Guitarras icónicas, memorabilia legendaria y hamburguesas enormes. Terraza con vista al Strip. Abierto desde 7:30am.", maps:"https://www.google.com/maps/search/Hard+Rock+Cafe+Las+Vegas+Strip" },
+    { name:"Top of the World",            emoji:"🌆", cat:"Rooftop",              tipo:"Americana · Restaurante Giratorio", preco:"$$$$", local:"The STRAT",        rating:4.3, tags:[], desc:"Cena giratoria a 264 metros de altura. Las Vegas entera bajo tus pies, una vuelta completa cada 80 minutos. Romántico, espectacular e imprescindible.", maps:"https://www.google.com/maps/search/Top+of+the+World+Restaurant+Strat+Las+Vegas" },
+    { name:"Giada",                       emoji:"🍝", cat:"Rooftop",              tipo:"Italiana",                       preco:"$$$",  local:"The Cromwell",       rating:4.6, tags:[], desc:"La chef Giada De Laurentiis trae la cocina italiana moderna al Strip. Terraza con vistas únicas al Boulevard — una de las más bonitas de Vegas.", maps:"https://www.google.com/maps/search/Giada+Restaurant+Cromwell+Las+Vegas" },
+    // Fine Dining
+    { name:"Gordon Ramsay Hell's Kitchen",emoji:"🔥", cat:"Fine Dining",          tipo:"Steakhouse · Británica",         preco:"$$$",  local:"Caesars Palace",     rating:4.7, tags:["gf"], desc:"El restaurante más famoso del Strip. Beef Wellington legendario en el teatro más icónico de Gordon Ramsay. Reserva con anticipación — siempre lleno.", maps:"https://www.google.com/maps/search/Gordon+Ramsay+Hells+Kitchen+Caesars+Palace+Las+Vegas" },
+    { name:"Joël Robuchon",               emoji:"👨‍🍳", cat:"Fine Dining",          tipo:"Alta Cocina Francesa",           preco:"$$$$", local:"MGM Grand",          rating:4.9, tags:[], desc:"El único restaurante con 3 estrellas Michelin en Las Vegas. La experiencia gastronómica más exclusiva de Nevada. Una noche que no olvidarás.", maps:"https://www.google.com/maps/search/Joel+Robuchon+MGM+Grand+Las+Vegas" },
+    { name:"STK Steakhouse",              emoji:"🥩", cat:"Fine Dining",          tipo:"Steakhouse Moderna",             preco:"$$$",  local:"Cosmopolitan",       rating:4.5, tags:[], desc:"El steakhouse más cool de Vegas. Ambiente de club, música en vivo y los mejores cortes. Ideal para grupos y celebraciones especiales.", maps:"https://www.google.com/maps/search/STK+Steakhouse+Cosmopolitan+Las+Vegas" },
+    { name:"Nobu Las Vegas",              emoji:"🍣", cat:"Fine Dining",          tipo:"Japonesa · Peruana",             preco:"$$$",  local:"Caesars Palace",     rating:4.6, tags:["gf"], desc:"El templo mundial de la cocina japonesa-peruana. Black Cod with Miso — el plato más imitado del mundo. Una visita obligatoria en el Strip.", maps:"https://www.google.com/maps/search/Nobu+Las+Vegas+Caesars+Palace" },
+    { name:"Mizumi",                      emoji:"🎋", cat:"Fine Dining",          tipo:"Japonesa · Teppanyaki",          preco:"$$$",  local:"Wynn Las Vegas",     rating:4.5, tags:[], desc:"Japonés de alta gama dentro del Wynn. Teppanyaki espectacular con vistas al lago y cascada. Sushi, mariscos y wagyu de primera. Abre solo jueves a domingo.", maps:"https://www.google.com/maps/search/Mizumi+Restaurant+Wynn+Las+Vegas" },
+    { name:"Tao Las Vegas",               emoji:"🏮", cat:"Fine Dining",          tipo:"Asiática · Japonesa · Dim Sum",  preco:"$$$",  local:"The Venetian",       rating:4.4, tags:[], desc:"El restaurante asiático más icónico del Strip. Buda gigante, dim sum, sushi y platos asiáticos de autor en un ambiente espectacular de dos pisos. Una experiencia única.", maps:"https://www.google.com/maps/search/Tao+Restaurant+Venetian+Las+Vegas" },
+    { name:"The Buffet at Wynn",          emoji:"🦞", cat:"Fine Dining",          tipo:"Buffet Premium",                 preco:"$$$",  local:"Wynn Las Vegas",     rating:4.2, tags:[], desc:"El buffet más premium de Las Vegas. Cangrejos, carnes a la parrilla, estaciones gourmet y postres de autor. Solo viernes, sábado y domingo.", maps:"https://www.google.com/maps/search/The+Buffet+Wynn+Las+Vegas" },
+    { name:"Joe's Seafood Prime Steak",   emoji:"🦀", cat:"Fine Dining",          tipo:"Stone Crab · Mariscos Frescos",  preco:"$$$$", local:"Forum Shops, Caesars", rating:4.7, tags:["gf"], desc:"Stone crab, prime steak y mariscos frescos en el corazón del Strip. Menú GF dedicado. Uno de los favoritos de temporada para celebraciones especiales.", maps:"https://www.google.com/maps/search/Joes+Seafood+Prime+Steak+Stone+Crab+Las+Vegas" },
+    // Casual
+    { name:"Grand Lux Cafe",              emoji:"✨", cat:"Casual",               tipo:"Americana · Abierto 24hrs",      preco:"$$",   local:"The Venetian",       rating:4.5, tags:["gf"], desc:"Abierto 24 horas. El restaurante del Venetian que lo tiene todo: desayunos espectaculares, pasta, pollo y los postres más irresistibles del Strip.", maps:"https://www.google.com/maps/search/Grand+Lux+Cafe+Venetian+Las+Vegas" },
+    { name:"Virgil's Real BBQ",           emoji:"🍖", cat:"Casual",               tipo:"BBQ Americano",                  preco:"$$",   local:"LINQ",               rating:4.3, tags:[], desc:"BBQ americano de verdad en el corazón del Strip. Costillas, brisket y pulled pork que se deshacen solos. Vista al High Roller incluida.", maps:"https://www.google.com/maps/search/Virgils+Real+BBQ+LINQ+Las+Vegas" },
+    { name:"The Cheesecake Factory",      emoji:"🍰", cat:"Casual",               tipo:"Americana · Internacional",      preco:"$$",   local:"Forum Shops, Caesars", rating:4.4, tags:["gf"], desc:"Menú enorme con más de 200 platos y porciones gigantes — comparte con alguien. El cheesecake de chocolate Godiva es obligatorio.", maps:"https://www.google.com/maps/search/Cheesecake+Factory+Forum+Shops+Las+Vegas" },
+    { name:"Olive Garden",                emoji:"🍝", cat:"Casual",               tipo:"Italiana",                       preco:"$$",   local:"Las Vegas Strip",    rating:4.6, tags:["gf"], desc:"Pastas, sopas y el pan de ajo más famoso de América. Justo en el Strip, precio accesible y porciones generosas. Ideal para familias.", maps:"https://www.google.com/maps/search/Olive+Garden+Las+Vegas+Strip" },
+    { name:"Yardbird",                    emoji:"🍗", cat:"Casual",               tipo:"Cocina Americana",             preco:"$$",   local:"The Venetian",       rating:4.6, tags:["gf"], desc:"El mejor pollo frito de Las Vegas — con harina de arroz, es gluten friendly. Cocina sureña reconfortante y cócteles increíbles.", maps:"https://www.google.com/maps/search/Yardbird+Venetian+Las+Vegas" },
+    { name:"Shake Shack",                 emoji:"🍔", cat:"Casual",               tipo:"Hamburguesas",                   preco:"$$",   local:"New York-New York",   rating:4.4, tags:[], desc:"La hamburguesería más de moda de América. ShackBurger jugoso, papas crinkle y milkshakes espesos. Abierto desde las 6am hasta las 4am.", maps:"https://www.google.com/maps/search/Shake+Shack+New+York+New+York+Las+Vegas" },
+    { name:"Black Tap CrazyShakes",       emoji:"🥤", cat:"Casual",               tipo:"Milkshakes · Hamburguesas",      preco:"$$",   local:"The Venetian",       rating:4.3, tags:[], desc:"Los milkshakes más absurdos del mundo — coronados con tortas enteras, algodón de azúcar y dulces. Instagram obligatorio. Abierto hasta la 1am.", maps:"https://www.google.com/maps/search/Black+Tap+Venetian+Las+Vegas" },
+    { name:"In-N-Out Burger",             emoji:"🍔", cat:"Casual",               tipo:"Hamburguesas",                   preco:"$",    local:"Las Vegas Strip",    rating:4.8, tags:["gf"], desc:"La hamburguesa más famosa del Oeste americano. Pide el menú secreto 'Animal Style'. Para GF: pide 'Protein Style' en lechuga — sin cruces.", maps:"https://www.google.com/maps/search/In-N-Out+Burger+near+Las+Vegas+Strip" },
+    { name:"Raising Cane's",              emoji:"🍗", cat:"Casual",               tipo:"Pollo Frito",                    preco:"$",    local:"Las Vegas Strip",    rating:4.6, tags:[], desc:"El pollo frito más adictivo del Strip. Solo tenders, papas, ensalada y la Cane's Sauce secreta. Abierto hasta las 4am. Rápido, sabroso y barato.", maps:"https://www.google.com/maps/search/Raising+Canes+Las+Vegas+Strip" },
+    { name:"Wicked Spoon",                emoji:"🍽️", cat:"Casual",               tipo:"Buffet Gourmet",                 preco:"$$$",  local:"Cosmopolitan",       rating:4.5, tags:["gf"], desc:"El buffet más instagrameable de Las Vegas. Estaciones gourmet, mariscos frescos y postres de autor. Opciones sin gluten disponibles. Vale cada dólar.", maps:"https://www.google.com/maps/search/Wicked+Spoon+Cosmopolitan+Las+Vegas" },
+    // Desayuno
+    { name:"Siegel's Bagelmania",         emoji:"🥯", cat:"Desayuno",             tipo:"Bagels · Deli",                  preco:"$$",   local:"Convention Center",  rating:4.6, tags:["gf"], desc:"El deli más querido de Las Vegas. Bagels frescos horneados cada mañana con docenas de cream cheese. Tienen bagels sin gluten. Abre a las 6am.", maps:"https://www.google.com/maps/search/Siegels+Bagelmania+Las+Vegas" },
+    { name:"Urth Caffé",                  emoji:"☕", cat:"Desayuno",             tipo:"Café Orgánico",                  preco:"$$",   local:"Wynn Las Vegas",     rating:4.2, tags:[], desc:"El café más instagrameable de Las Vegas. Dentro del Wynn, con jardín interior, fuente y ambiente europeo. Lattes de pistacho y desayunos orgánicos.", maps:"https://www.google.com/maps/search/Urth+Caffe+Wynn+Las+Vegas" },
+    { name:"Denny's",                     emoji:"🍳", cat:"Desayuno",             tipo:"Desayuno Americano",             preco:"$",    local:"Las Vegas Strip",    rating:4.3, tags:["gf"], desc:"Abierto 24 horas. El desayuno americano clásico: pancakes, huevos y café sin límite. Menú GF disponible — pide omelets y skillets. Cocina compartida, informa al servidor.", maps:"https://www.google.com/maps/search/Denny's+near+me+Las+Vegas+Strip" },
+    { name:"Hash House A Go Go",          emoji:"🥞", cat:"Desayuno",             tipo:"Desayuno Gigante",               preco:"$$",   local:"The LINQ",           rating:4.8, tags:[], desc:"Las porciones más ridículas de Vegas — los pancakes son del tamaño de tu cara. Pollo con waffles legendario. Llega temprano porque la fila crece rápido.", maps:"https://www.google.com/maps/search/Hash+House+A+Go+Go+LINQ+Las+Vegas" },
+    { name:"Eggslut",                     emoji:"🥚", cat:"Desayuno",             tipo:"Sándwiches de Huevo",            preco:"$$",   local:"Cosmopolitan",       rating:4.3, tags:["gf"], desc:"El sandwich de huevo más famoso de Instagram. Brioche suave, huevos sedosos y las truffle hashbrowns más adictivas del Strip. Pide el omelet bowl — es GF.", maps:"https://www.google.com/maps/search/Eggslut+Cosmopolitan+Las+Vegas" },
+    { name:"Peppermill Restaurant",       emoji:"☕", cat:"Desayuno",             tipo:"Diner Americano",                preco:"$$",   local:"Las Vegas Strip",    rating:4.5, tags:[], desc:"El diner más icónico de Las Vegas desde 1972. Porciones enormes, ambiente retro de los 70s y el Fireside Lounge de fuego vivo. Abierto 24 horas los fines de semana.", maps:"https://www.google.com/maps/search/Peppermill+Restaurant+Las+Vegas" },
+    { name:"Black Bear Diner",            emoji:"🐻", cat:"Desayuno",             tipo:"Diner Familiar",                 preco:"$",    local:"Las Vegas Strip",    rating:4.5, tags:["gf"], desc:"Diner familiar con porciones gigantes. Omelets cocinados en sartén separada (GF seguro), pan GF Ancient Grain disponible bajo pedido. Desayuno todo el día.", maps:"https://www.google.com/maps/search/Black+Bear+Diner+Las+Vegas" },
+    { name:"IHOP",                        emoji:"🥞", cat:"Desayuno",             tipo:"Pancakes · Desayuno",            preco:"$",    local:"Las Vegas Strip",    rating:4.4, tags:["gf"], desc:"Menú GF dedicado con pancakes y waffles sin gluten. Abierto 24 horas. Prueba el Tres Leches off-menu que todos piden.", maps:"https://www.google.com/maps/search/IHOP+near+Las+Vegas+Strip" },
+    // Famosos de la TV
+    { name:"Big Chicken — Shaquille O'Neal", emoji:"🏀", cat:"Famosos de la TV",  tipo:"Pollo Frito",                    preco:"$$",   local:"Paradise Rd",        rating:4.6, tags:[], desc:"El restaurante del legendario Shaquille O'Neal. Sándwich de pollo doble empanado, mac & cheese y banana pudding. El más querido de los famosos de Vegas.", maps:"https://www.google.com/maps/search/Big+Chicken+Shaquille+ONeal+Las+Vegas" },
+    { name:"Guy Fieri's Vegas Kitchen",   emoji:"🔥", cat:"Famosos de la TV",    tipo:"Americana Extrema",              preco:"$$",   local:"LINQ",               rating:3.9, tags:[], desc:"El rey del Food Network en el Strip. Trash Can Nachos, mac & cheese burgers y alas de pollo con whisky. Comida americana exagerada — exactamente como en TV.", maps:"https://www.google.com/maps/search/Guy+Fieri+Vegas+Kitchen+LINQ+Las+Vegas" },
+    { name:"Carlo's Bakery — Cake Boss",  emoji:"🎂", cat:"Famosos de la TV",    tipo:"Pastelería Italiana",            preco:"$$",   local:"The Venetian",       rating:3.7, tags:[], desc:"La famosa panadería del Cake Boss Buddy Valastro de TLC. Lobster Tail, cannolis, Rainbow Cake y pasteles de autor. El lugar más fotografiado del Venetian.", maps:"https://www.google.com/maps/search/Carlos+Bakery+Venetian+Las+Vegas" },
+    { name:"Buddy V's Ristorante",        emoji:"🍝", cat:"Famosos de la TV",    tipo:"Italiana · Pasta",               preco:"$$$",  local:"The Venetian",       rating:4.5, tags:[], desc:"El restaurante italiano de Buddy Valastro (Cake Boss). Mozzarella estirada en vivo, pasta hecha a mano y la pizza más auténtica del Strip. Un show en sí mismo.", maps:"https://www.google.com/maps/search/Buddy+Vs+Ristorante+Venetian+Las+Vegas" },
+    { name:"Gordon Ramsay Hell's Kitchen (TV)", emoji:"👨‍🍳", cat:"Famosos de la TV", tipo:"Steakhouse · Hell's Kitchen", preco:"$$$", local:"Caesars Palace",    rating:4.7, tags:["gf"], desc:"El restaurante de la serie Hell's Kitchen de Fox. Beef Wellington, pan de salmón y el menú exacto del programa. Reserva con semanas de anticipación.", maps:"https://www.google.com/maps/search/Gordon+Ramsay+Hells+Kitchen+Caesars+Palace+Las+Vegas" },
+    { name:"Amalfi — Bobby Flay",         emoji:"🐟", cat:"Famosos de la TV",    tipo:"Italiana · Mariscos",            preco:"$$$",  local:"Caesars Palace",     rating:4.4, tags:[], desc:"El campeón de Iron Chef trae la Costa Amalfitana al Strip. Pescado fresco del día, pasta y mariscos con técnica italiana auténtica. Abre solo a la cena.", maps:"https://www.google.com/maps/search/Amalfi+Bobby+Flay+Caesars+Palace+Las+Vegas" },
+    { name:"Bazaar Meat — José Andrés",   emoji:"🥩", cat:"Famosos de la TV",    tipo:"Carnes · Cocina de Vanguardia",  preco:"$$$$", local:"The Venetian",       rating:4.5, tags:[], desc:"El chef español más famoso del mundo — conocido por su disputa con Trump — trae su churrasco de autor al Venetian. Cotton candy foie gras, vaca vieja y espectáculo total.", maps:"https://www.google.com/maps/search/Bazaar+Meat+Jose+Andres+Venetian+Las+Vegas" },
+    // Confeitaria
+    { name:"Hershey's Chocolate World",   emoji:"🍫", cat:"Confeitaria",          tipo:"Chocolates",                     preco:"$",    local:"New York-New York",   rating:4.5, tags:[], desc:"El mundo del chocolate de Hershey's — como entrar a la fábrica de Willy Wonka. Chocolates, helados y souvenirs. Perfecto para llevar de regalo. Abierto hasta la 1am.", maps:"https://www.google.com/maps/search/Hersheys+Chocolate+World+Las+Vegas" },
+    { name:"Donutique",                   emoji:"🍩", cat:"Confeitaria",          tipo:"Donuts Gourmet",                 preco:"$$",   local:"The Venetian",       rating:4.2, tags:[], desc:"Donuts gourmet europeos en el corazón del Venetian. Cada pieza es una obra de arte: tiramisu, pistacho, crema de limón. Opciones veganas y sin gluten.", maps:"https://www.google.com/maps/search/Donutique+Venetian+Las+Vegas" },
+    { name:"Zeppola Cafe",                emoji:"🥐", cat:"Confeitaria",          tipo:"Croissants · Café",              preco:"$$",   local:"The Venetian",       rating:4.3, tags:[], desc:"El café viral de la Piazza San Marco en el Venetian. Los Cube Croissants y Rolly Croissants son los más fotografiados de Las Vegas. Receta familiar italiana desde las 4am.", maps:"https://www.google.com/maps/search/Zeppola+Cafe+Venetian+Las+Vegas" },
+    { name:"Dominique Ansel",             emoji:"🌸", cat:"Confeitaria",          tipo:"Pastelería Francesa",            preco:"$$$",  local:"Paris Las Vegas",    rating:4.0, tags:[], desc:"El inventor del Cronut. Pastelería de autor francesa con creaciones únicas cada temporada. El Cookie Shot (llenado con leche al momento) es imprescindible.", maps:"https://www.google.com/maps/search/Dominique+Ansel+Paris+Las+Vegas" },
+    // Vegano
+    { name:"Tacotarian",                  emoji:"🌮", cat:"Vegano",               tipo:"Tacos Veganos",                  preco:"$",    local:"Planet Hollywood",   rating:4.6, tags:["gf","vegan"], desc:"100% plant-based. Los mejores tacos veganos del Strip — birria, chorizo y al pastor sin carne que engañan hasta a los carnívoros. Tortillas de maíz GF.", maps:"https://www.google.com/maps/search/Tacotarian+Las+Vegas" },
+    { name:"True Food Kitchen",           emoji:"🥗", cat:"Vegano",               tipo:"Saludable · Orgánico",           preco:"$$",   local:"Forum Shops, Caesars", rating:4.5, tags:["gf","vegan"], desc:"Cocina saludable y orgánica con menú amplio vegano y GF. Edamame dumplings, bowls de quinoa y hamburguesas plant-based. En el Forum Shops de Caesars.", maps:"https://www.google.com/maps/search/True+Food+Kitchen+Las+Vegas+Forum+Shops" },
+    { name:"Nacho Daddy",                 emoji:"🧀", cat:"Vegano",               tipo:"Mexicano Vegano",                preco:"$$",   local:"Las Vegas Strip",    rating:4.4, tags:["vegan"], desc:"Bar mexicano con menú vegano completo — nachos, burritos y chimichanga de pollo plant-based. Ambiente de sports bar, abierto hasta las 3am.", maps:"https://www.google.com/maps/search/Nacho+Daddy+Las+Vegas" },
+    { name:"Crossroads Kitchen",          emoji:"🌿", cat:"Vegano",               tipo:"Alta Cocina Vegana",             preco:"$$$",  local:"Resorts World",      rating:4.5, tags:["gf","vegan"], desc:"El único restaurante vegano fine dining en el Strip. Chef Tal Ronnen. Calamares veganos, pasta carbonara plant-based y brunch buffet los domingos. Impresionante.", maps:"https://www.google.com/maps/search/Crossroads+Kitchen+Resorts+World+Las+Vegas" },
+  ],
+
+  // ── CHURRASCARIAS ────────────────────────────────────────────────────
+  churrascarias: [
+    { name:"Galpão Gaucho",   emoji:"🏆", cat:"Churrascaria", tipo:"Churrasco Brasileño", preco:"$$$",  local:"Las Vegas Strip",        rating:4.8, desc:"La mejor churrascaria del Strip. 18 cortes de la parrilla incluyendo el legendario Golden Steak® bañado en oro. Barra de ensaladas con 45 opciones. Servicio impecable, ambiente elegante.", maps:"https://www.google.com/maps/search/Galpao+Gaucho+Las+Vegas" },
+    { name:"Fogo de Chão",    emoji:"🔥", cat:"Churrascaria", tipo:"Churrasco Brasileño", preco:"$$$",  local:"The Venetian",           rating:4.7, desc:"Picanha, fraldinha y filet mignon asados en brasa abierta y cortados en la mesa por gauchos. Dos niveles, parrilla a la vista y el Market Table más completo de Vegas.", maps:"https://www.google.com/maps/search/Fogo+de+Chao+Venetian+Las+Vegas" },
+    { name:"Texas de Brazil",  emoji:"🤠", cat:"Churrascaria", tipo:"Churrasco Brasileño", preco:"$$$",  local:"Town Square",            rating:4.5, desc:"Churrascaria al estilo texano-brasileño con cortes de res, cerdo, cordero, pollo y chorizo a voluntad. Barra de ensaladas con más de 50 opciones. Ideal para grupos grandes.", maps:"https://www.google.com/maps/search/Texas+de+Brazil+Las+Vegas+Town+Square" },
+  ],
+};
+
+const CAT_META = {
+  atracciones:  { label:"Atracciones",         emoji:"🎡", destaque:"En Destaque",    hasFecha:false },
+  sphere:       { label:"The Sphere",          emoji:"🌐", destaque:"En Destaque",    hasFecha:true  },
+  conciertos:   { label:"Conciertos",          emoji:"🎤", destaque:"En Destaque",    hasFecha:true  },
+  deportes:     { label:"Deportes",            emoji:"🏆", destaque:"En Destaque",    hasFecha:true  },
+  shows:        { label:"Shows",               emoji:"🎭", destaque:"En Destaque",    hasFecha:false },
+  tributos:     { label:"Tributos",            emoji:"🎵", destaque:"En Destaque",    hasFecha:false },
+  tours:        { label:"Tours",               emoji:"🏔️", destaque:"En Destaque",    hasFecha:false },
+  nightlife:    { label:"Fiestas & Nightlife", emoji:"🔥", destaque:"Mayores de 21",  hasFecha:false },
+  experiencias: { label:"Experiencias",        emoji:"⚡", destaque:"En Destaque",    hasFecha:false },
+  ninos:        { label:"Con niños",           emoji:"👨‍👩‍👧", destaque:"Familia",       hasFecha:false },
+  restaurantes: { label:"Bares & Restaurantes",emoji:"🍻", destaque:"Comer & Beber",  hasFecha:false },
+};
+
+
+// ─── COLORES POR SUBCATEGORÍA DE RESTAURANTE ─────────────────────────────
+const CAT_COLORS = {
+  "Con Vista al Bellagio": { bg:"rgba(99,179,237,0.18)",  border:"rgba(99,179,237,0.6)",  text:"#90cdf4" },
+  "Rooftop":               { bg:"rgba(251,146,60,0.18)",  border:"rgba(251,146,60,0.6)",  text:"#fdba74" },
+  "Fine Dining":           { bg:"rgba(255,215,0,0.15)",   border:"rgba(255,215,0,0.6)",   text:"#ffd700" },
+  "Casual":                { bg:"rgba(104,211,145,0.15)", border:"rgba(104,211,145,0.6)", text:"#6ee7a0" },
+  "Desayuno":              { bg:"rgba(246,173,85,0.15)",  border:"rgba(246,173,85,0.6)",  text:"#fbbf6a" },
+  "Churrascaria":          { bg:"rgba(220,38,38,0.15)",   border:"rgba(220,38,38,0.6)",   text:"#fca5a5" },
+  "Famosos de la TV":      { bg:"rgba(167,139,250,0.15)", border:"rgba(167,139,250,0.6)", text:"#c4b5fd" },
+  "Confeitaria":           { bg:"rgba(244,114,182,0.15)", border:"rgba(244,114,182,0.6)", text:"#f9a8d4" },
+  "Vegano":                { bg:"rgba(52,211,153,0.15)",  border:"rgba(52,211,153,0.6)",  text:"#6ee7b7" },
+};
+
+// SUBCATS emojis atualizados
+const SUBCATS = [
+  { id:"Desayuno",          label:"Desayuno",        emoji:"🍳" },
+  { id:"Casual",            label:"Casual",          emoji:"🍔" },
+  { id:"Con Vista al Bellagio", label:"Vista Bellagio", emoji:"⛲" },
+  { id:"Churrascaria",      label:"Churrascaria",    emoji:"🥩" },
+  { id:"Rooftop",           label:"Rooftop",         emoji:"🏙️" },
+  { id:"Fine Dining",       label:"Fine Dining",     emoji:"🍽️" },
+  { id:"Famosos de la TV",  label:"Famosos TV",      emoji:"📺" },
+  { id:"Confeitaria",       label:"Dulces & Pasteles",emoji:"🍰" },
+  { id:"Vegano",            label:"Vegano",          emoji:"🌿" },
 ];
 
-const FREE_EXPERIENCES = [
-  { id:"f1", name:"Bellagio Fountains at Night", loc:"Bellagio Hotel", time:"After 8pm", emoji:"⛲", desc:"Every 15-30 minutes after dark. 1,000 jets of water choreographed to music. Free. Unmissable.", url:"https://vegas.vdvm.net/oq11jb" },
-  { id:"f3", name:"Fremont Street LED Experience", loc:"Downtown Vegas", time:"After dark", emoji:"💡", desc:"A 1,500-foot LED canopy with free shows every hour. The Vegas the Strip doesn't want you to see.", url:"https://vegas.vdvm.net/9gR3A3" },
-  { id:"f5", name:"Grand Canal Shoppes — The Venetian", loc:"The Venetian", time:"Anytime", emoji:"🛶", desc:"Venice reconstructed inside a hotel. Walk it for free. Watch the gondolas for free. It works.", url:"https://vegas.vdvm.net/MmJJG3" },
-  { id:"f10", name:"Welcome to Las Vegas Sign", loc:"South Strip", time:"Golden Hour", emoji:"🪧", desc:"The photo. Golden hour makes it transcendent. Get there 30 minutes before sunset.", url:"https://vegas.vdvm.net/DKPrk2" },
-  { id:"f6", name:"Pinball Hall of Fame", loc:"South Strip", time:"Anytime", emoji:"🎮", desc:"500+ vintage machines from the 1950s onward. All playable for quarters. Totally free to enter.", url:"https://vegas.vdvm.net/WqnZa3", tags:["budget"] },
-  { id:"f2", name:"Bellagio Conservatory & Garden", loc:"Bellagio Hotel", time:"Anytime", emoji:"🌸", desc:"A 14,000 sq ft indoor garden that changes 5 times a year. Currently the most beautiful room in Vegas.", url:"https://vegas.vdvm.net/Org2RN" },
-  { id:"f9", name:"Fall of Atlantis — Caesars", loc:"Forum Shops", time:"Every hour", emoji:"🏛️", desc:"A free animatronic show inside Caesars Forum Shops. Surprisingly spectacular.", url:"https://vegas.vdvm.net/g1jjyO", tags:["budget"] },
-  { id:"f4", name:"Flamingo Wildlife Habitat", loc:"Flamingo Hotel", time:"Morning", emoji:"🦩", desc:"Real flamingos living inside a casino resort. Free to visit. Great for families and kids — surreal at 8am.", tags:["family","kids"], url:"https://vegas.vdvm.net/6eOKEq" },
-  { id:"f7", name:"M&M's World Las Vegas", loc:"Las Vegas Blvd", time:"Anytime", emoji:"🍬", desc:"4 floors of chocolate chaos. Free to enter. The world's largest M&M's store.", url:"https://vegas.vdvm.net/JzGaLE", tags:["family","kids"] },
-  { id:"f8", name:"Hershey's Chocolate World", loc:"New York-New York", time:"Anytime", emoji:"🍫", desc:"Inside a casino. A giant Hershey's experience — free to browse, optional to buy.", url:"https://vegas.vdvm.net/rQZ9R5", tags:["family","kids"] },
-];
-
-// ─── HOTELS ───────────────────────────────────────────────────────────────
-const HOTELS = [
-  { name:"Wynn Las Vegas", stars:5, price:"$250–$600/night", feature:"Best spa & pool on Strip", url:"https://vegas.vdvm.net/n4RmL9", profiles:["luxury","couple","girls","work"], tiers:["vip"], location:"north-south", nosmoking:false, kitchen:false },
-  { name:"Bellagio", stars:5, price:"$200–$500/night", feature:"Iconic fountains, fine dining", url:"https://vegas.vdvm.net/OY9Per", profiles:["luxury","couple","girls","family","first-timer","work"], tiers:["high","vip"], location:"center", nosmoking:false, kitchen:false },
-  { name:"The Venetian Resort", stars:5, price:"$200–$450/night", feature:"Gondola rides, huge suites", url:"https://vegas.vdvm.net/y200Jv", profiles:["luxury","couple","girls","first-timer"], tiers:["high","vip"], location:"center", nosmoking:false, kitchen:false },
-  { name:"Cosmopolitan", stars:5, price:"$180–$500/night", feature:"Hippest hotel, best vibe", url:"https://vegas.vdvm.net/POPzZX", profiles:["luxury","couple","girls","first-timer"], tiers:["high","vip"], location:"center", nosmoking:false, kitchen:false },
-  { name:"Caesars Palace", stars:5, price:"$150–$400/night", feature:"Most iconic Vegas hotel", url:"https://vegas.vdvm.net/QYNkjx", profiles:["luxury","couple","first-timer","work"], tiers:["high","vip"], location:"center", nosmoking:false, kitchen:false },
-  { name:"Fontainebleau Las Vegas", stars:5, price:"$200–$600/night", feature:"Newest 5-star, stunning design", url:"https://vegas.vdvm.net/5kM4k3", profiles:["luxury","couple","girls","work"], tiers:["vip"], location:"north-south", nosmoking:false, kitchen:false },
-  { name:"Trump International Hotel", stars:5, price:"$150–$400/night", feature:"No casino, suites with kitchen", url:"https://vegas.vdvm.net/GmzdA6", profiles:["luxury","couple","family","work"], tiers:["high","vip"], location:"off-strip", nosmoking:true, kitchen:true },
-  { name:"Aria Resort & Casino", stars:5, price:"$180–$450/night", feature:"Modern luxury, best casino tech", url:"https://vegas.vdvm.net/MKDrA2", profiles:["luxury","work"], tiers:["high","vip"], location:"center", nosmoking:false, kitchen:false },
-  { name:"MGM Grand", stars:4, price:"$100–$300/night", feature:"Huge casino, great pools", url:"https://vegas.vdvm.net/DWb4Lo", profiles:["first-timer","work"], tiers:["mid","high"], location:"center", nosmoking:false, kitchen:false },
-  { name:"Mandalay Bay", stars:4, price:"$120–$350/night", feature:"Beach pool, lazy river — away from the Strip chaos", url:"https://vegas.vdvm.net/WqmQxO", profiles:["couple","girls","family","work"], tiers:["mid","high"], location:"north-south", nosmoking:false, kitchen:false },
-  { name:"The Signature at MGM Grand", stars:4, price:"$120–$350/night", feature:"All suites, separate entrance, no casino noise", url:"https://vegas.vdvm.net/rQ6o4d", profiles:["couple","family","work"], tiers:["mid","high"], location:"center", nosmoking:true, kitchen:true },
-  { name:"Hilton Grand Vacations Club Elara", stars:4, price:"$130–$300/night", feature:"Suite with full kitchen, Center Strip", url:"https://vegas.vdvm.net/PzrobX", profiles:["couple","family"], tiers:["mid","high"], location:"center", nosmoking:true, kitchen:true },
-  { name:"Park MGM", stars:4, price:"$80–$200/night", feature:"Only 100% smoke-free casino on Strip", url:"https://vegas.vdvm.net/L0x90L", profiles:["couple","first-timer","work"], tiers:["mid","high"], location:"center", nosmoking:true, kitchen:false },
-  { name:"Vdara Hotel & Spa", stars:4, price:"$100–$250/night", feature:"No casino, quiet, suites with kitchen", url:"https://vegas.vdvm.net/xk4DEx", profiles:["couple","family","work"], tiers:["mid","high"], location:"center", nosmoking:true, kitchen:true },
-  { name:"SAHARA Las Vegas", stars:4, price:"$70–$180/night", feature:"Great pool, energetic vibe, North Strip", url:"https://vegas.vdvm.net/E0z4qe", profiles:["girls","first-timer"], tiers:["budget","mid"], location:"north-south", nosmoking:false, kitchen:false },
-  { name:"The LINQ Hotel", stars:3, price:"$60–$150/night", feature:"Steps from High Roller — center of everything", url:"https://vegas.vdvm.net/Gb0Lbr", profiles:["couple","girls","first-timer"], tiers:["budget","mid"], location:"center", nosmoking:false, kitchen:false },
-  { name:"Paris Las Vegas", stars:4, price:"$80–$200/night", feature:"Eiffel Tower views, romantic location", url:"https://vegas.vdvm.net/xJ21JR", profiles:["couple","girls","first-timer"], tiers:["mid","high"], location:"center", nosmoking:false, kitchen:false },
-  { name:"Flamingo Las Vegas", stars:3, price:"$50–$130/night", feature:"Wildlife habitat, classic Vegas — best budget Strip hotel", url:"https://vegas.vdvm.net/1GD49x", profiles:["couple","girls","first-timer","budget"], tiers:["budget","mid"], location:"center", nosmoking:false, kitchen:false },
-  { name:"Jockey Club", stars:3, price:"$80–$180/night", feature:"Kitchen suites, steps from Bellagio", url:"https://vegas.vdvm.net/m5WVRy", profiles:["couple","family","first-timer","work"], tiers:["mid","high"], location:"center", nosmoking:true, kitchen:true },
-  { name:"Horseshoe Las Vegas", stars:3, price:"$50–$120/night", feature:"Central Strip, unbeatable value", url:"https://vegas.vdvm.net/Pzr5aX", profiles:["family","first-timer","work","budget"], tiers:["budget","mid"], location:"center", nosmoking:false, kitchen:false },
-  { name:"New York-New York", stars:3, price:"$60–$150/night", feature:"Roller coaster, fun atmosphere — great for families", url:"https://vegas.vdvm.net/aNxEKb", profiles:["family","first-timer","work","budget"], tiers:["budget","mid"], location:"center", nosmoking:false, kitchen:false },
-];
-
-// ─── QUESTIONS ────────────────────────────────────────────────────────────
-const QUESTIONS = [
-  { id:"tripType", question:"Who's joining you in Vegas?", subtitle:"This shapes your entire experience", cols:3, multi:false,
-    options:[
-      {v:"solo",label:"Flying Solo",emoji:"🕶️",desc:"Just me — zero compromises"},
-      {v:"couple",label:"With My Partner",emoji:"❤️",desc:"Making memories together"},
-      {v:"group",label:"The Squad",emoji:"🥂",desc:"The more the wilder"},
-      {v:"family",label:"Family Trip",emoji:"👨‍👩‍👧",desc:"Everyone has fun"},
-      {v:"bachelorette",label:"Bachelorette / Bachelor",emoji:"👰",desc:"Epic last night of freedom"},
-      {v:"work",label:"Work Trip",emoji:"💼",desc:"Here for business, staying for Vegas"},
-    ]},
-  { id:"groupGender", question:"What's your group like?", subtitle:"Helps us personalize your experience", cols:2, multi:false,
-    familyVersion: true,
-    options:[
-      {v:"girls",label:"Girls / Women",emoji:"👯‍♀️",desc:"Girls night — we run this city"},
-      {v:"guys",label:"Guys / Men",emoji:"🤙",desc:"Boys trip — no rules apply"},
-      {v:"lgbtq",label:"LGBTQ+",emoji:"🏳️‍🌈",desc:"Proud, loud & ready for Vegas"},
-      {v:"mixed",label:"Mixed Group",emoji:"👫",desc:"Everyone together — all welcome"},
-    ],
-    coupleOptions:[
-      {v:"mixed",label:"Man & Woman",emoji:"👫",desc:"Classic couple — Vegas is yours"},
-      {v:"lgbtq",label:"LGBTQ+",emoji:"🏳️‍🌈",desc:"Proud & ready for Vegas"},
-    ],
-    soloOptions:[
-      {v:"girls",label:"Woman",emoji:"👩",desc:"Traveling solo as a woman"},
-      {v:"guys",label:"Man",emoji:"👨",desc:"Traveling solo as a man"},
-      {v:"lgbtq",label:"LGBTQ+",emoji:"🏳️‍🌈",desc:"Proud & ready for Vegas"},
-    ],
-    familyOptions:[
-      {v:"under6",label:"Little Ones",emoji:"🧸",desc:"Under 6 — animals, rides & easy fun"},
-      {v:"kids",label:"Kids",emoji:"🧒",desc:"Ages 6–12 — adventures & discovery"},
-      {v:"teens",label:"Teens",emoji:"🧑",desc:"Ages 13–17 — thrills & cool experiences"},
-      {v:"mixedages",label:"Mixed Ages",emoji:"👨‍👩‍👧‍👦",desc:"Different ages — something for everyone"},
-    ]},
-  { id:"vibe", question:"What's your Vegas vibe?", subtitle:"Pick up to 2 — your itinerary covers both", cols:3, multi:true, max:2,
-    options:[
-      {v:"dark",label:"Dark & Mysterious",emoji:"🌑",desc:"Ghost tours, hidden bars & the dark side of Vegas"},
-      {v:"luxury",label:"Pure Luxury",emoji:"💎",desc:"Only the best, always"},
-      {v:"adventure",label:"Thrill Seeker",emoji:"⚡",desc:"Adrenaline & rush"},
-      {v:"casino",label:"Casino & Gambling",emoji:"🎲",desc:"The game within the game"},
-      {v:"nightout",label:"Night Out",emoji:"🥃",desc:"Clubs, shows & no rules"},
-      {v:"first-timer",label:"First Time in Vegas",emoji:"🎰",desc:"The iconic, done perfectly"},
-    ],
-    lgbtqOptions:[
-      {v:"dark",label:"Dark & Mysterious",emoji:"🌑",desc:"Ghost tours, hidden bars & the dark side of Vegas"},
-      {v:"luxury",label:"Pure Luxury",emoji:"💎",desc:"Only the best, always"},
-      {v:"adventure",label:"Thrill Seeker",emoji:"⚡",desc:"Adrenaline & rush"},
-      {v:"casino",label:"Gambling & Sports",emoji:"🎲",desc:"Sportsbooks, live games & casino action"},
-      {v:"nightout",label:"Wild Night Out",emoji:"🥂",desc:"Clubs, shows & no rules"},
-      {v:"first-timer",label:"First Time in Vegas",emoji:"🎰",desc:"The iconic, done perfectly"},
-    ],
-    familyMulti: true, familyMax: 2,
-    familyOptions:[
-      {v:"thrill",label:"Thrill & Adventure",emoji:"⚡",desc:"Rides, ATV & outdoor thrills"},
-      {v:"show",label:"Shows & Entertainment",emoji:"🎭",desc:"Cirque, magic & live shows"},
-      {v:"explore",label:"Explore & Discover",emoji:"🔭",desc:"Parks, museums & new experiences"},
-      {v:"relaxed",label:"Relaxed & Easy",emoji:"😎",desc:"Low-key fun without exhaustion"},
-    ],
-    girlsOptions:[
-      {v:"girlswild",label:"Wild Night Out",emoji:"🥂",desc:"Clubs, shows & no rules"},
-      {v:"girlsspa",label:"Pamper & Relax",emoji:"💆",desc:"Spa days & luxury experiences"},
-      {v:"girlsadventure",label:"Adventure Girls",emoji:"⚡",desc:"Thrills, outdoors & adrenaline"},
-      {v:"girlsmix",label:"Mix of Everything",emoji:"🔥",desc:"A little bit of it all"},
-    ],
-    guysOptions:[
-      {v:"dark",label:"Dark & Mysterious",emoji:"🌑",desc:"Ghost tours, hidden bars & the dark side of Vegas"},
-      {v:"adventure",label:"Thrill Seeker",emoji:"⚡",desc:"Adrenaline & rush"},
-      {v:"casino",label:"Gambling & Sports",emoji:"🎲",desc:"Sportsbooks, live games & casino action"},
-      {v:"nightout",label:"Night Out",emoji:"🥃",desc:"Clubs, shows & no rules"},
-      {v:"first-timer",label:"First Time in Vegas",emoji:"🎰",desc:"The iconic, done perfectly"},
-    ]},
-  { id:"interest", question:"What's calling you to Vegas?", subtitle:"", cols:2, multi:true, max:3,
-    options:[
-      {v:"show",label:"Shows & Live Entertainment",emoji:"🎭",desc:"Cirque, Sphere, concerts & tributes"},
-      {v:"nightlife",label:"Wild Nights Out",emoji:"🥂",desc:"Clubs, bar crawls & pool parties"},
-      {v:"nature",label:"Nature & National Parks",emoji:"🏜️",desc:"Grand Canyon, deserts & outdoors"},
-      {v:"wellness",label:"Spa & Wellness",emoji:"💆",desc:"Rest, reset & luxury spa days"},
-      {v:"unique",label:"Unique & Hidden Gems",emoji:"🔮",desc:"Things only possible in Vegas"},
-      {v:"sports",label:"Sports & Action",emoji:"🏆",desc:"Live games & sportsbooks"},
-      {v:"adventure",label:"Thrill & Adventure",emoji:"⚡",desc:"ATV, helicopter & adrenaline"},
-      {v:"luxury",label:"Pure Luxury",emoji:"💎",desc:"Only the best — no compromises"},
-    ]},
-  { id:"alreadyInVegas", question:"Are you already in Vegas?", subtitle:"This helps us tailor your itinerary perfectly", cols:2, multi:false,
-    options:[
-      {v:"already",label:"I'm Here Now! 🎰",emoji:"✈️",desc:"Already in Vegas — skip the hotel search"},
-      {v:"planning",label:"Planning My Trip",emoji:"🗓️",desc:"Coming soon — I need hotel recommendations"},
-    ]},
-  { id:"hotelPref", question:"What matters most in your hotel?", subtitle:"We'll match you with the right property", cols:2, multi:false,
-    options:[
-      {v:"price",label:"⭐⭐⭐ Strip · Budget",emoji:"",desc:"Center of the action, smart price"},
-      {v:"location",label:"⭐⭐⭐⭐ Strip · Mid-Range",emoji:"",desc:"Great location, great quality"},
-      {v:"luxury",label:"⭐⭐⭐⭐⭐ Strip · Luxury",emoji:"",desc:"The full Vegas experience"},
-      {v:"quiet",label:"🧘 Quiet & Peaceful",emoji:"",desc:"Away from casino noise, actually sleep"},
-      {v:"nosmoking",label:"🚭 Smoke-Free Only",emoji:"",desc:"Non-negotiable — 100% clean air"},
-      {v:"kitchen",label:"🍳 Suite with Kitchen",emoji:"",desc:"Cook your own meals, ideal for families"},
-    ]},
-  { id:"season", question:"When are you visiting?", subtitle:"Vegas transforms completely with each season", cols:2, multi:false,
-    options:[
-      {v:"winter",label:"Winter",emoji:"❄️",desc:"Dec – Feb · Cool nights, Mt. Charleston snow"},
-      {v:"spring",label:"Spring",emoji:"🌸",desc:"Mar – May · Perfect weather"},
-      {v:"summer",label:"Summer",emoji:"☀️",desc:"Jun – Sep · 105°F heat, pool parties"},
-      {v:"fall",label:"Fall",emoji:"🍂",desc:"Oct – Nov · Golden weather"},
-    ]},
-  { id:"days", question:"How many days are you staying?", subtitle:"We'll scale your itinerary perfectly", cols:2, multi:false,
-    options:[
-      {v:"1-2",label:"1–2 Days",emoji:"⚡",desc:"Quick hit — only the best"},
-      {v:"3-4",label:"3–4 Days",emoji:"🎯",desc:"The classic Vegas trip"},
-      {v:"5-7",label:"5–7 Days",emoji:"🗺️",desc:"Deep dive into everything"},
-      {v:"1week",label:"1 Week+",emoji:"👑",desc:"Full immersion"},
-    ]},
-  { id:"timeOfDay", question:"When do you come alive?", subtitle:"Your rhythm shapes the perfect itinerary", cols:2, multi:false,
-    options:[
-      {v:"morning",label:"Early Bird",emoji:"🌅",desc:"Up at sunrise — mornings are my peak"},
-      {v:"night",label:"Night Owl",emoji:"🌙",desc:"I come alive after dark"},
-      {v:"day",label:"Midday Explorer",emoji:"☀️",desc:"Afternoons are my sweet spot"},
-      {v:"allday",label:"All Hours",emoji:"🔥",desc:"I sleep when I'm back home"},
-    ]},
-  { id:"budget", question:"Budget per experience?", subtitle:"Per person · No judgment — just better picks", cols:2, multi:false,
-    options:[
-      {v:"budget",label:"Under $75",emoji:"🎰",desc:"Smart choices, maximum impact"},
-      {v:"mid",label:"$75 – $150",emoji:"🃏",desc:"The sweet spot of quality"},
-      {v:"high",label:"$150 – $250",emoji:"🥃",desc:"Premium — worth every dollar"},
-      {v:"vip",label:"$250+",emoji:"👑",desc:"VIP. No questions asked."},
-    ]},
-];
-
-// ─── FILTER LOGIC ─────────────────────────────────────────────────────────
-function getMaxCards(days) {
-  // Returns total cards (day + night pairs)
-  // 1-2 days = 3 pairs = 6 cards, etc.
-  return {["1-2"]:6,["3-4"]:8,["5-7"]:14,["1week"]:16}[days]||8;
-}
-
-function filterExperiences(ans) {
-  const interests = Array.isArray(ans.interest) ? ans.interest : [ans.interest].filter(Boolean);
-  const isGirlsTrip = ans.groupGender === "girls" || ans.tripType === "bachelorette";
-  const isGuysTrip = ans.groupGender === "guys";
-  const isLGBTQ = ans.groupGender === "lgbtq";
-  const isGirls = isGirlsTrip; // alias for clarity in scoring
-  const kidsAge = ans.groupGender; // when family: under6, kids, teens, mixedages
-
-  // Kids age IDs
-  const UNDER6_IDS  = [26,17,24,25,4,7,10]; // Circus, Blue Man, Discovery, Magic Show, Flyover, Titanic, M&M
-  const KIDS6_IDS   = [5,23,4,7,10,25,38,17,26]; // Dig This, Aquarium, Flyover, Titanic, M&M, Magic Show, Sphere, Blue Man, Circus
-  const TEENS_IDS   = [5,38,1,47,42,40,4,21,23,19,43]; // Dig This, Sphere, High Roller, Shooting, Exotics, ATV, Flyover, Machine Gun, Aquarium, Mojave, Red Rock
-  const maxCards = getMaxCards(ans.days);
-  const wantsNature = interests.includes("nature");
-  const wantsWellness = interests.includes("wellness");
-  const wantsNightlife = interests.includes("nightlife");
-  const wantsSports = interests.includes("sports");
-  const wantsAdventure = interests.includes("adventure");
-  const wantsLuxury = interests.includes("luxury");
-  const SPORTS_IDS = [75,76,77,78,79,80,45,82,83,84,85];
-
-  const budgetMatch = (price) => {
-    if(price===0) return true; // free always passes
-    if(ans.budget==="budget") return price<=75;
-    if(ans.budget==="mid") return price<=150;
-    if(ans.budget==="high") return price<=250;
-    return true;
-  };
-
-  const NATURE_IDS = [40,41,43,44,46,47,48,49,50,51,52,53,54,58,65];
-  const WELLNESS_IDS = [61,62,63,64];
-  const NIGHTLIFE_IDS = [11,14,24,30,31,35,66,67];
-  const SPHERE_ID = 38;
-
-  // Girls-specific experiences — male revues YES, drag NO
-  const GIRLS_IDS = [18,30,31,35,56,61,62,63];
-  // Guys-specific experiences — female shows YES
-  const GUYS_IDS = [8,14,21,47,40,42,11,66,67,23,36,74];
-  // LGBTQ experiences — exclusive
-  const LGBTQ_IDS = [68,69,70,71,72,73];
-
-  const scored = PAID.map(exp => {
-    let s=0;
-    // Vibe scoring — handles both string (others) and array (family)
-    const vibes = Array.isArray(ans.vibe) ? ans.vibe : [ans.vibe].filter(Boolean);
-    vibes.forEach(v => {
-      if(v==="nightout") { if(exp.interests?.includes("nightlife")||exp.tags.includes("nightlife")) s+=4; }
-      else if(v==="casino") {
-        // casino = gambling + sports for guys AND lgbtq
-        if(exp.interests?.includes("sports")||SPORTS_IDS.includes(exp.id)) s+=4;
-        if(exp.vibes?.includes("casino")) s+=4;
-      }
-      else if(exp.vibes.includes(v)) s+=4;
-    });
-
-    // Girls trip vibe scoring
-    if(isGirlsTrip) {
-      if(vibes.includes("girlswild") && [30,31,35,11,56,14,8,66,67].includes(exp.id)) s+=5;
-      if(vibes.includes("girlsspa") && WELLNESS_IDS.includes(exp.id)) s+=6;
-      if(vibes.includes("girlsspa") && [62,63,61,64].includes(exp.id)) s+=4;
-      if(vibes.includes("girlsadventure") && exp.tags.includes("adventure")) s+=4;
-      if(vibes.includes("girlsadventure") && [45,50,52,58].includes(exp.id)) s+=3;
-      if(vibes.includes("girlsmix") && exp.girlsTrip) s+=3;
-    }
-
-    // Guys solo vibe scoring
-    if(isGuysTrip && ans.tripType==="solo") {
-      if(vibes.includes("nightout") && [74,11,24,66,67].includes(exp.id)) s+=5;
-      if(vibes.includes("casino") && (SPORTS_IDS.includes(exp.id)||exp.vibes?.includes("casino"))) s+=5;
-      if(vibes.includes("adventure") && exp.tags.includes("adventure")) s+=3;
-      if(vibes.includes("dark") && exp.vibes?.includes("dark")) s+=3;
-    }
-
-    // Family vibe scoring
-    if(ans.tripType==="family") {
-      if(vibes.includes("thrill") && TEENS_IDS.includes(exp.id)) s+=4;
-      if(vibes.includes("thrill") && exp.tags.includes("adventure")) s+=3;
-      if(vibes.includes("show") && exp.tags.includes("family")) s+=4;
-      if(vibes.includes("show") && exp.interests?.includes("show")) s+=3;
-      if(vibes.includes("explore") && (exp.tags.includes("family")||NATURE_IDS.includes(exp.id)||exp.cat==="Culture")) s+=4;
-      if(vibes.includes("relaxed") && [1,18,26,7,10,6,2,3].includes(exp.id)) s+=4;
-      if(vibes.includes("relaxed") && exp.price<=60) s+=2;
-    }
-    if(ans.tripType && exp.tags.includes(ans.tripType)) s+=3;
-
-    // Group gender scoring
-    if(isGirlsTrip && exp.girlsTrip) s+=5;
-    if(isGirlsTrip && GIRLS_IDS.includes(exp.id)) s+=3;
-    if(isGuysTrip && exp.guysTrip) s+=5;
-    if(isGuysTrip && GUYS_IDS.includes(exp.id)) s+=3;
-    if(isLGBTQ && exp.lgbtq) s+=6;
-    if(isLGBTQ && LGBTQ_IDS.includes(exp.id)) s+=4;
-
-    // Kids age scoring
-    if(ans.tripType==="family") {
-      if(kidsAge==="under6" && UNDER6_IDS.includes(exp.id)) s+=6;
-      if(kidsAge==="under6" && !UNDER6_IDS.includes(exp.id) && !exp.tags.includes("family")) s-=4;
-      if(kidsAge==="kids" && KIDS6_IDS.includes(exp.id)) s+=6;
-      if(kidsAge==="kids" && !KIDS6_IDS.includes(exp.id) && !exp.tags.includes("family")) s-=3;
-      if(kidsAge==="teens" && TEENS_IDS.includes(exp.id)) s+=6;
-      if(kidsAge==="mixedages" && exp.tags.includes("family")) s+=4;
-      // Always penalize adult shows for families
-      if([8,14,27,30,31,35,56,74,68,69,70,71,72,73].includes(exp.id)) s-=8;
-    }
-
-    // Penalization rules
-    if(isGuysTrip && [70,71,72,73].includes(exp.id)) s-=6;  // no drag for guys
-    if(!isLGBTQ && [68,69,70,71,72,73].includes(exp.id)) s-=5;  // LGBT events only for lgbtq
-    if(isGirlsTrip && [74].includes(exp.id)) s-=4;  // no strip club crawl for girls
-
-    // ADULT SHOW GENDER LOGIC:
-    const isBachelorette = ans.tripType === "bachelorette";
-    const isHeteroCouple = ans.tripType === "couple" && ans.groupGender !== "lgbtq";
-    if(!isGirlsTrip && !isBachelorette && [31,35].includes(exp.id)) s-=8;
-    if(isGirlsTrip && [8,27,29].includes(exp.id)) s-=8;
-    if(isBachelorette && [8,27,29].includes(exp.id)) s-=8;
-
-    // LUXURY RULES — budget experiences never for vip/luxury budget
-    const isLuxuryBudget = ans.budget === "vip" || ans.budget === "high";
-    if(isLuxuryBudget) {
-      // Never show these for luxury travelers
-      if([26].includes(exp.id)) s-=15;  // Hop-On Hop-Off bus
-      if([33].includes(exp.id)) s-=15;  // Tournament of Kings (kids show)
-      if([44].includes(exp.id)) s-=12;  // Grand Canyon bus tour $99 — show helicopter instead
-      if([1,6].includes(exp.id)) s-=8;  // Basic High Roller ticket, Eiffel Tower
-      // Grand Canyon helicopter (id:58) gets huge boost for luxury
-      if([58].includes(exp.id)) s+=10;
-    }
-
-    // GRAND CANYON DEDUP — never show more than 1 Grand Canyon experience
-    const GRAND_CANYON_IDS = [44,45,58]; // Bus tour, Helicopter Strip, Helicopter Landing
-
-    interests.forEach(i=>{
-      if(exp.interests&&exp.interests.includes(i)) s+=3;
-      if(exp.tags.includes(i)) s+=2;
-    });
-
-    if(wantsNature && NATURE_IDS.includes(exp.id)) s+=4;
-    if(wantsNature && !NATURE_IDS.includes(exp.id) && !exp.vibes.includes("adventure")) s-=2;
-    if(wantsWellness && WELLNESS_IDS.includes(exp.id)) s+=4;
-    if(wantsNightlife && NIGHTLIFE_IDS.includes(exp.id)) s+=3;
-    if(wantsSports && SPORTS_IDS.includes(exp.id)) s+=5;
-    if(!wantsSports && SPORTS_IDS.includes(exp.id) && !exp.tags.includes(ans.tripType)) s-=2;
-    if(wantsAdventure && exp.tags.includes("adventure")) s+=3;
-    if(wantsAdventure && NATURE_IDS.includes(exp.id)) s+=2;
-    if(wantsLuxury && exp.vibes.includes("luxury")) s+=4;
-    if(wantsLuxury && exp.tier==="luxury") s+=3;
-    if(exp.id===SPHERE_ID && budgetMatch(exp.price)) s+=3;
-    if(ans.timeOfDay && exp.times.includes(ans.timeOfDay)) s+=2;
-    if(ans.season && exp.seasons.includes(ans.season)) s+=2;
-    if(budgetMatch(exp.price)) s+=3;
-    else s-=2;
-    if(ans.timeOfDay!=="allday" && !exp.times.includes(ans.timeOfDay)) s-=3;
-    return {...exp,score:s};
-  }).sort((a,b)=>b.score-a.score);
-
-  const SPA_IDS = [61,62,63,64]; // Four Seasons, Canyon Ranch, Encore Wynn, Vdara
-  const MALE_REVUE_IDS = [31,35]; // Chippendales, Thunder From Down Under
-  const FEMALE_REVUE_IDS = [8,27,29]; // FANTASY Burlesque, ROUGE, Atomic Saloon
-  const DRAG_IDS = [70,71,72,73]; // Drag shows only
-  const TOUR_IDS = [31,43,44,45,46,47,48,50,51,52,53,54,55,56,60,67,86,88,89,90,91];
-  const KIDS_IDS = [85,32,15]; // Water park, Tournament of Kings, Blue Man
-
-  const result=[]; const used=new Set();
-  const dayPairs = {["1-2"]:3,["3-4"]:4,["5-7"]:7,["1week"]:8}[ans.days]||4;
-  const minTours = (ans.days==="5-7"||ans.days==="1week") ? 4 : 0;
-
-  // Nightlife/Adult/Strip category IDs — max 1 per category in itinerary
-  const NIGHTLIFE_CAT_IDS = [11, 24, 56, 66, 67]; // Club crawls, bar crawls, pool parties
-  const ADULT_SHOW_IDS = []; // Covered by FEMALE_REVUE_IDS and MALE_REVUE_IDS
-  const STRIP_CLUB_IDS = [74]; // Strip club crawl
-  const GRAND_CANYON_IDS = [44, 45, 58]; // Bus tour, Helicopter Strip, Helicopter Landing
-  const WEDDING_IDS = [57, 60, 92]; // Elvis Wedding, Helicopter Wedding, Elvis+Limo
-
-  // Category dedup trackers
-  const state = { spaAdded:false, maleRevueAdded:false, femaleRevueAdded:false, dragAdded:false, toursAdded:0, nightlifeAdded:false, adultShowAdded:false, stripClubAdded:false, grandCanyonAdded:false, weddingAdded:false };
-
-  const canAdd = (exp) => {
-    if(used.has(exp.id)) return false;
-    if(!budgetMatch(exp.price)) return false;
-    if(SPA_IDS.includes(exp.id) && state.spaAdded) return false;
-    if(MALE_REVUE_IDS.includes(exp.id) && state.maleRevueAdded) return false;
-    if(FEMALE_REVUE_IDS.includes(exp.id) && state.femaleRevueAdded) return false;
-    if(DRAG_IDS.includes(exp.id) && state.dragAdded) return false;
-    if(NIGHTLIFE_CAT_IDS.includes(exp.id) && state.nightlifeAdded) return false;
-    if(ADULT_SHOW_IDS.includes(exp.id) && state.adultShowAdded) return false;
-    if(STRIP_CLUB_IDS.includes(exp.id) && state.stripClubAdded) return false;
-    if(GRAND_CANYON_IDS.includes(exp.id) && state.grandCanyonAdded) return false;
-    if(WEDDING_IDS.includes(exp.id) && state.weddingAdded) return false;
-    return true;
-  };
-
-  const trackAdded = (exp) => {
-    used.add(exp.id);
-    if(SPA_IDS.includes(exp.id)) state.spaAdded = true;
-    if(MALE_REVUE_IDS.includes(exp.id)) state.maleRevueAdded = true;
-    if(FEMALE_REVUE_IDS.includes(exp.id)) state.femaleRevueAdded = true;
-    if(DRAG_IDS.includes(exp.id)) state.dragAdded = true;
-    if(NIGHTLIFE_CAT_IDS.includes(exp.id)) state.nightlifeAdded = true;
-    if(ADULT_SHOW_IDS.includes(exp.id)) state.adultShowAdded = true;
-    if(STRIP_CLUB_IDS.includes(exp.id)) state.stripClubAdded = true;
-    if(GRAND_CANYON_IDS.includes(exp.id)) state.grandCanyonAdded = true;
-    if(WEDDING_IDS.includes(exp.id)) state.weddingAdded = true;
-    if(TOUR_IDS.includes(exp.id)) state.toursAdded++;
-  };
-
-  // Separate scored into day and night buckets
-  const dayScored = scored.filter(e=>
-    (e.times.includes("morning")||e.times.includes("day")) &&
-    budgetMatch(e.price)
-  );
-  const nightScored = scored.filter(e=>
-    e.times.includes("night") &&
-    budgetMatch(e.price)
-  );
-
-  // Build pairs: alternating day/night with category dedup
-  let dayIdx=0, nightIdx=0;
-  for(let i=0; i<dayPairs; i++){
-    // Add day experience
-    while(dayIdx<dayScored.length && !canAdd(dayScored[dayIdx])) dayIdx++;
-    if(dayIdx<dayScored.length){
-      trackAdded(dayScored[dayIdx]);
-      result.push({...dayScored[dayIdx], timeSlot:"day"});
-      dayIdx++;
-    }
-    // Add night experience
-    while(nightIdx<nightScored.length && !canAdd(nightScored[nightIdx])) nightIdx++;
-    if(nightIdx<nightScored.length){
-      trackAdded(nightScored[nightIdx]);
-      result.push({...nightScored[nightIdx], timeSlot:"night"});
-      nightIdx++;
-    }
-  }
-
-  // Enforce minimum tours for longer trips
-  if(minTours > 0 && state.toursAdded < minTours) {
-    const tourCandidates = scored.filter(e=>TOUR_IDS.includes(e.id)&&!used.has(e.id)&&budgetMatch(e.price));
-    let added = 0;
-    for(const tour of tourCandidates) {
-      if(state.toursAdded + added >= minTours) break;
-      // Replace last night exp with tour if needed
-      const lastNight = result.findIndex(e=>e.timeSlot==="night"&&!TOUR_IDS.includes(e.id));
-      if(lastNight>=0) {
-        used.delete(result[lastNight].id);
-        result[lastNight] = {...tour, timeSlot:"day"};
-        used.add(tour.id);
-        added++;
-      }
-    }
-  }
-
-  return result;
-}
-
-function getHotels(ans) {
-  const profile = [];
-  const tierMap = {budget:"budget", mid:"mid", high:"high", vip:"vip"};
-  const userTier = tierMap[ans.budget] || "mid";
-
-  // Build profile list
-  if(ans.groupGender==="girls" || ans.tripType==="bachelorette") profile.push("girls");
-  if(ans.groupGender==="lgbtq") profile.push("girls","first-timer");
-  if(ans.vibe==="luxury" || ans.hotelPref==="luxury") profile.push("luxury");
-  if(ans.tripType==="couple" || (ans.tripType==="solo" && ans.groupGender==="girls")) profile.push("couple");
-  if(ans.tripType==="family" || ans.hotelPref==="kitchen") profile.push("family");
-  if(ans.tripType==="work" || ans.hotelPref==="quiet") profile.push("work");
-  if(ans.vibe==="first-timer" || ans.hotelPref==="location" || ans.hotelPref==="value" || ans.tripType==="solo") profile.push("first-timer");
-  if(ans.hotelPref==="nosmoking") profile.push("couple","work","family");
-  if(ans.budget==="budget" || ans.hotelPref==="price" || ans.hotelPref==="value") profile.push("budget");
-  if(profile.length===0) profile.push("first-timer");
-
-  // Start with hotels matching profile
-  let filtered = HOTELS.filter(h => h.profiles.some(p => profile.includes(p)));
-
-  // Apply hotelPref specific filters
-  if(ans.hotelPref==="nosmoking") filtered = HOTELS.filter(h=>h.nosmoking).filter(h=>h.profiles.some(p=>profile.includes(p)));
-  else if(ans.hotelPref==="kitchen") filtered = HOTELS.filter(h=>h.kitchen).filter(h=>h.profiles.some(p=>profile.includes(p)));
-  else if(ans.hotelPref==="quiet") filtered = HOTELS.filter(h=>h.nosmoking||h.name.includes("Vdara")||h.name.includes("Park MGM")||h.name.includes("Signature")||h.name.includes("Trump")).filter(h=>h.profiles.some(p=>profile.includes(p)));
-  else if(ans.hotelPref==="location") filtered = HOTELS.filter(h=>h.location==="center").filter(h=>h.profiles.some(p=>profile.includes(p)));
-  else if(ans.hotelPref==="value") filtered = HOTELS.filter(h=>h.location==="center" && h.tiers.includes("budget") || h.tiers.includes("mid")).filter(h=>h.profiles.some(p=>profile.includes(p)));
-
-  // ALWAYS filter by budget tier — hard rule
-  const tierFiltered = filtered.filter(h => h.tiers.includes(userTier));
-  if(tierFiltered.length >= 2) filtered = tierFiltered;
-  else if(tierFiltered.length === 1) filtered = tierFiltered;
-
-  // Deduplicate and limit to 3 — never show MGM Grand + Signature together
-  const seen = new Set();
-  const result = [];
-  let hasMGM = false;
-  for(const h of filtered) {
-    if(seen.has(h.name) || result.length>=3) continue;
-    if(h.name==="MGM Grand" && hasMGM) continue;
-    if(h.name==="The Signature at MGM Grand" && hasMGM) continue;
-    if(h.name==="MGM Grand" || h.name==="The Signature at MGM Grand") hasMGM = true;
-    seen.add(h.name);
-    result.push(h);
-  }
-  // Fill if needed — try adjacent tier before giving up
-  if(result.length<3) {
-    const adjacentTiers = {budget:["budget","mid"], mid:["mid","budget","high"], high:["high","mid","vip"], vip:["vip","high"]};
-    const allowedTiers = adjacentTiers[userTier] || [userTier];
-    for(const h of HOTELS) {
-      if(!seen.has(h.name) && result.length<3 && 
-         h.profiles.some(p=>profile.includes(p)) && 
-         h.tiers.some(t=>allowedTiers.includes(t))) {
-        seen.add(h.name); result.push(h);
-      }
-    }
-  }
-  return result;
-}
-  const seasonLabels={winter:"Winter",spring:"Spring",summer:"Summer",fall:"Fall"};
-  const daysLabels={"1-2":"Weekend","3-4":"4-Day","5-7":"7-Day","1week":"Full Week"};
-
-  // Build itinerary HTML grouped by day
-  const dayPairs = Math.ceil(itinerary.length/2);
-  let itineraryHtml = "";
-  for(let i=0;i<dayPairs;i++){
-    const dayExp = itinerary.find(e=>e.timeSlot==="day"&&itinerary.indexOf(e)===i*2);
-    const nightExp = itinerary.find(e=>e.timeSlot==="night"&&itinerary.indexOf(e)===i*2+1);
-    itineraryHtml += `<p style="color:#ff2d55;font-size:14px;font-weight:bold;letter-spacing:2px;margin:20px 0 8px">Day ${i+1}</p>`;
-    [dayExp,nightExp].filter(Boolean).forEach(e=>{
-      const isFree = e.price===0;
-      itineraryHtml += `
-        <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:14px 18px;margin-bottom:8px">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
-            <span style="font-size:20px;margin-right:10px">${e.emoji}</span>
-            <span style="color:#fff;font-size:13px;font-weight:bold;flex:1">${e.name}</span>
-            <span style="color:${isFree?"#2ecc71":"#ffd700"};font-size:14px;font-weight:bold;margin-left:10px">${isFree?"FREE":"$"+e.price}</span>
-          </div>
-          <p style="color:#aaa;font-size:12px;line-height:1.6;margin:0 0 10px">${e.desc}</p>
-          <a href="${e.url}" style="display:block;background:${isFree?"rgba(39,174,96,.2)":"linear-gradient(135deg,#ff2d55,#c0392b)"};color:${isFree?"#2ecc71":"#fff"};text-align:center;padding:10px;border-radius:6px;text-decoration:none;font-size:12px;font-weight:bold">
-            ${isFree?"🔗 Learn More":"🎟️ Book Now"}
-          </a>
-        </div>`;
-    });
-  }
-
-  // Free experiences
-  if(freeExp && freeExp.length>0){
-    itineraryHtml += `<p style="color:#2ecc71;font-size:13px;font-weight:bold;letter-spacing:2px;margin:20px 0 8px">✨ Free Experiences</p>`;
-    freeExp.forEach(f=>{
-      itineraryHtml += `
-        <div style="background:rgba(39,174,96,.04);border:1px solid rgba(39,174,96,.15);border-radius:8px;padding:12px 16px;margin-bottom:6px">
-          <span style="font-size:18px;margin-right:8px">${f.emoji}</span>
-          <span style="color:#fff;font-size:13px;font-weight:bold">${f.name}</span>
-          <p style="color:#aaa;font-size:12px;margin:4px 0 8px">${f.desc}</p>
-          <a href="${f.url}" style="color:#2ecc71;font-size:12px;text-decoration:none">🔗 Learn More →</a>
-        </div>`;
-    });
-  }
-
-  // Load EmailJS SDK dynamically
-  if(!window.emailjs){
-    await new Promise((res,rej)=>{
-      const s=document.createElement("script");
-      s.src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js";
-      s.onload=()=>{
-        window.emailjs.init(EMAILJS_KEY);
-        window._emailjsInited = true;
-        res();
-      };
-      s.onerror=rej;
-      document.head.appendChild(s);
-    });
-  } else if(!window._emailjsInited) {
-    window.emailjs.init(EMAILJS_KEY);
-    window._emailjsInited = true;
-  }
-
-  const fullEmailHtml = `<!DOCTYPE html>
-<html><head><meta charset="UTF-8"></head>
-<body style="margin:0;padding:0;background:#0d0a18;font-family:Georgia,serif">
-<div style="max-width:600px;margin:0 auto;background:#0d0a18">
-
-  <div style="background:#1a0a0a;padding:40px;text-align:center;border-bottom:2px solid #ff2d55">
-    <p style="color:#ff2d55;font-size:10px;letter-spacing:6px;margin:0 0 12px;font-family:monospace">◆ CLASSIFIED ◆</p>
-    <h1 style="font-size:28px;font-weight:bold;margin:0 0 6px;color:#ffd700">VEGAS UNVEILED</h1>
-    <p style="color:#666;font-size:11px;letter-spacing:3px;margin:0">YOUR SECRET ITINERARY HAS ARRIVED</p>
-  </div>
-
-  <div style="border-left:3px solid #ff2d55;margin:32px 32px 0;padding:16px 20px;background:#1a0505">
-    <div style={{color:"#ff2d55",fontSize:"0.75rem",letterSpacing:"0.18em",marginBottom:"12px",fontWeight:"700",textTransform:"uppercase",fontFamily:"'DM Sans',sans-serif"}}>Traveler Profile</div>
-    <p style="color:#ccc;font-style:italic;line-height:1.8;margin:0;font-size:13px">${aiStory || "Your secret Vegas itinerary is ready."}</p>
-  </div>
-
-  <div style="padding:16px 32px">
-    <span style="background:#1a1500;border:1px solid #3d3000;border-radius:20px;padding:4px 12px;color:#ffd700;font-size:11px;font-family:monospace">${seasonLabels[answers.season]} in Vegas</span>
-    &nbsp;
-    <span style="background:#1a1500;border:1px solid #3d3000;border-radius:20px;padding:4px 12px;color:#ffd700;font-size:11px;font-family:monospace">${daysLabels[answers.days]} trip</span>
-  </div>
-
-  <div style="padding:8px 32px 32px">
-    <p style="color:#fff;font-size:15px;margin:0 0 4px;font-weight:bold">Your Itinerary</p>
-    <p style="color:#555;font-size:11px;margin:0 0 16px;letter-spacing:1px">BOOK DIRECTLY — LINKS BELOW</p>
-    ${itineraryHtml}
-  </div>
-
-  <div style="background:#050505;padding:24px 32px;text-align:center;border-top:1px solid #1a1a1a">
-    <p style="color:#444;font-size:11px;margin:0 0 6px">Generated exclusively for you by <strong style="color:#ffd700">Vegas Unveiled</strong></p>
-    <p style="color:#444;font-size:11px;margin:0">Booking links may include affiliate partnerships · Prices subject to availability</p>
-    <p style="margin-top:10px"><a href="https://vegas-unveiled.vercel.app" style="color:#555;font-size:11px">vegas-unveiled.vercel.app</a></p>
-  </div>
-
-</div>
-</body></html>`;
-
-  try {
-    const result = await window.emailjs.send(EMAILJS_SERVICE, EMAILJS_TEMPLATE, {
-      to_email: toEmail,
-      content: fullEmailHtml,
-      message_html: fullEmailHtml,
-    });
-    console.log("EmailJS success:", result);
-    return result;
-  } catch(err) {
-    console.error("EmailJS error:", JSON.stringify(err));
-    throw err;
-  }
-}
-
-// ─── MAIN APP ─────────────────────────────────────────────────────────────
-export default function VegasApp() {
-  const [step,setStep]=useState(0);
-  const [answers,setAnswers]=useState({});
-  const [selected,setSelected]=useState(null);
-  const [loading,setLoading]=useState(false);
-  const [itinerary,setItinerary]=useState([]);
-  const [freeExp,setFreeExp]=useState([]);
-  const [hotels,setHotels]=useState([]);
-  const [aiStory,setAiStory]=useState();
-  const [aiTitle,setAiTitle]=useState("");
-  const [aiReady,setAiReady]=useState(false);
-  const [email,setEmail]=useState();
-  const [emailSent,setEmailSent]=useState(false);
-  const [emailLoading,setEmailLoading]=useState(false);
-  const [showEmail,setShowEmail]=useState(false);
-
-  const totalSteps=QUESTIONS.length;
-  const isFamily = answers.tripType === "family";
-  const isSolo = answers.tripType === "solo";
-  const isCouple = answers.tripType === "couple";
-  const isGirls = answers.groupGender === "girls" ||
-                  (answers.tripType === "bachelorette" && answers.groupGender !== "guys" && answers.groupGender !== "lgbtq");
-  const isGuys = answers.groupGender === "guys";
-  const isLGBTQ = answers.groupGender === "lgbtq";
-  const rawQ = QUESTIONS[step-1];
-  const currentQ = rawQ ? {
-    ...rawQ,
-    question: rawQ.id==="groupGender" && isFamily ? "How old are the kids?"
-            : rawQ.id==="groupGender" && isSolo ? "How do you identify?"
-            : rawQ.id==="groupGender" && isCouple ? "How do you identify as a couple?"
-            : rawQ.id==="vibe" && isFamily ? "What's the energy for this trip?"
-            : rawQ.id==="vibe" && isGirls ? "What kind of girls trip is this?"
-            : rawQ.id==="vibe" && isGuys ? "What's your Vegas vibe?"
-            : rawQ.question,
-    subtitle: rawQ.id==="groupGender" && isFamily ? "We'll tailor the itinerary for them"
-            : rawQ.id==="groupGender" && (isSolo||isCouple) ? "Helps us personalize your experience"
-            : rawQ.id==="vibe" && isFamily ? "Pick up to 2 — day and night covered"
-            : rawQ.id==="vibe" && isGirls ? "Pick the vibe that calls to you"
-            : rawQ.id==="vibe" && isGuys ? "Pick up to 2 — we'll cover both"
-            : rawQ.subtitle,
-    cols: rawQ.id==="groupGender" && (isSolo||isCouple) ? 1
-        : rawQ.id==="vibe" && isFamily ? 2
-        : rawQ.id==="vibe" && isGirls ? 2
-        : rawQ.id==="vibe" && isGuys ? 2
-        : rawQ.cols,
-    multi: rawQ.id==="vibe" && isFamily ? true
-         : rawQ.id==="vibe" && isGuys ? true
-         : rawQ.multi,
-    max: rawQ.id==="vibe" && isFamily ? rawQ.familyMax
-       : rawQ.id==="vibe" && isGuys ? 2
-       : rawQ.max,
-    options: rawQ.id==="groupGender" && isFamily ? rawQ.familyOptions
-           : rawQ.id==="groupGender" && isSolo ? rawQ.soloOptions
-           : rawQ.id==="groupGender" && isCouple ? rawQ.coupleOptions
-           : rawQ.id==="vibe" && isFamily ? rawQ.familyOptions
-           : rawQ.id==="vibe" && isGirls ? rawQ.girlsOptions
-           : rawQ.id==="vibe" && isGuys ? rawQ.guysOptions
-           : rawQ.id==="vibe" && isLGBTQ ? rawQ.lgbtqOptions
-           : rawQ.options,
-  } : null;
-
-  function handleSelect(v){
-    if(!currentQ?.multi){setSelected(v);return;}
-    const max=currentQ.max||2;
-    setSelected(prev=>{
-      const arr=Array.isArray(prev)?prev:[];
-      if(arr.includes(v)) return arr.filter(x=>x!==v);
-      if(arr.length>=max) return arr;
-      return [...arr,v];
-    });
-  }
-
-  const canContinue=step===0||(!currentQ?.multi&&selected!==null)||(currentQ?.multi&&Array.isArray(selected)&&selected.length>0);
-  const multiCount=currentQ?.multi&&Array.isArray(selected)?selected.length:0;
-
-  async function handleNext(){
-    if(step===0){setStep(1);return;}
-    const newAns={...answers,[currentQ.id]:selected};
-    setAnswers(newAns);
-    setSelected(null);
-
-    if(step<totalSteps){
-      const nextStep = step+1;
-      const nextQ = QUESTIONS[nextStep-1];
-      const isGuysNow = newAns.groupGender === "guys";
-      const isLGBTQNow = newAns.groupGender === "lgbtq";
-      // Skip vibe only for girls/mixed — guys and lgbtq have their own vibe options
-      const skipVibe = !isGuysNow && !isLGBTQNow && newAns.tripType !== "family";
-
-      // Skip hotelPref if already in Vegas
-      if(nextQ?.id==="hotelPref" && newAns.alreadyInVegas==="already"){
-        const finalAns = {...newAns, hotelPref:"location"};
-        setAnswers(finalAns);
-        setStep(nextStep+1);
-        return;
-      }
-
-      // For girls/lgbtq/mixed: skip Q3 vibe AND Q4 interest separately
-      // Instead interest shows as Q3 (handled in currentQ display)
-      // Skip Q3 (vibe) — jump straight to interest
-      if(nextQ?.id==="vibe" && skipVibe){
-        setStep(nextStep+1); // skip vibe, go to interest
-        return;
-      }
-
-      // Skip Q4 (interest) for family — auto-map from vibe
-      if(nextQ?.id==="interest" && newAns.tripType==="family"){
-        const familyVibes = Array.isArray(newAns.vibe) ? newAns.vibe : [newAns.vibe];
-        const autoInterests = [];
-        if(familyVibes.includes("show")) autoInterests.push("show");
-        if(familyVibes.includes("explore")) autoInterests.push("nature","unique");
-        if(familyVibes.includes("thrill")) autoInterests.push("adventure");
-        if(familyVibes.includes("relaxed")) autoInterests.push("unique");
-        const finalAns = {...newAns, interest: autoInterests.length>0 ? autoInterests : ["unique"]};
-        setAnswers(finalAns);
-        setStep(nextStep+1);
-      } else {
-        setStep(nextStep);
-      }
-      return;
-    }
-
-    setLoading(true);
-    const results=filterExperiences(newAns);
-    const hotelResults=getHotels(newAns);
-    const kidsAge = newAns.groupGender;
-    const isYoungFamily = newAns.tripType==="family" && (kidsAge==="under6"||kidsAge==="kids");
-    const maxDays = {["1-2"]:3,["3-4"]:4,["5-7"]:7,["1week"]:8}[newAns.days]||4;
-    const freeResults = FREE_EXPERIENCES.filter(f => {
-      if(isYoungFamily && f.id==="f3") return false;
-      if(newAns.tripType==="family" && kidsAge==="under6" && f.time==="After 8pm") return false;
-      // Exclude kids/family attractions for non-family trips
-      if(f.tags && f.tags.includes("kids") && newAns.tripType!=="family") return false;
-      if(f.tags && f.tags.includes("family") && newAns.tripType!=="family") return false;
-      // For luxury/vip — exclude budget-only free experiences
-      if((newAns.budget==="vip"||newAns.budget==="high") && f.tags && f.tags.includes("budget")) return false;
-      return true;
-    }).reduce((acc, f) => {
-      const hasFountains = acc.some(x=>x.id==="f1");
-      const hasConservatory = acc.some(x=>x.id==="f2");
-      if(f.id==="f2" && hasFountains) return acc;
-      if(f.id==="f1" && hasConservatory) return acc;
-      if(acc.length>=maxDays) return acc;
-      return [...acc, f];
-    }, []);
-    setItinerary(results);
-    setFreeExp(freeResults);
-    setHotels(hotelResults);
-
-    const seasonCtx={
-      winter:"Vegas in winter — cold desert nights, barely any crowds.",
-      spring:"Vegas in spring — perfect weather for everything.",
-      summer:"Vegas in summer — brutal heat, electric chaos after dark.",
-      fall:"Vegas in fall — golden light, the best-kept seasonal secret."
-    };
-
-    // Build traveler profile descriptor
-    const tripLabels={solo:"solo traveler",couple:"couple",group:"squad",family:"family",bachelorette:"bachelorette party",work:"work traveler"};
-    const genderLabels={girls:"woman",guys:"man",lgbtq:"LGBTQ+ traveler",mixed:"",under6:"family with little ones",kids:"family with kids",teens:"family with teens",mixedages:"family"};
-    const vibeLabels={dark:"drawn to the dark and mysterious side of Vegas",luxury:"a pure luxury seeker",adventure:"a thrill seeker",casino:"a casino and sports lover",romantic:"a hopeless romantic","first-timer":"experiencing Vegas for the first time",girlswild:"ready for a wild night out",girlsspa:"craving luxury and relaxation",girlsadventure:"an adventure-loving traveler",girlsmix:"looking for a perfect mix of everything",thrill:"craving thrills and adventure",show:"a live entertainment lover",explore:"an explorer at heart",relaxed:"looking for easy, fun experiences",nightout:"here for the nightlife and a serious night out"};
-
-    const genderPrefix = genderLabels[newAns.groupGender] || "";
-    const travelerType = genderPrefix
-      ? `${genderPrefix} ${tripLabels[newAns.tripType]||""}`.trim()
-      : tripLabels[newAns.tripType] || "traveler";
-    const vibeDesc = vibeLabels[Array.isArray(newAns.vibe)?newAns.vibe[0]:newAns.vibe]||"";
-    const interestDesc = Array.isArray(newAns.interest)?newAns.interest.join(" and "):newAns.interest||"";
-
-    const fallbacks = [
-      `You're the type of traveler who already knows what you want before you arrive — and Vegas is about to confirm every instinct. ${seasonCtx[newAns.season]} Most people come here and see the surface. You're not most people. Your itinerary is ready.`,
-    ];
-
-    // Show results immediately with fallback — AI briefing updates in background
-    setAiStory(fallbacks[0]);
-    setLoading(false);
-    setStep(totalSteps+1);
-
-    // Fetch AI briefing in background and update when ready
-    const budgetDesc = {budget:"looks for the best experience at the lowest cost — hostels, free attractions, street food, nothing wasted",mid:"balances spending consciously — saves on some things to splurge on others, always asking if it's worth it",high:"travels comfortably without overthinking costs — chooses quality over price but isn't reckless",vip:"cost is never the deciding factor — only the best hotels, restaurants and experiences make the cut"}[newAns.budget] || "";
-
-    const experienceNames = results.map(e=>e.name);
-    const freeNames = freeResults.map(e=>e.name);
-
-    fetch("/api/briefing",{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({
-        travelerType, vibeDesc, interestDesc, budgetDesc,
-        season:newAns.season, days:newAns.days, timeOfDay:newAns.timeOfDay,
-        experiences: experienceNames, freeExperiences: freeNames
-      })
-    }).then(r=>r.json()).then(data=>{
-      const text = data.text;
-      if(text && text.length > 30) { setAiStory(text); if(data.title) setAiTitle(data.title); setAiReady(true); }
-      else setAiReady(true);
-    }).catch(()=>{ setAiReady(true); });
-  }
-
-  async function handleEmailSubmit(){
-    if(!email||emailLoading) return;
-    setEmailLoading(true);
-    try {
-      await sendItineraryEmail(email,itinerary,freeExp,hotels,answers,aiStory);
-      setEmailSent(true);
-    } catch(err) {
-      console.error("Email error:", err);
-      alert("Could not send email. Please try again or check your email address.");
-    }
-    setEmailLoading(false);
-  }
-
-  const totalCost=itinerary.reduce((s,e)=>s+e.price,0);
-  const seasonLabels={winter:"Winter",spring:"Spring",summer:"Summer",fall:"Fall"};
-  const daysLabels={"1-2":"3-day","3-4":"4-day","5-7":"7-day","1week":"8-day"};
-
+const CATEGORIAS = Object.entries(CAT_META).map(([id, m]) => ({ id, label:m.label, emoji:m.emoji, hasFecha:m.hasFecha }));
+const MAX_SEL = 3;
+const MAX_SUBCAT = 2;
+
+// ─── ORDEN DE PRECIO ─────────────────────────────────────────────────────
+const PRECO_ORDER = { "$":1, "$$":2, "$$$":3, "$$$$":4 };
+
+// ─── ESTILOS ──────────────────────────────────────────────────────────────
+const S = {
+  app: { minHeight:"100vh", height:"100vh", background:"#050014", display:"flex", flexDirection:"column", alignItems:"center", fontFamily:"'Inter', sans-serif", color:"#fff", position:"relative", overflow:"hidden" },
+  inner: { width:"100%", maxWidth:"420px", display:"flex", flexDirection:"column", height:"100vh", position:"relative", zIndex:2 },
+  header: { padding:"10px 24px 8px", textAlign:"center", borderBottom:"1px solid rgba(200,160,40,0.3)", flexShrink:0, background:"linear-gradient(180deg, rgba(5,0,20,0.97) 0%, rgba(10,0,35,0.88) 100%)" },
+  logo: { fontFamily:"'Inter', sans-serif", fontSize:"24px", fontWeight:900, letterSpacing:"3px", textTransform:"uppercase", color:"#fff" },
+  logoSpan: { color:"#cc44ff", textShadow:"0 0 15px rgba(180,50,255,1)" },
+  headerSub: { fontFamily:"'Inter', sans-serif", fontSize:"10px", fontWeight:700, letterSpacing:"4px", textTransform:"uppercase", color:"#c8a840", marginTop:"3px" },
+  splashBody: { flex:1, display:"flex", flexDirection:"column", alignItems:"center", padding:"20px 28px 28px", gap:"0", textAlign:"center" },
+  city: { fontFamily:"'Playfair Display', serif", fontWeight:900, fontSize:"clamp(58px,18vw,78px)", lineHeight:0.85, color:"#fff", letterSpacing:"-2px" },
+  subtitulo: { fontSize:"12px", fontWeight:700, letterSpacing:"5px", textTransform:"uppercase", color:"rgba(255,255,255,0.45)", margin:"18px 0 4px" },
+  destaque: { fontFamily:"'Playfair Display', serif", fontSize:"26px", fontWeight:700, color:"#fff" },
+  deco: { width:"40px", height:"1px", background:"linear-gradient(90deg, transparent, #e000c8, transparent)", boxShadow:"0 0 8px rgba(200,0,180,0.5)", margin:"148px auto 16px" },
+  loquepasa: { fontFamily:"'Playfair Display', serif", fontSize:"28px", fontStyle:"italic", color:"#e000c8", lineHeight:1.3, marginBottom:"6px" },
+  solopasa: { fontFamily:"'Playfair Display', serif", fontSize:"36px", fontStyle:"italic", fontWeight:900, color:"#fff", lineHeight:1.1 },
+  categorias: { display:"flex", alignItems:"center", justifyContent:"center", flexWrap:"nowrap", gap:"5px", fontSize:"10px", fontWeight:800, letterSpacing:"1.5px", textTransform:"uppercase", color:"#e000c8", textShadow:"0 0 10px rgba(200,0,180,0.7)", marginTop:"32px" },
+  sep: { color:"rgba(224,0,200,0.4)", fontWeight:300 },
+  cta: { background:"linear-gradient(135deg, #d400bc 0%, #8800a0 100%)", color:"#fff", border:"none", borderRadius:"8px", padding:0, width:"100%", maxWidth:"300px", cursor:"pointer", fontFamily:"'Inter', sans-serif", boxShadow:"0 0 28px rgba(200,0,180,0.45), 0 8px 28px rgba(0,0,0,0.5)", transition:"all 0.2s", overflow:"hidden" },
+  ctaMain: { display:"block", padding:"18px 24px 14px", fontSize:"19px", fontWeight:700, borderBottom:"1px solid rgba(255,255,255,0.12)" },
+  ctaSub: { display:"block", padding:"10px 24px 13px", fontSize:"10px", fontWeight:600, letterSpacing:"2.5px", textTransform:"uppercase", color:"rgba(255,255,255,0.65)" },
+  filtrosBody: { flex:1, display:"flex", flexDirection:"column", overflow:"hidden", minHeight:0 },
+  filtrosScroll: { flex:1, overflowY:"auto", padding:"16px 16px 8px", WebkitOverflowScrolling:"touch" },
+  filtrosFooter: { flexShrink:0, padding:"10px 16px 24px", background:"linear-gradient(to top, #050014 75%, rgba(5,0,20,0))", borderTop:"none" },
+  filtrosTitulo: { fontFamily:"'Playfair Display', serif", fontSize:"22px", fontWeight:700, color:"#fff", textAlign:"center", marginBottom:"6px" },
+  filtrosSub: { fontSize:"15px", fontWeight:700, color:"#fff", textAlign:"center", marginBottom:"16px", letterSpacing:"0.5px" },
+  filtrosGrid: { display:"grid", gridTemplateColumns:"1fr 1fr", gap:"8px", marginBottom:"16px" },
+  filtroBtn: (sel) => ({ background: sel ? "rgba(204,68,255,0.25)" : "rgba(255,255,255,0.07)", border: sel ? "2px solid #cc44ff" : "1.5px solid rgba(200,160,40,0.3)", borderRadius:"10px", padding:"10px 8px", cursor:"pointer", fontFamily:"'Inter', sans-serif", color: sel ? "#fff" : "rgba(255,255,255,0.85)", fontSize:"11px", fontWeight:700, textAlign:"center", transition:"all 0.2s", display:"flex", flexDirection:"column", alignItems:"center", gap:"5px", boxShadow: sel ? "0 0 16px rgba(204,68,255,0.35)" : "0 2px 8px rgba(0,0,0,0.4)" }),
+  filtroEmoji: { fontSize:"22px", lineHeight:1 },
+  fechaBadge: { fontSize:"8px", background:"rgba(200,160,40,0.2)", color:"#c8a840", border:"1px solid rgba(200,160,40,0.4)", borderRadius:"10px", padding:"1px 6px", letterSpacing:"1px" },
+  contador: (ativo) => ({ textAlign:"center", fontSize:"11px", fontWeight:500, letterSpacing:"2px", textTransform:"uppercase", color: ativo ? "#cc44ff" : "rgba(255,255,255,0.3)", marginBottom:"12px", minHeight:"18px", textShadow: ativo ? "0 0 8px rgba(204,68,255,0.5)" : "none" }),
+  resBody: { flex:1, overflowY:"auto", padding:"16px 16px 48px" },
+  resBack: { background:"linear-gradient(135deg, #7700cc 0%, #440088 55%, #aa8800 100%)", border:"1.5px solid rgba(200,160,40,0.4)", color:"#fff", fontSize:"15px", fontWeight:700, letterSpacing:"1px", cursor:"pointer", fontFamily:"'Inter', sans-serif", marginBottom:"20px", display:"flex", alignItems:"center", justifyContent:"center", gap:"8px", padding:"12px 24px", borderRadius:"10px", width:"100%", boxShadow:"0 0 20px rgba(100,0,200,0.4)", transition:"all 0.2s" },
+  avisoLegal: { fontSize:"12px", color:"rgba(255,255,255,0.5)", fontStyle:"italic", lineHeight:1.6, marginBottom:"16px", padding:"10px 14px", background:"rgba(255,255,255,0.03)", borderRadius:"8px", border:"1px solid rgba(200,160,40,0.2)" },
+  catHeader: { marginBottom:"16px", paddingBottom:"10px", borderBottom:"2px solid rgba(200,160,40,0.4)" },
+  catTitulo: { fontFamily:"'Playfair Display', serif", fontSize:"24px", fontWeight:700, color:"#fff", display:"block" },
+  catSubTitulo: { fontFamily:"'Playfair Display', serif", fontSize:"17px", fontWeight:700, color:"rgba(255,255,255,0.85)", marginBottom:"10px", marginTop:"18px", paddingBottom:"6px", borderBottom:"1px solid rgba(200,160,40,0.2)" },
+  card: { background:"rgba(10,0,35,0.6)", border:"1px solid rgba(200,160,40,0.2)", borderRadius:"14px", padding:"14px", marginBottom:"10px", transition:"all 0.2s" },
+  cardEmoji: { fontSize:"28px", lineHeight:1, flexShrink:0 },
+  cardTop: { display:"flex", alignItems:"flex-start", gap:"12px", marginBottom:"10px" },
+  cardName: { fontFamily:"'Inter', sans-serif", fontSize:"14px", fontWeight:700, color:"#fff", marginBottom:"6px", lineHeight:1.3 },
+  cardTags: { display:"flex", flexWrap:"wrap", gap:"4px" },
+  tagDur: { fontSize:"10px", padding:"2px 8px", borderRadius:"20px", fontWeight:500, background:"rgba(200,160,40,0.15)", color:"#c8a840", border:"1px solid rgba(200,160,40,0.3)" },
+  tagRating: { fontSize:"10px", padding:"2px 8px", borderRadius:"20px", fontWeight:500, background:"rgba(255,255,255,0.06)", color:"rgba(255,255,255,0.6)", border:"1px solid rgba(255,255,255,0.1)" },
+  cardPrice: { fontSize:"16px", fontWeight:700, color:"#c8a840", whiteSpace:"nowrap", marginLeft:"8px", flexShrink:0 },
+  cardDesc: { fontSize:"12px", color:"rgba(255,255,255,0.55)", lineHeight:1.7, marginBottom:"12px" },
+  cardBtn: { display:"block", background:"linear-gradient(135deg, #7700cc 0%, #440088 55%, #aa8800 100%)", color:"#fff", textAlign:"center", padding:"12px", borderRadius:"8px", textDecoration:"none", fontSize:"13px", fontWeight:700, fontFamily:"'Inter', sans-serif", letterSpacing:"0.5px", boxShadow:"0 4px 16px rgba(100,0,200,0.3)", border:"1px solid rgba(200,160,40,0.3)" },
+  calWrap: { background:"rgba(200,160,40,0.08)", border:"2px solid rgba(200,160,40,0.4)", borderRadius:"12px", padding:"16px", marginBottom:"20px" },
+  calTitle: { fontSize:"14px", fontWeight:800, letterSpacing:"1px", textTransform:"uppercase", color:"#c8a840", marginBottom:"12px" },
+  calInput: { width:"100%", background:"rgba(255,255,255,0.08)", border:"1.5px solid rgba(200,160,40,0.4)", borderRadius:"8px", padding:"12px 14px", color:"#fff", fontSize:"16px", fontFamily:"'Inter', sans-serif", outline:"none", cursor:"pointer" },
+};
+
+// ─── COMPONENTES ──────────────────────────────────────────────────────────
+function Header() {
   return (
-    <div style={{minHeight:"100vh",background:"linear-gradient(160deg,#080810 0%,#0d0a18 45%,#080810 100%)",fontFamily:"'Georgia',serif",color:"#fff",overflow:"hidden",position:"relative"}}>
-      <style>{`
-        @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-        @keyframes pulse{0%,100%{opacity:.2}50%{opacity:.8}}
-        @keyframes spin{to{transform:rotate(360deg)}}
-        @keyframes flicker{0%,88%,90%,92%,100%{opacity:1}89%,91%{opacity:.3}}
-        @keyframes shimmer{0%{background-position:-200% center}100%{background-position:200% center}}
-        *{box-sizing:border-box}
-        ::-webkit-scrollbar{width:3px}
-        ::-webkit-scrollbar-thumb{background:#ff2d55;border-radius:2px}
-        a:hover{opacity:.8!important}
-        input:focus{outline:none!important}
-      `}</style>
+    <div style={S.header}>
+      <div style={S.logo}>Tu Vegas <span style={S.logoSpan}>Tickets</span></div>
+      <div style={S.headerSub}>Experiencias Auténticas</div>
+    </div>
+  );
+}
 
-      {[...Array(25)].map((_,i)=>(
-        <div key={i} style={{position:"fixed",borderRadius:"50%",pointerEvents:"none",
-          width:`${(i%3)+1}px`,height:`${(i%3)+1}px`,
-          background:["#ffd700","#ff2d55","#9b59b6","#3498db"][i%4],
-          left:`${(i*4.1)%100}%`,top:`${(i*7.3)%100}%`,
-          animation:`pulse ${2+(i%4)}s ease-in-out infinite`,animationDelay:`${i*0.2}s`}}/>
-      ))}
+function Glow() {
+  return (
+    <>
+      <div style={{position:"fixed",top:0,left:"50%",transform:"translateX(-50%)",width:"100%",maxWidth:"420px",height:"100vh",pointerEvents:"none",zIndex:1}}>
+        <div style={{position:"absolute",top:"-120px",left:"50%",transform:"translateX(-50%)",width:400,height:400,background:"radial-gradient(circle,rgba(210,0,185,0.13) 0%,transparent 65%)"}}/>
+        <div style={{position:"absolute",bottom:"-80px",left:"50%",transform:"translateX(-50%)",width:360,height:360,background:"radial-gradient(circle,rgba(210,0,185,0.10) 0%,transparent 65%)"}}/>
+        <div style={{position:"absolute",top:0,left:0,width:"2px",height:"100%",background:"linear-gradient(180deg,transparent,#e000c8 50%,transparent)",opacity:0.5}}/>
+        <div style={{position:"absolute",top:0,right:0,width:"2px",height:"100%",background:"linear-gradient(180deg,transparent,#e000c8 50%,transparent)",opacity:0.5}}/>
+      </div>
+    </>
+  );
+}
 
-      <div style={{maxWidth:"680px",margin:"0 auto",padding:"28px 18px",position:"relative"}}>
+function ExpCard({ exp }) {
+  return (
+    <div style={S.card}>
+      <div style={S.cardTop}>
+        <span style={S.cardEmoji}>{exp.emoji}</span>
+        <div style={S.cardInfo}>
+          <div style={S.cardName}>{exp.name}</div>
+          <div style={S.cardTags}>
+            {exp.dur    && <span style={S.tagDur}>⏱ {exp.dur}</span>}
+            {exp.rating && <span style={S.tagRating}>⭐ {exp.rating}</span>}
+          </div>
+        </div>
+        <div style={S.cardPrice}>{exp.price}</div>
+      </div>
+      <div style={S.cardDesc}>{exp.desc}</div>
+      <a href={exp.url} target="_blank" rel="noopener noreferrer" style={S.cardBtn}>🎟️ Reservar Ahora</a>
+    </div>
+  );
+}
 
-        {/* HEADER */}
-        <div style={{textAlign:"center",marginBottom:"36px",animation:"fadeUp .6s ease"}}>
-          <div style={{fontSize:"0.6rem",letterSpacing:"0.5em",color:"#ff2d55",marginBottom:"10px",textTransform:"uppercase"}}>◆ CLASSIFIED ◆</div>
-          <h1 style={{fontSize:"clamp(1.8rem,6vw,3rem)",margin:"0 0 6px",
-            background:"linear-gradient(135deg,#ffd700 0%,#ff2d55 50%,#ffd700 100%)",
-            backgroundSize:"200% auto",
-            WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",
-            backgroundClip:"text",animation:"flicker 9s infinite, shimmer 4s linear infinite",lineHeight:1.1}}>
-            VEGAS UNVEILED
-          </h1>
-          <p style={{color:"#aaa",fontSize:"0.85rem",margin:0,letterSpacing:"0.1em"}}>Experiences they don't put in the brochures</p>
+function RestCard({ rest }) {
+  const c = CAT_COLORS[rest.cat] || CAT_COLORS["Casual"];
+  const tagTipo = { fontSize:"10px", padding:"2px 8px", borderRadius:"20px", fontWeight:600, background:c.bg, color:c.text, border:`1px solid ${c.border}` };
+  const tagPreco = { fontSize:"11px", padding:"2px 8px", borderRadius:"20px", fontWeight:700, background:"rgba(255,215,0,0.12)", color:"#ffd700", border:"1px solid rgba(255,215,0,0.3)" };
+  const tagGF = { fontSize:"10px", padding:"2px 7px", borderRadius:"20px", fontWeight:600, background:"rgba(52,211,153,0.12)", color:"#6ee7b7", border:"1px solid rgba(52,211,153,0.4)" };
+  const tagVegan = { fontSize:"10px", padding:"2px 7px", borderRadius:"20px", fontWeight:600, background:"rgba(52,211,153,0.18)", color:"#34d399", border:"1px solid rgba(52,211,153,0.5)" };
+  return (
+    <div style={S.card}>
+      <div style={S.cardTop}>
+        <span style={S.cardEmoji}>{rest.emoji}</span>
+        <div style={S.cardInfo}>
+          <div style={S.cardName}>{rest.name}</div>
+          <div style={S.cardTags}>
+            {rest.tipo && <span style={tagTipo}>{rest.tipo}</span>}
+            {rest.preco && <span style={tagPreco}>{rest.preco}</span>}
+            {rest.tags?.includes("gf") && <span style={tagGF}>🌾 GF</span>}
+            {rest.tags?.includes("vegan") && <span style={tagVegan}>🌿 Vegano</span>}
+            {rest.rating && <span style={S.tagRating}>⭐ {rest.rating}</span>}
+          </div>
+          {rest.local && <div style={{fontSize:"10px", color:"rgba(255,255,255,0.35)", marginTop:"5px"}}>📍 {rest.local}</div>}
+        </div>
+      </div>
+      <div style={S.cardDesc}>{rest.desc}</div>
+      <a href={rest.maps} target="_blank" rel="noopener noreferrer"
+        style={{...S.cardBtn, background:"linear-gradient(135deg, #1a6a3a, #0d4a26)"}}>
+        🗺️ Cómo llegar
+      </a>
+    </div>
+  );
+}
+
+// ─── PANTALLA 1: SPLASH ───────────────────────────────────────────────────
+function SplashScreen({ onStart }) {
+  return (
+    <div style={{...S.app, position:"relative"}}>
+      <div style={S.inner}>
+        {/* Foto de fundo */}
+        <div style={{position:"absolute", inset:0, backgroundImage:`url(${VEGAS_BG})`, backgroundSize:"cover", backgroundPosition:"center 40%", zIndex:0}}/>
+        {/* Overlay gradiente */}
+        <div style={{position:"absolute", inset:0, background:"linear-gradient(180deg, rgba(5,0,20,0.92) 0%, rgba(5,0,20,0.45) 20%, rgba(0,0,5,0.05) 45%, rgba(0,0,10,0.2) 65%, rgba(5,0,20,0.88) 82%, rgba(5,0,25,0.97) 100%)", zIndex:1}}/>
+
+        {/* Header */}
+        <div style={{padding:"14px 24px 12px", textAlign:"center", borderBottom:"1.5px solid rgba(200,160,40,0.4)", position:"relative", zIndex:2, flexShrink:0, background:"linear-gradient(180deg, rgba(5,0,20,0.97) 0%, rgba(10,0,35,0.88) 100%)"}}>
+          <div style={{fontFamily:"'Inter', sans-serif", fontSize:"24px", fontWeight:900, letterSpacing:"3px", textTransform:"uppercase", color:"#fff"}}>
+            TU VEGAS <span style={{color:"#cc44ff", textShadow:"0 0 15px rgba(180,50,255,1)"}}>TICKETS</span>
+          </div>
+          <div style={{fontSize:"10px", fontWeight:700, letterSpacing:"5px", textTransform:"uppercase", color:"#c8a840", marginTop:"4px"}}>Experiencias Auténticas</div>
         </div>
 
-        {/* INTRO */}
-        {step===0&&(
-          <div style={{animation:"fadeUp .6s ease .2s both"}}>
-            <div style={{background:"linear-gradient(135deg,rgba(255,45,85,.07),rgba(255,215,0,.04))",border:"1px solid rgba(255,215,0,.12)",borderRadius:"20px",padding:"40px 28px",textAlign:"center",marginBottom:"24px"}}>
-              <div style={{fontSize:"3rem",marginBottom:"20px"}}>🎰</div>
-              <h2 style={{fontSize:"1.45rem",color:"#fff",margin:"0 0 18px",fontWeight:"700",lineHeight:1.35}}>
-                There's a side of Vegas <em style={{color:"#ff2d55",fontStyle:"italic"}}>most people never find.</em>
-              </h2>
-              <p style={{color:"#ccc",lineHeight:1.85,margin:"0 0 10px",fontSize:"0.95rem"}}>Answer a few questions and we'll reveal your personal traveler profile — then build you an itinerary as unique as you are.</p>
-              <p style={{color:"#999",fontSize:"0.85rem",margin:0,fontStyle:"italic"}}>Quick, personal, free.</p>
-            </div>
-            <button onClick={handleNext} style={{width:"100%",padding:"19px",borderRadius:"12px",border:"none",background:"linear-gradient(135deg,#ff2d55,#ff6b35)",color:"#fff",fontSize:"0.95rem",fontWeight:"700",cursor:"pointer",letterSpacing:"0.08em",textTransform:"uppercase",boxShadow:"0 8px 32px rgba(255,45,85,.38)",transition:"all .2s"}}
-              onMouseEnter={e=>{e.currentTarget.style.transform="translateY(-2px)";e.currentTarget.style.boxShadow="0 14px 40px rgba(255,45,85,.55)"}}
-              onMouseLeave={e=>{e.currentTarget.style.transform="none";e.currentTarget.style.boxShadow="0 8px 32px rgba(255,45,85,.38)"}}>
-              REVEAL MY SECRET ITINERARY →
-            </button>
-            <p style={{textAlign:"center",color:"#aaa",fontSize:"0.82rem",margin:"12px 0 0",fontStyle:"italic"}}>
-              ✨ Includes free hidden gems only locals know
-            </p>
+        {/* Meio — frase */}
+        <div style={{flex:1, display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"flex-start", padding:"66px 20px 0", position:"relative", zIndex:2, textAlign:"center"}}>
+          <div style={{fontFamily:"'Anton', sans-serif", fontSize:"8.5vw", lineHeight:1.1, color:"#fff", textShadow:"2px 2px 12px rgba(0,0,0,0.95)", display:"block", whiteSpace:"nowrap"}}>
+            LO QUE PASA EN VEGAS,
           </div>
-        )}
+          <div style={{fontFamily:"'Anton', sans-serif", fontSize:"8.5vw", lineHeight:1.1, color:"#cc44ff", display:"block", whiteSpace:"nowrap", marginTop:"6px"}}>
+            SOLO PASA EN VEGAS.
+          </div>
+        </div>
 
-        {/* QUESTIONS */}
-        {step>=1&&step<=totalSteps&&!loading&&(
-          <div key={step} style={{animation:"fadeUp .35s ease"}}>
-            <div style={{marginBottom:"26px"}}>
-              <div style={{height:"2px",background:"rgba(255,255,255,.06)",borderRadius:"2px"}}>
-                <div style={{height:"100%",borderRadius:"2px",background:"linear-gradient(90deg,#ff2d55,#ffd700)",width:`${(step/totalSteps)*100}%`,transition:"width .5s ease"}}/>
-              </div>
-            </div>
+        {/* Fundo — badge + botão + categorias */}
+        <div style={{flexShrink:0, padding:"0 16px 134px", display:"flex", flexDirection:"column", alignItems:"center", gap:"8px", position:"relative", zIndex:2}}>
+          <div style={{display:"flex", alignItems:"center", gap:"6px", background:"rgba(0,0,0,0.5)", border:"1px solid rgba(200,160,40,0.5)", borderRadius:"20px", padding:"5px 16px", fontSize:"10px", fontWeight:700, letterSpacing:"1px", color:"#e0c060", fontFamily:"'Inter', sans-serif"}}>
+            🔥 +500 EXPERIENCIAS DISPONIBLES
+          </div>
+          <button onClick={onStart} style={{width:"100%", background:"linear-gradient(135deg, #7700cc 0%, #440088 55%, #aa8800 100%)", border:"1.5px solid rgba(200,160,40,0.4)", borderRadius:"10px", overflow:"hidden", boxShadow:"0 0 25px rgba(100,0,200,0.5), 0 4px 16px rgba(0,0,0,0.7)", cursor:"pointer", fontFamily:"'Inter', sans-serif"}}>
+            <span style={{display:"block", padding:"15px 24px 11px", fontFamily:"'Anton', sans-serif", fontSize:"22px", color:"#fff", borderBottom:"1px solid rgba(200,160,40,0.3)", letterSpacing:"2px"}}>
+              ¡EMPIEZA AQUÍ! <span style={{color:"#f0c830"}}>→</span>
+            </span>
+            <span style={{display:"block", padding:"7px 24px 10px", fontSize:"10px", fontWeight:700, letterSpacing:"2px", textTransform:"uppercase", color:"#c8a840"}}>
+              Reserva sin compromiso · Gratis
+            </span>
+          </button>
+          <div style={{display:"flex", alignItems:"center", justifyContent:"center", gap:"6px", fontSize:"10px", fontWeight:700, letterSpacing:"1.5px", textTransform:"uppercase", color:"rgba(255,255,255,0.55)", fontFamily:"'Inter', sans-serif"}}>
+            <span>Tickets</span><span style={{color:"rgba(200,160,40,0.5)"}}>·</span>
+            <span>Shows</span><span style={{color:"rgba(200,160,40,0.5)"}}>·</span>
+            <span>Tours</span><span style={{color:"rgba(200,160,40,0.5)"}}>·</span>
+            <span>Bares</span><span style={{color:"rgba(200,160,40,0.5)"}}>·</span>
+            <span>Restaurantes</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
-            <h2 style={{fontSize:"1.4rem",color:"#fff",margin:"0 0 5px",fontWeight:"normal"}}>{currentQ.question}</h2>
-            <p style={{color:"#ff2d55",fontSize:"0.82rem",margin:"0 0 18px",fontStyle:"italic",fontFamily:"'DM Sans',sans-serif"}}>{currentQ.subtitle}</p>
+// ─── PANTALLA 2: FILTROS CON TABS ────────────────────────────────────────
+const CATS_EXPERIENCIAS = Object.entries(CAT_META)
+  .filter(([id]) => id !== "restaurantes")
+  .map(([id, m]) => ({ id, label:m.label, emoji:m.emoji, hasFecha:m.hasFecha }));
 
-            {currentQ.multi&&(
-              <div style={{background:"rgba(255,215,0,.12)",border:"2px solid rgba(255,215,0,.5)",borderRadius:"10px",padding:"12px 16px",marginBottom:"14px",display:"flex",alignItems:"center",gap:"10px"}}>
-                <span style={{fontSize:"1.1rem"}}>✨</span>
-                <span style={{color:"#ffd700",fontSize:"0.95rem",fontWeight:"700"}}>
-                  {multiCount===0?`✨ Select up to ${currentQ.max} — we'll cover them all`:multiCount<currentQ.max?`${multiCount} selected — pick one more`:`${multiCount} selected — ready!`}
-                </span>
-              </div>
+function FiltrosScreen({ onResultados }) {
+  const [aba, setAba]       = useState("exp"); // "exp" | "rest"
+  const [selExp, setSelExp] = useState([]);
+  const [selRest, setSelRest] = useState([]);
+
+  const toggleExp = (id) => {
+    setSelExp(prev => {
+      if (prev.includes(id)) return prev.filter(x => x !== id);
+      if (prev.length >= MAX_SEL) return prev;
+      return [...prev, id];
+    });
+  };
+
+  const toggleRest = (id) => {
+    setSelRest(prev => {
+      if (prev.includes(id)) return prev.filter(x => x !== id);
+      if (prev.length >= MAX_SUBCAT) return prev;
+      return [...prev, id];
+    });
+  };
+
+  const totalSel = selExp.length + (selRest.length > 0 ? 1 : 0);
+  const ativoExp = selExp.length > 0;
+  const ativoRest = selRest.length > 0;
+  const ativo = ativoExp || ativoRest;
+
+  const handleVer = () => {
+    if (!ativo) return;
+    const cats = [...selExp];
+    if (ativoRest) cats.push("restaurantes");
+    onResultados(cats, selRest);
+  };
+
+  const tabStyle = (active) => ({
+    flex:1, padding:"12px 8px", border:"none", cursor:"pointer",
+    fontFamily:"'Inter', sans-serif", fontSize:"13px", fontWeight:700,
+    letterSpacing:"0.5px", transition:"all 0.2s",
+    background: active ? "rgba(224,0,200,0.2)" : "rgba(255,255,255,0.05)",
+    color: active ? "#fff" : "rgba(255,255,255,0.45)",
+    borderBottom: active ? "2px solid #e000c8" : "2px solid transparent",
+    boxShadow: active ? "0 0 12px rgba(200,0,180,0.2)" : "none",
+  });
+
+  return (
+    <div style={S.app}>
+      <div style={S.inner}>
+        <Glow />
+        <Header />
+
+        {/* ── ABAS ── */}
+        <div style={{display:"flex", flexShrink:0, borderBottom:"1px solid rgba(255,255,255,0.08)"}}>
+          <button style={tabStyle(aba === "exp")} onClick={() => setAba("exp")}>
+            🎭 Experiencias
+            {ativoExp && <span style={{marginLeft:"6px", background:"#e000c8", color:"#fff", borderRadius:"10px", padding:"1px 6px", fontSize:"10px"}}>{selExp.length}</span>}
+          </button>
+          <button style={tabStyle(aba === "rest")} onClick={() => setAba("rest")}>
+            🍻 Comer & Beber
+            {ativoRest && <span style={{marginLeft:"6px", background:"#e000c8", color:"#fff", borderRadius:"10px", padding:"1px 6px", fontSize:"10px"}}>{selRest.length}</span>}
+          </button>
+        </div>
+
+        <div style={S.filtrosBody}>
+          <div style={S.filtrosScroll}>
+
+            {/* ── ABA EXPERIENCIAS ── */}
+            {aba === "exp" && (
+              <>
+                <div style={S.filtrosTitulo}>¿Qué quieres hacer?</div>
+                <div style={S.filtrosSub}>Elige hasta <span style={{color:"#e000c8", textShadow:"0 0 12px rgba(200,0,180,0.8)"}}>{MAX_SEL} opciones</span></div>
+                <div style={S.filtrosGrid}>
+                  {CATS_EXPERIENCIAS.map((cat, i) => {
+                    const isSel = selExp.includes(cat.id);
+                    const isLast = i === CATS_EXPERIENCIAS.length - 1 && CATS_EXPERIENCIAS.length % 2 !== 0;
+                    return (
+                      <button key={cat.id} onClick={() => toggleExp(cat.id)}
+                        style={{...S.filtroBtn(isSel), gridColumn: isLast ? "1 / -1" : undefined}}>
+                        <span style={S.filtroEmoji}>{cat.emoji}</span>
+                        {cat.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </>
             )}
 
-            <div style={{display:"grid",gridTemplateColumns:currentQ.cols===3?"repeat(3,1fr)":"repeat(2,1fr)",gap:"10px",marginBottom:"20px"}}>
-              {currentQ.options.map(opt=>{
-                const isSel=currentQ.multi?Array.isArray(selected)&&selected.includes(opt.v):selected===opt.v;
-                const isDisabled=currentQ.multi&&!isSel&&multiCount>=(currentQ.max||2);
+            {/* ── ABA RESTAURANTES ── */}
+            {aba === "rest" && (
+              <>
+                <div style={S.filtrosTitulo}>¿Dónde comer?</div>
+                <div style={S.filtrosSub}>Elige hasta <span style={{color:"#e000c8", textShadow:"0 0 12px rgba(200,0,180,0.8)"}}>{MAX_SUBCAT} categorías</span></div>
+                <div style={S.filtrosGrid}>
+                  {SUBCATS.map((cat, i) => {
+                    const isSel = selRest.includes(cat.id);
+                    const isLast = i === SUBCATS.length - 1 && SUBCATS.length % 2 !== 0;
+                    const c = CAT_COLORS[cat.id] || {};
+                    return (
+                      <button key={cat.id} onClick={() => toggleRest(cat.id)}
+                        style={{
+                          ...S.filtroBtn(isSel),
+                          gridColumn: isLast ? "1 / -1" : undefined,
+                          border: isSel ? `2px solid ${c.border || "#e000c8"}` : "1.5px solid rgba(255,255,255,0.25)",
+                          background: isSel ? (c.bg || "rgba(224,0,200,0.25)") : "rgba(255,255,255,0.09)",
+                          color: isSel ? (c.text || "#fff") : "rgba(255,255,255,0.85)",
+                          boxShadow: isSel ? `0 0 16px ${c.border || "rgba(224,0,200,0.35)"}` : "0 2px 8px rgba(0,0,0,0.4)",
+                        }}>
+                        <span style={S.filtroEmoji}>{cat.emoji}</span>
+                        {cat.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </>
+            )}
+          </div>
+
+          {/* ── RODAPÉ FIXO ── */}
+          <div style={S.filtrosFooter}>
+            <div style={S.contador(ativo)}>
+              {!ativo && "Selecciona al menos una opción"}
+              {ativo && `${ativoExp ? selExp.length + " experiencia(s)" : ""}${ativoExp && ativoRest ? " + " : ""}${ativoRest ? selRest.length + " restaurante(s)" : ""}`}
+            </div>
+            <div style={{display:"flex",justifyContent:"center"}}>
+              <button onClick={handleVer}
+                style={{...S.cta, opacity: ativo ? 1 : 0.35, pointerEvents: ativo ? "auto" : "none",
+                  boxShadow: ativo ? "0 0 28px rgba(200,0,180,0.45),0 8px 28px rgba(0,0,0,0.5)" : "none"}}>
+                <span style={S.ctaMain}>¡Ver opciones! →</span>
+                <span style={S.ctaSub}>Mostrar todo disponible</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── PANTALLA 3: RESULTADOS ───────────────────────────────────────────────
+function ResultadosScreen({ sel, subcatRest, onVolver }) {
+  const [fecha, setFecha] = useState("");
+  const [erro, setErro] = useState(false);
+
+  // Proteção contra tela branca
+  if (!sel || sel.length === 0) {
+    return (
+      <div style={{minHeight:"100vh", background:"#050014", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", padding:"32px", textAlign:"center"}}>
+        <div style={{color:"rgba(255,255,255,0.5)", fontSize:"14px", marginBottom:"24px"}}>Algo salió mal. Por favor, vuelve e intenta de nuevo.</div>
+        <button onClick={onVolver} style={{background:"linear-gradient(135deg,#7700cc,#440088)", border:"none", color:"#fff", padding:"14px 32px", borderRadius:"10px", fontSize:"15px", fontWeight:700, cursor:"pointer"}}>← Volver</button>
+      </div>
+    );
+  }
+
+  if (erro) {
+    return (
+      <div style={{minHeight:"100vh", background:"#050014", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", padding:"32px", textAlign:"center"}}>
+        <div style={{color:"rgba(255,255,255,0.5)", fontSize:"14px", marginBottom:"24px"}}>Algo salió mal. Por favor, vuelve e intenta de nuevo.</div>
+        <button onClick={onVolver} style={{background:"linear-gradient(135deg,#7700cc,#440088)", border:"none", color:"#fff", padding:"14px 32px", borderRadius:"10px", fontSize:"15px", fontWeight:700, cursor:"pointer"}}>← Volver</button>
+      </div>
+    );
+  }
+
+  const filtrarPorFecha = (items, catId) => {
+    if (!CAT_META[catId]?.hasFecha) return items;
+    if (!fecha) return items;
+    return items.filter(item => {
+      // Sem datas = evento permanente/diário, sempre aparece
+      if (!item.dates || item.dates.length === 0) return true;
+      // Verifica se a data selecionada está na lista de datas específicas
+      return item.dates.includes(fecha);
+    });
+  };
+
+  const hasFecha = sel.some(id => CAT_META[id]?.hasFecha);
+  const seen = new Set();
+
+  let sections = [];
+  try {
+    sections = sel.map(catId => {
+    let items = (DB[catId] || []).filter(item => {
+      if (seen.has(item.name)) return false;
+      seen.add(item.name);
+      return true;
+    });
+    // Filtrar por subcategoria se for restaurantes
+    if (catId === "restaurantes" && subcatRest && subcatRest.length > 0) {
+      items = items.filter(item => subcatRest.includes(item.cat));
+    }
+    // Churrascarias dentro de restaurantes
+    if (catId === "restaurantes" && subcatRest && subcatRest.includes("Churrascaria")) {
+      const churr = (DB["churrascarias"] || []).filter(item => {
+        if (seen.has(item.name)) return false;
+        seen.add(item.name);
+        return true;
+      });
+      items = [...items, ...churr];
+    }
+    // Ordenar: shows mantém ordem original (mágicos juntos no final), resto alfabético
+    if (catId !== "shows" && catId !== "restaurantes") {
+      items = [...items].sort((a, b) => a.name.localeCompare(b.name, "es"));
+    }
+    // Shows: mágicos juntos no final
+    if (catId === "shows") {
+      const magicos = ["Criss Angel MINDFREAK","Mat Franco — Magic Reinvented Nightly","Allstars of Magic","V — The Ultimate Variety Show"];
+      items = [
+        ...items.filter(i => !magicos.includes(i.name)),
+        ...items.filter(i => magicos.includes(i.name)),
+      ];
+    }
+    const filtered = filtrarPorFecha(items, catId);
+    return { catId, meta: CAT_META[catId], items: filtered };
+  }).filter(s => s.items.length > 0);
+  } catch(e) {
+    console.error("Erro ResultadosScreen:", e);
+    return (
+      <div style={{minHeight:"100vh", background:"#050014", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", padding:"32px", textAlign:"center"}}>
+        <div style={{color:"rgba(255,255,255,0.5)", fontSize:"14px", marginBottom:"24px"}}>Algo salió mal. Por favor, vuelve e intenta de nuevo.</div>
+        <button onClick={onVolver} style={{background:"linear-gradient(135deg,#7700cc,#440088)", border:"none", color:"#fff", padding:"14px 32px", borderRadius:"10px", fontSize:"15px", fontWeight:700, cursor:"pointer"}}>← Volver</button>
+      </div>
+    );
+  }
+
+  return (
+    <div style={S.app}>
+      <div style={S.inner}>
+        <Glow />
+        <Header />
+        <div style={S.resBody}>
+          <button style={S.resBack} onClick={onVolver}>
+            ← Volver
+          </button>
+
+          {hasFecha && (
+            <div style={S.calWrap}>
+              <div style={S.calTitle}>📅 ¿Cuándo estarás en Las Vegas?</div>
+              <input type="date" style={S.calInput} value={fecha}
+                onChange={e => setFecha(e.target.value)}
+                min="2026-01-01" max="2027-12-31" />
+              {fecha && (
+                <div style={{fontSize:"11px",color:"rgba(255,255,255,0.4)",marginTop:"8px"}}>
+                  Mostrando eventos disponibles el {new Date(fecha+"T00:00:00").toLocaleDateString("es-ES",{day:"numeric",month:"long",year:"numeric"})}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Aviso legal apenas para categorias que não são restaurantes */}
+          {sel.some(id => id !== "restaurantes") && (
+            <div style={{fontSize:"12px", color:"rgba(255,255,255,0.55)", fontStyle:"italic", lineHeight:1.5, marginBottom:"20px", padding:"10px 14px", background:"rgba(255,255,255,0.04)", borderRadius:"8px", border:"1px solid rgba(255,255,255,0.1)"}}>
+              * Precios referenciales, sujetos a disponibilidad y cambios sin previo aviso.
+            </div>
+          )}
+
+          {sections.length === 0 && fecha && (
+            <div style={{textAlign:"center",color:"rgba(255,255,255,0.5)",padding:"40px 20px"}}>
+              <div style={{fontSize:"32px",marginBottom:"12px"}}>📅</div>
+              <div style={{fontSize:"14px"}}>No hay eventos disponibles para esa fecha.</div>
+              <div style={{fontSize:"12px",color:"rgba(255,255,255,0.3)",marginTop:"8px"}}>Prueba con otra fecha o elimina el filtro.</div>
+            </div>
+          )}
+
+          {sections.map(({ catId, meta, items }, si) => {
+            if (catId === "restaurantes") {
+              // Agrupar por subcategoria e ordenar por preço dentro de cada uma
+              const subcatOrder = ["Desayuno","Casual","Con Vista al Bellagio","Churrascaria","Rooftop","Fine Dining","Famosos de la TV","Confeitaria","Vegano"];
+              const grupos = {};
+              items.forEach(item => {
+                const k = item.cat || "Outros";
+                if (!grupos[k]) grupos[k] = [];
+                grupos[k].push(item);
+              });
+              const subcatsPresentes = subcatOrder.filter(k => grupos[k]?.length > 0);
+              return (
+                <div key={catId} style={{marginBottom:"36px", animation:`fadeUp 0.45s ease ${si*0.08}s both`}}>
+                  <div style={S.catHeader}>
+                    <span style={S.catTitulo}>Bares & Restaurantes</span>
+                  </div>
+                  {subcatsPresentes.map(subcat => (
+                    <div key={subcat}>
+                      <div style={S.catSubTitulo}>{subcat}</div>
+                      {grupos[subcat]
+                        .sort((a,b) => (PRECO_ORDER[a.preco]||0) - (PRECO_ORDER[b.preco]||0))
+                        .map(exp => <RestCard key={exp.name} rest={exp} />)}
+                    </div>
+                  ))}
+                  {/* Botão voltar embaixo */}
+                  <button style={{...S.resBack, marginTop:"16px"}} onClick={onVolver}>← Volver</button>
+                </div>
+              );
+            }
+            return (
+              <div key={catId} style={{marginBottom:"36px", animation:`fadeUp 0.45s ease ${si*0.08}s both`}}>
+                <div style={S.catHeader}>
+                  <span style={S.catTitulo}>{meta.label}</span>
+                </div>
+                {items.map(exp => <ExpCard key={exp.name} exp={exp} />)}
+              </div>
+            );
+          })}
+          {/* Mensagem de afiliação */}
+          <div style={{fontSize:"11px", color:"rgba(255,255,255,0.35)", fontStyle:"italic", lineHeight:1.6, marginTop:"8px", marginBottom:"24px", padding:"10px 14px", background:"rgba(200,160,40,0.05)", borderRadius:"8px", border:"1px solid rgba(200,160,40,0.15)", textAlign:"center"}}>
+            🔗 Algunos enlaces son de afiliación. Al reservar a través de ellos, apoyás este proyecto sin costo adicional para ti.
+          </div>
+        </div>
+      </div>
+      <style>{`@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}`}</style>
+    </div>
+  );
+}
+
+function SubcatRestScreen({ onVolver, onResultados }) {
+  const [sel, setSel] = useState([]);
+
+  const toggle = (id) => {
+    setSel(prev => {
+      if (prev.includes(id)) return prev.filter(x => x !== id);
+      if (prev.length >= MAX_SUBCAT) return prev;
+      return [...prev, id];
+    });
+  };
+
+  const ativo = sel.length >= 1;
+  const atMax = sel.length === MAX_SUBCAT;
+
+  return (
+    <div style={S.app}>
+      <div style={S.inner}>
+        <Glow />
+        <Header />
+        <div style={S.filtrosBody}>
+          <div style={S.filtrosScroll}>
+            {/* Botón volver */}
+            <button onClick={onVolver}
+              style={{background:"rgba(255,255,255,0.07)", border:"1.5px solid rgba(255,255,255,0.18)", borderRadius:"10px", color:"rgba(255,255,255,0.7)", fontSize:"13px", fontWeight:600, padding:"10px 16px", cursor:"pointer", fontFamily:"'Inter', sans-serif", marginBottom:"20px", display:"flex", alignItems:"center", gap:"6px"}}>
+              ← Volver
+            </button>
+
+            <div style={S.filtrosTitulo}>Restaurantes</div>
+            <div style={S.filtrosSub}>Elige hasta <span style={{color:"#e000c8", textShadow:"0 0 12px rgba(200,0,180,0.8)"}}>{MAX_SUBCAT} categorías</span></div>
+
+            <div style={S.filtrosGrid}>
+              {SUBCATS.map((cat, i) => {
+                const isSel = sel.includes(cat.id);
+                const isLast = i === SUBCATS.length - 1 && SUBCATS.length % 2 !== 0;
+                const c = CAT_COLORS[cat.id] || {};
                 return (
-                  <button key={opt.v} onClick={()=>!isDisabled&&handleSelect(opt.v)} style={{padding:"16px 12px",borderRadius:"13px",border:"none",cursor:isDisabled?"not-allowed":"pointer",
-                    background:isSel?"linear-gradient(135deg,rgba(255,45,85,.25),rgba(255,215,0,.15))":"rgba(255,255,255,.08)",
-outline:isSel?"1.5px solid rgba(255,215,0,.55)":"1px solid rgba(255,255,255,.15)",
-                    opacity:isDisabled&&!isSel?.45:1,color:"#fff",textAlign:"left",transition:"all .2s",
-                    transform:isSel?"scale(1.03)":"scale(1)"}}>
-                    <div style={{fontSize:"1.4rem",marginBottom:"6px"}}>{opt.emoji}</div>
-                    <div style={{fontWeight:"700",fontSize:"0.95rem",marginBottom:"4px",color:isSel?"#ffd700":"#fff"}}>{opt.label}</div>
-                    <div style={{color:"#aaa",fontSize:"0.8rem",lineHeight:1.5}}>{opt.desc}</div>
-                    {isSel&&<div style={{marginTop:"6px",color:"#ffd700",fontSize:"0.75rem"}}>✓</div>}
+                  <button key={cat.id} onClick={() => toggle(cat.id)}
+                    style={{
+                      ...S.filtroBtn(isSel),
+                      gridColumn: isLast ? "1 / -1" : undefined,
+                      border: isSel ? `2px solid ${c.border || "#e000c8"}` : "1.5px solid rgba(255,255,255,0.25)",
+                      background: isSel ? (c.bg || "rgba(224,0,200,0.25)") : "rgba(255,255,255,0.09)",
+                      color: isSel ? (c.text || "#fff") : "rgba(255,255,255,0.85)",
+                      boxShadow: isSel ? `0 0 16px ${c.border || "rgba(224,0,200,0.35)"}` : "0 2px 8px rgba(0,0,0,0.4)",
+                    }}>
+                    <span style={S.filtroEmoji}>{cat.emoji}</span>
+                    {cat.label}
                   </button>
                 );
               })}
             </div>
+          </div>
 
-            {/* Floating continue button — always visible */}
-            <div style={{position:"sticky",bottom:"16px",zIndex:100,marginTop:"16px"}}>
-              <button onClick={handleNext} disabled={!canContinue} style={{width:"100%",padding:"16px",borderRadius:"12px",border:"none",
-                background:canContinue?"linear-gradient(135deg,#ff2d55,#ff6b35)":"rgba(20,20,30,.95)",
-                color:canContinue?"#fff":"#666",fontSize:"0.92rem",fontWeight:"700",
-                cursor:canContinue?"pointer":"not-allowed",letterSpacing:"0.08em",textTransform:"uppercase",transition:"all .3s",
-                boxShadow:canContinue?"0 6px 24px rgba(255,45,85,.5), 0 2px 8px rgba(0,0,0,.8)":"0 2px 8px rgba(0,0,0,.6)",
-                border:canContinue?"none":"1px solid rgba(255,255,255,.08)"}}>
-                {step===totalSteps?"🔓 Unlock My Itinerary":canContinue?"Continue →":"Select an option above"}
+          <div style={S.filtrosFooter}>
+            <div style={S.contador(ativo)}>
+              {!ativo && "Selecciona al menos una categoría"}
+              {ativo && !atMax && `${sel.length} de ${MAX_SUBCAT} seleccionadas`}
+              {atMax && "✦ Máximo alcanzado ✦"}
+            </div>
+            <div style={{display:"flex",justifyContent:"center"}}>
+              <button onClick={() => ativo && onResultados(sel)}
+                style={{...S.cta, opacity: ativo ? 1 : 0.35, pointerEvents: ativo ? "auto" : "none",
+                  boxShadow: ativo ? "0 0 28px rgba(200,0,180,0.45),0 8px 28px rgba(0,0,0,0.5)" : "none"}}>
+                <span style={S.ctaMain}>¡Ver restaurantes! →</span>
+                <span style={S.ctaSub}>Mostrar opciones disponibles</span>
               </button>
             </div>
           </div>
-        )}
-
-        {/* LOADING */}
-        {loading&&(
-          <div style={{textAlign:"center",padding:"60px 0",animation:"fadeUp .4s ease"}}>
-            <div style={{position:"relative",width:"70px",height:"70px",margin:"0 auto 24px"}}>
-              {[0,1,2].map(i=>(
-                <div key={i} style={{position:"absolute",inset:`${i*8}px`,borderRadius:"50%",border:"2px solid transparent",
-                  borderTopColor:i%2===0?"#ff2d55":"#ffd700",
-                  animation:`spin ${1+i*.5}s linear infinite ${i%2?"reverse":""}`}}/>
-              ))}
-            </div>
-            <p style={{color:"#ffd700",fontSize:"0.95rem",margin:"0 0 6px"}}>Accessing the underground...</p>
-            <p style={{color:"#888",fontSize:"0.78rem"}}>Building your secret Vegas itinerary</p>
-          </div>
-        )}
-
-        {/* RESULTS */}
-        {step===totalSteps+1&&!loading&&(
-          <div style={{animation:"fadeUp .5s ease"}}>
-
-            {/* AI Story */}
-            <div style={{background:"linear-gradient(135deg,rgba(255,45,85,.09),rgba(255,215,0,.05))",border:"1px solid rgba(255,215,0,.16)",borderLeft:"3px solid #ff2d55",borderRadius:"16px",padding:"22px",marginBottom:"16px"}}>
-              <div style={{color:"#ff2d55",fontSize:"0.62rem",letterSpacing:"0.22em",marginBottom:"10px"}}>◆ YOUR SECRET BRIEFING</div>
-              {!aiReady ? (
-                <div style={{display:"flex",alignItems:"center",gap:"12px",padding:"8px 0"}}>
-                  <div style={{position:"relative",width:"28px",height:"28px",flexShrink:0}}>
-                    {[0,1,2].map(i=>(
-                      <div key={i} style={{position:"absolute",inset:`${i*4}px`,borderRadius:"50%",border:"1.5px solid transparent",
-                        borderTopColor:i%2===0?"#ff2d55":"#ffd700",
-                        animation:`spin ${0.8+i*.3}s linear infinite ${i%2?"reverse":""}`}}/>
-                    ))}
-                  </div>
-                  <div>
-                    <p style={{color:"#ffd700",fontSize:"0.8rem",margin:"0 0 3px",fontWeight:"700"}}>Analyzing your traveler profile...</p>
-                    <p style={{color:"#888",fontSize:"0.72rem",margin:0}}>Your personalized briefing will appear in a few seconds ✨</p>
-                  </div>
-                </div>
-              ) : (
-                <div style={{animation:"fadeUp .5s ease"}}>
-                  {aiTitle && (
-                    <div style={{marginBottom:"14px"}}>
-                      <span style={{fontSize:"0.65rem",letterSpacing:"0.18em",color:"#888",textTransform:"uppercase"}}>Traveler Profile</span>
-                      <div style={{fontSize:"1.05rem",fontWeight:"700",color:"#ffd700",fontStyle:"normal",letterSpacing:"0.04em",marginTop:"4px"}}>{aiTitle}</div>
-                    </div>
-                  )}
-                  {aiStory.split("\n\n").filter(p=>p.trim()).map((para,i)=>(
-                    <p key={i} style={{color:"#ddd",lineHeight:1.9,margin:i===0?"0 0 14px 0":"0 0 14px 0",fontStyle:"italic",fontSize:"0.92rem"}}>
-                      {i===0?"\"":""}{para}{i===aiStory.split("\n\n").filter(p=>p.trim()).length-1?"\"":""}
-                    </p>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {/* Summary badges */}
-            <div style={{display:"flex",flexWrap:"wrap",gap:"6px",marginBottom:"22px"}}>
-              {[`${seasonLabels[answers.season]} in Vegas`,`${daysLabels[answers.days]} trip`].map(b=>(
-                <div key={b} style={{background:"rgba(255,215,0,.07)",border:"1px solid rgba(255,215,0,.16)",borderRadius:"20px",padding:"4px 14px",color:"#ffd700",fontSize:"0.72rem",letterSpacing:"0.06em"}}>{b}</div>
-              ))}
-            </div>
-
-            {/* HOTELS FIRST */}
-            {hotels.length>0&&answers.alreadyInVegas!=="already"&&(
-              <div style={{marginBottom:"28px"}}>
-                <h3 style={{color:"#fff",fontSize:"1.1rem",margin:"0 0 4px",fontWeight:"700"}}>🏨 Where to Stay</h3>
-                <p style={{color:"#888",fontSize:"0.78rem",margin:"0 0 14px"}}>Matched to your profile & budget</p>
-                <div style={{display:"flex",flexDirection:"column",gap:"12px",marginBottom:"8px"}}>
-                  {hotels.map((h,i)=>(
-                    <div key={h.name} style={{background:"rgba(255,255,255,.04)",border:"1px solid rgba(255,255,255,.09)",borderRadius:"14px",padding:"18px",animation:`fadeUp .5s ease ${i*.1}s both`}}>
-                      <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:"10px"}}>
-                        <div style={{flex:1}}>
-                          <div style={{color:"#fff",fontWeight:"700",fontSize:"1rem",marginBottom:"3px"}}>{h.name}</div>
-                          <div style={{color:"#ffd700",fontSize:"0.75rem",marginBottom:"5px"}}>{"⭐".repeat(h.stars)}</div>
-                          <div style={{color:"#aaa",fontSize:"0.82rem"}}>{h.feature}</div>
-                        </div>
-                        <div style={{color:"#2ecc71",fontSize:"0.85rem",fontWeight:"700",marginLeft:"12px",whiteSpace:"nowrap"}}>{h.price}</div>
-                      </div>
-                      <a href={h.url} target="_blank" rel="noopener noreferrer" style={{display:"block",background:"rgba(26,92,26,.5)",border:"1px solid rgba(39,174,96,.4)",color:"#2ecc71",padding:"12px 16px",borderRadius:"9px",textDecoration:"none",fontSize:"0.85rem",fontWeight:"700",textAlign:"center"}}>
-                        🏨 View Hotel
-                      </a>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* PAID EXPERIENCES + FREE INTERCALATED — grouped by day */}
-            <h2 style={{color:"#fff",fontSize:"1.2rem",margin:"0 0 4px",fontWeight:"700"}}>Your Itinerary</h2>
-            <p style={{color:"#888",fontSize:"0.78rem",margin:"0 0 4px",fontFamily:"'DM Sans',sans-serif"}}>Book directly — links below</p>
-<p style={{color:"#666",fontSize:"0.68rem",margin:"0 0 18px",fontStyle:"italic",fontFamily:"'DM Sans',sans-serif"}}>* Prices are indicative and subject to availability. Rates may change without notice. We are not responsible for price variations at the time of booking.</p>
-
-            <div style={{display:"flex",flexDirection:"column",gap:"20px",marginBottom:"28px"}}>
-              {(() => {
-                const combined = [];
-                const dayPairs = Math.ceil(itinerary.length / 2);
-
-                let freeIdx = 0;
-                for(let d=0; d<dayPairs; d++){
-                  const dayExp = itinerary[d*2];
-                  const nightExp = itinerary[d*2+1];
-                  const freeForThisDay = freeExp[freeIdx] || null;
-                  if(freeForThisDay) freeIdx++;
-                  combined.push(
-                    <div key={`day-${d+1}`}>
-                      <div style={{color:"#ff2d55",fontSize:"1.1rem",fontWeight:"700",letterSpacing:"0.05em",margin:"0 0 8px",fontFamily:"Georgia,serif"}}>
-                        Day {d+1}
-                      </div>
-                      <div style={{display:"flex",flexDirection:"column",gap:"10px"}}>
-                        {dayExp && <ExperienceCard key={dayExp.id} exp={dayExp} day={null} index={d*2} isFree={false} timeLabel="🌅 Day"/>}
-                        {freeForThisDay && <ExperienceCard key={freeForThisDay.id} exp={freeForThisDay} day={null} index={d*2} isFree={true}/>}
-                        {nightExp && <ExperienceCard key={nightExp.id} exp={nightExp} day={null} index={d*2+1} isFree={false} timeLabel="🌙 Night"/>}
-                      </div>
-                    </div>
-                  );
-                }
-                return combined;
-              })()}
-            </div>
-
-            {/* FAMILY TIPS BONUS CARD */}
-            {answers.tripType==="family"&&(
-              <div style={{background:"rgba(255,215,0,.05)",border:"1px solid rgba(255,215,0,.15)",borderRadius:"16px",padding:"20px",marginBottom:"22px"}}>
-                <div style={{color:"#ffd700",fontSize:"0.62rem",letterSpacing:"0.2em",marginBottom:"12px"}}>◆ INSIDER TIPS — VEGAS WITH KIDS</div>
-                <div style={{display:"flex",flexDirection:"column",gap:"8px"}}>
-                  {[
-                    {emoji:"🎂",tip:"Age matters in Vegas — under 21 cannot sit at bars or stay in casinos. Kids can walk through but not linger."},
-                    {emoji:"☀️",tip:"Avoid June–September if possible. Heat exceeds 105°F and can exhaust children quickly."},
-                    {emoji:"💧",tip:"Carry water bottles everywhere. The dry desert air dehydrates kids faster than you expect."},
-                    {emoji:"🏨",tip:"Book a hotel with kitchen or kitchenette — saves money and makes meals easier for picky eaters."},
-                    {emoji:"🎰",tip:"Kids can walk through casinos but cannot stop, sit or linger — even with an adult. Keep moving and they're fine."},
-                    {emoji:"🌅",tip:"Plan outdoor activities for early morning (before 10am) and return indoors during peak heat (noon–4pm)."},
-                    {emoji:"🚗",tip:"Consider renting a car — much easier with young kids than navigating the Strip on foot."},
-                    {emoji:"🚬",tip:"You will smell marijuana on the Strip. It's legal in Nevada. Prepare your kids in advance."},
-                    {emoji:"🎭",tip:"Some Strip characters smoke. Be prepared for your child to see Mickey or Elmo with a cigarette."},
-                    {emoji:"✈️",tip:"Build in a rest day on arrival — jet lag hits kids hard and a calm first day sets up the whole trip."},
-                  ].map((item,i)=>(
-                    <div key={i} style={{display:"flex",gap:"10px",alignItems:"flex-start"}}>
-                      <span style={{fontSize:"1rem",minWidth:"24px"}}>{item.emoji}</span>
-                      <p style={{color:"#aaa",fontSize:"0.78rem",lineHeight:1.6,margin:0}}>{item.tip}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Share buttons — moved to bottom */}
-            <div style={{marginBottom:"20px"}}>
-              <p style={{color:"#aaa",fontSize:"0.78rem",margin:"0 0 10px",textAlign:"center"}}>Know someone who'd love this? Send them their own custom itinerary.</p>
-              <div style={{display:"flex",gap:"8px"}}>
-                <button onClick={()=>{
-                    const shareText = "Going to Vegas? Discover your traveler profile and see what the city has to offer you 🎰\n" + window.location.href;
-                    if(navigator.clipboard && navigator.clipboard.writeText){
-                      navigator.clipboard.writeText(shareText).then(()=>alert("Copied! Just paste and send 🎰")).catch(()=>{
-                        prompt("Copy this and send to your friend:", shareText);
-                      });
-                    } else {
-                      prompt("Copy this and send to your friend:", shareText);
-                    }
-                  }}
-                  style={{flex:1,padding:"12px",borderRadius:"9px",border:"1px solid rgba(255,255,255,.12)",background:"rgba(255,255,255,.05)",color:"#ccc",fontSize:"0.8rem",cursor:"pointer"}}>
-                  🔗 Copy Link
-                </button>
-                <button onClick={()=>{
-                    const shareText = "Going to Vegas? Discover your traveler profile and see what the city has to offer you 🎰";
-                    const shareUrl = window.location.href;
-                    if(navigator.share){
-                      navigator.share({ title:"Vegas Unveiled", text: shareText, url: shareUrl });
-                    } else {
-                      prompt("Copy and share this:", shareText + "\n" + shareUrl);
-                    }
-                  }}
-                  style={{flex:1,padding:"12px",borderRadius:"9px",border:"1px solid rgba(255,215,0,.25)",background:"rgba(255,215,0,.08)",color:"#ffd700",fontSize:"0.8rem",cursor:"pointer",fontWeight:"700"}}>
-                  💬 Share with Friends
-                </button>
-              </div>
-            </div>
-
-            {/* EMAIL CAPTURE */}
-            {!emailSent?(
-              <div style={{background:"rgba(255,255,255,.03)",border:"1px solid rgba(255,255,255,.09)",borderRadius:"14px",padding:"18px",marginBottom:"22px"}}>
-                <p style={{color:"#ccc",fontSize:"0.85rem",margin:"0 0 12px"}}>
-                  📧 <strong style={{color:"#fff"}}>Get your itinerary as PDF</strong> — save it for later and share with your travel buddies
-                </p>
-                {!aiReady && (
-                  <p style={{color:"#ffd700",fontSize:"0.75rem",margin:"0 0 10px",fontStyle:"italic"}}>
-                    ⏳ Finalizing your personalized briefing — email will be ready in seconds...
-                  </p>
-                )}
-                <div style={{display:"flex",gap:"8px"}}>
-                  <input type="email" placeholder="your@email.com" value={email} onChange={e=>setEmail(e.target.value)}
-                    style={{flex:1,padding:"11px 14px",borderRadius:"8px",border:"1px solid rgba(255,255,255,.12)",background:"rgba(255,255,255,.05)",color:"#fff",fontSize:"0.85rem"}}/>
-                  <button onClick={handleEmailSubmit} disabled={!email||emailLoading||!aiReady} style={{padding:"11px 16px",borderRadius:"8px",border:"none",background:(email&&aiReady)?"linear-gradient(135deg,#ff2d55,#c0392b)":"rgba(255,255,255,.05)",color:(email&&aiReady)?"#fff":"#444",fontSize:"0.8rem",fontWeight:"700",cursor:(email&&aiReady)?"pointer":"not-allowed",whiteSpace:"nowrap"}}>
-                    {emailLoading?"Sending...":!aiReady?"Wait...":"Send PDF"}
-                  </button>
-                </div>
-              </div>
-            ):(
-              <div style={{background:"rgba(39,174,96,.1)",border:"1px solid rgba(39,174,96,.3)",borderRadius:"14px",padding:"14px 18px",marginBottom:"22px",textAlign:"center"}}>
-                <span style={{color:"#2ecc71",fontSize:"0.85rem"}}>✅ Itinerary sent to {email} — check your inbox!</span>
-              </div>
-            )}
-
-            {/* Feedback section */}
-            <div style={{background:"rgba(255,215,0,.04)",border:"1px solid rgba(255,215,0,.12)",borderRadius:"14px",padding:"18px",marginBottom:"16px",textAlign:"center"}}>
-              <p style={{color:"#ccc",fontSize:"0.85rem",margin:"0 0 4px",fontWeight:"700"}}>
-                🎰 Missing something in your itinerary?
-              </p>
-              <p style={{color:"#888",fontSize:"0.78rem",margin:"0 0 12px"}}>
-                Vegas is waiting for you with open arms.
-              </p>
-              <a href="mailto:unveiledvegas@gmail.com?subject=Itinerary Feedback"
-                style={{display:"inline-block",padding:"10px 22px",borderRadius:"9px",border:"1px solid rgba(255,215,0,.25)",color:"#ffd700",fontSize:"0.8rem",textDecoration:"none",fontWeight:"700"}}>
-                Leave Your Feedback →
-              </a>
-            </div>
-
-            <button onClick={()=>{setStep(0);setAnswers({});setSelected(null);setAiStory("");setAiTitle("");setAiReady(false);setItinerary([]);setFreeExp([]);setHotels([]);setEmail("");setEmailSent(false);}}
-              style={{width:"100%",padding:"16px",borderRadius:"10px",background:"rgba(255,255,255,.06)",border:"1px solid rgba(255,255,255,.2)",color:"#bbb",fontSize:"0.95rem",fontWeight:"600",cursor:"pointer",transition:"all .2s"}}
-              onMouseEnter={e=>{e.currentTarget.style.color="#fff";e.currentTarget.style.background="rgba(255,255,255,.12)"}}
-              onMouseLeave={e=>{e.currentTarget.style.color="#bbb";e.currentTarget.style.background="rgba(255,255,255,.06)"}}>
-              ↩ Start Over — Build a New Itinerary
-            </button>
-
-            <p style={{textAlign:"center",color:"#444",fontSize:"0.65rem",marginTop:"16px"}}>
-              Booking links may include affiliate partnerships · Prices subject to availability
-            </p>
-          </div>
-        )}
+        </div>
       </div>
     </div>
   );
 }
 
-function ExperienceCard({exp,day,index,isFree,timeLabel}){
-  const [hov,setHov]=useState(false);
-  const timeSlotLabels = {
-    morning:"🌅 Morning",
-    day:"☀️ Afternoon",
-    night:"🌙 Night",
-    allday:"🔥 Any Time"
+// ─── APP ROOT ─────────────────────────────────────────────────────────────
+export default function TuVegasTickets() {
+  const [screen, setScreen]             = useState("splash");
+  const [sel, setSel]                   = useState([]);
+  const [subcatRest, setSubcatRest]     = useState([]);
+  const [abaAnterior, setAbaAnterior]   = useState("exp");
+
+  // Controla a seta de voltar do telefone
+  const navegarPara = (novaScreen) => {
+    window.history.pushState({ screen: novaScreen }, "");
+    setScreen(novaScreen);
   };
-  const bestTime = (!timeLabel && exp.times) ? timeSlotLabels[exp.times[0]] || "" : "";
+
+  useEffect(() => {
+    const handlePopState = () => {
+      setScreen(prev => {
+        if (prev === "resultados") return "filtros";
+        if (prev === "filtros") return "splash";
+        return prev;
+      });
+    };
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, []);
+
+  const handleResultados = (cats, subcats) => {
+    setSel(cats);
+    setSubcatRest(subcats || []);
+    const temRest = cats.includes("restaurantes");
+    const temExp  = cats.some(c => c !== "restaurantes");
+    setAbaAnterior(temRest && !temExp ? "rest" : "exp");
+    navegarPara("resultados");
+  };
 
   return (
-    <div onMouseEnter={()=>setHov(true)} onMouseLeave={()=>setHov(false)}
-      style={{background:hov?`linear-gradient(135deg,${isFree?"rgba(39,174,96,.1)":"rgba(255,45,85,.1)"},rgba(255,215,0,.05))`:"rgba(255,255,255,.03)",
-        border:hov?`1px solid ${isFree?"rgba(39,174,96,.3)":"rgba(255,215,0,.3)"}`:"1px solid rgba(255,255,255,.06)",
-        borderRadius:"14px",padding:"18px",transition:"all .3s",transform:hov?"translateY(-1px)":"none",
-        animation:`fadeUp .5s ease ${index*.08}s both`}}>
-      <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:"10px"}}>
-        <div style={{display:"flex",gap:"12px",alignItems:"flex-start",flex:1}}>
-          <div style={{display:"flex",flexDirection:"column",alignItems:"center",gap:"3px",minWidth:"44px"}}>
-            <span style={{fontSize:"1.8rem"}}>{exp.emoji}</span>
-          </div>
-          <div style={{flex:1}}>
-            <div style={{color:"#fff",fontWeight:"700",fontSize:"1rem",marginBottom:"6px",lineHeight:1.3}}>{exp.name}</div>
-            <div style={{display:"flex",gap:"5px",flexWrap:"wrap"}}>
-              {!isFree&&timeLabel&&<span style={{background:"rgba(255,45,85,.12)",color:"#ff6b8a",fontSize:"0.72rem",padding:"2px 10px",borderRadius:"20px",border:"1px solid rgba(255,45,85,.2)"}}>{timeLabel}</span>}
-              {exp.dur&&<span style={{background:"rgba(255,215,0,.15)",color:"#ffd700",fontSize:"0.72rem",padding:"2px 10px",borderRadius:"20px",border:"1px solid rgba(255,215,0,.25)"}}>{exp.dur}</span>}
-              {exp.rating>0&&<span style={{background:"rgba(255,45,85,.15)",color:"#ff8080",fontSize:"0.72rem",padding:"2px 10px",borderRadius:"20px",border:"1px solid rgba(255,45,85,.25)"}}>⭐ {exp.rating}</span>}
-              {exp.isNew&&<span style={{background:"rgba(39,174,96,.2)",color:"#2ecc71",fontSize:"0.72rem",padding:"2px 10px",borderRadius:"20px",border:"1px solid rgba(39,174,96,.3)"}}>✨ New</span>}
-              {exp.limitedTime&&<span style={{background:"rgba(255,165,0,.15)",color:"#ffaa00",fontSize:"0.72rem",padding:"2px 10px",borderRadius:"20px",border:"1px solid rgba(255,165,0,.3)"}}>⏰ {exp.limitedTime}</span>}
-            </div>
-          </div>
-        </div>
-        {isFree
-          ? <span style={{background:"rgba(39,174,96,.2)",border:"1px solid rgba(39,174,96,.4)",color:"#2ecc71",fontSize:"0.78rem",fontWeight:"700",padding:"4px 12px",borderRadius:"20px",whiteSpace:"nowrap",marginLeft:"8px"}}>FREE</span>
-         : <span style={{color:"#ffd700",fontSize:"0.95rem",fontWeight:"bold",marginLeft:"10px",whiteSpace:"nowrap",fontFamily:"'DM Sans',sans-serif"}}>From ${exp.price}</span>
-      </div>
-      <p style={{color:"#bbb",fontSize:"0.85rem",lineHeight:1.7,margin:"0 0 14px"}}>{exp.desc}</p>
-      <a href={exp.url} target="_blank" rel="noopener noreferrer"
-        style={{display:"block",background:isFree?"linear-gradient(135deg,rgba(39,174,96,.3),rgba(39,174,96,.15))":"linear-gradient(135deg,#ff2d55,#c0392b)",
-          border:isFree?"1px solid rgba(39,174,96,.4)":"none",
-          color:"#fff",padding:"13px 16px",borderRadius:"10px",textDecoration:"none",
-          fontSize:"0.88rem",fontWeight:"700",textAlign:"center",
-          boxShadow:isFree?"none":"0 4px 18px rgba(255,45,85,.35)"}}>
-        {isFree?"🔗 Learn More":"🎟️ Book Now"}
-      </a>
-    </div>
+    <>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Anton&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Inter:wght@300;400;500;600;700&display=swap');
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body, #root { height: 100%; background: #000; }
+        body { font-family: 'Inter', sans-serif; }
+        ::-webkit-scrollbar { width: 3px; }
+        ::-webkit-scrollbar-track { background: #111; }
+        ::-webkit-scrollbar-thumb { background: #e000c8; border-radius: 2px; }
+        input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); opacity: 0.6; cursor: pointer; }
+      `}</style>
+
+      {screen === "splash"     && <SplashScreen    onStart={() => navegarPara("filtros")} />}
+      {screen === "filtros"    && <FiltrosScreen   onResultados={handleResultados} />}
+      {screen === "resultados" && <ResultadosScreen
+                                    sel={sel}
+                                    subcatRest={subcatRest}
+                                    onVolver={() => navegarPara("filtros")} />}
+    </>
   );
 }
